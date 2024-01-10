@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023, FRC Team 3602. All rights reserved. This work
+ * Copyright (C) 2024, FRC Team 3602. All rights reserved. This work
  * is licensed under the terms of the MIT license which can be found
  * in the root directory of this project.
  */
@@ -23,9 +23,12 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+
+import frc.team3602.robot.vision.Vision;
 
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 import static frc.team3602.robot.Constants.VisionConstants.*;
@@ -40,9 +43,9 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
   private final ChoreoTrajectory trajectory = Choreo.getTrajectory("traj");
 
   // Vision
-  private double targetRange;
+  double targetRange;
+  private final Vision vision = new Vision();
 
-  private final PhotonCamera camera = new PhotonCamera("photonvision");
   private final PIDController forwardController = new PIDController(0.1, 0.0, 0.05);
   private final PIDController turnController = new PIDController(0.1, 0.0, 0.05);
 
@@ -54,25 +57,14 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
   public DrivetrainSubsystem(SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants... moduleConstants) {
     super(drivetrainConstants, moduleConstants);
 
-    this.m_pigeon2.setYaw(0.0); // REMOVE DURING COMP
+    this.m_pigeon2.setYaw(0.0); // TODO: REMOVE DURING COMP
   }
 
   @Override
   public void periodic() {
-    var result = camera.getLatestResult();
-
-    if (result.hasTargets()) {
-      targetRange = PhotonUtils.calculateDistanceToTargetMeters(CAMERA_HEIGHT_METERS, TARGET_HEIGHT_METERS,
-          CAMERA_PITCH_RADIANS, Units.degreesToRadians(result.getBestTarget().getPitch()));
-    }
+    targetRange = vision.getTargetHeight();
 
     SmartDashboard.putNumber("Distance to Target", Units.metersToFeet(targetRange));
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This is an estimate.
-    updateSimState(0.02, 12);
   }
 
   public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -87,7 +79,15 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
         new PIDController(1.0, 0.0, 0.0),
         new PIDController(1.0, 0.0, 0.0),
         (speeds) -> this.setControl(autonomousRequest.withSpeeds(speeds)),
-        () -> true,
+        () -> {
+          var alliance = DriverStation.getAlliance();
+
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+
+          return false;
+        },
         this);
   }
 
@@ -96,7 +96,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
       double forwardSpeed;
       double rotationSpeed;
 
-      var result = camera.getLatestResult();
+      var result = vision.getLatestResult();
 
       if (result.hasTargets()) {
         forwardSpeed = -forwardController.calculate(targetRange, GOAL_RANGE_METERS);

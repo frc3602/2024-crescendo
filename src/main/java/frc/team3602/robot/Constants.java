@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023, FRC Team 3602. All rights reserved. This work
+ * Copyright (C) 2024, FRC Team 3602. All rights reserved. This work
  * is licensed under the terms of the MIT license which can be found
  * in the root directory of this project.
  */
@@ -43,9 +43,6 @@ public final class Constants {
     private static final double COUPLE_GEAR_RATIO = 3.5714285714285716;
     private static final boolean TURN_MOTOR_INVERTED = true;
 
-    private static final double DRIVE_INERTIA = 0.001;
-    private static final double TURN_INERTIA = 0.00001;
-
     private static final boolean INVERT_LEFT_SIDE = false;
     private static final boolean INVERT_RIGHT_SIDE = true;
 
@@ -63,8 +60,6 @@ public final class Constants {
         .withSpeedAt12VoltsMps(SPEED_AT_12_VOLTS_MPS)
         .withCouplingGearRatio(COUPLE_GEAR_RATIO)
         .withSteerMotorInverted(TURN_MOTOR_INVERTED)
-        .withDriveInertia(DRIVE_INERTIA)
-        .withSteerInertia(TURN_INERTIA)
         .withFeedbackSource(SteerFeedbackType.FusedCANcoder);
 
     // Front left (Module 0)
