@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, FRC Team 3602. All rights reserved. This work
+ * Copyright (C) 2023, FRC Team 3602. All rights reserved. This work
  * is licensed under the terms of the MIT license which can be found
  * in the root directory of this project.
  */
@@ -145,5 +145,15 @@ public final class Constants {
         FRONT_RIGHT_MODULE_CONSTANTS,
         BACK_LEFT_MODULE_CONSTANTS,
         BACK_RIGHT_MODULE_CONSTANTS);
+  }
+
+  public final class VisionConstants {
+    public static final String PHOTON_CAMERA_NAME = "photonvision";
+
+    public static final double CAMERA_HEIGHT_METERS = Units.feetToMeters(1.4375);
+    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(46.0);
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0.0);
+
+    public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);
   }
 }

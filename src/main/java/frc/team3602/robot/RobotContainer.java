@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, FRC Team 3602. All rights reserved. This work
+ * Copyright (C) 2023, FRC Team 3602. All rights reserved. This work
  * is licensed under the terms of the MIT license which can be found
  * in the root directory of this project.
  */
@@ -41,6 +41,8 @@ public class RobotContainer {
   }
 
   private void configButtonBindings() {
+    // While holding a button, align with an apriltag.
+    xboxController.a().whileTrue(drivetrainSubsys.alignWithTarget());
   }
 
   private void configAutonomous() {
