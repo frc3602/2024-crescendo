@@ -31,9 +31,17 @@ public class Vision {
   }
 
   public double getTargetHeight() {
+    double targetHeight;
     var result = getLatestResult();
 
-    return fieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get().getZ();
+    if (result.hasTargets()) {
+      targetHeight = fieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get().getZ();
+    } else {
+      targetHeight = 0.0;
+      DriverStation.reportError("PhotonCamera: " + PHOTON_CAMERA_NAME + "has no Targets", false);
+    }
+
+    return targetHeight;
   }
 
   public double getTargetRange(double targetHeightMeters) {

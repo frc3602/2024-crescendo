@@ -13,12 +13,20 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
 
 import edu.wpi.first.math.util.Units;
-
-import frc.team3602.robot.subsystems.drivetrain.DrivetrainSubsystem;
+import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 
 public final class Constants {
   public final class OperatorInterfaceConstants {
     public final static int XBOX_CONTROLLER_PORT = 0;
+  }
+
+  public final class ShooterConstants {
+    public static final int TOP_SHOOTER_MOTOR_ID = 67;
+    public static final int BOTTOM_SHOOTER_MOTOR_ID = 68;
+  }
+
+  public final class IntakeConstants {
+    public static final int INTAKE_MOTOR_ID = 69;
   }
 
   public final class DrivetrainConstants {

@@ -4,12 +4,9 @@
  * in the root directory of this project.
  */
 
-package frc.team3602.robot.subsystems.drivetrain;
+package frc.team3602.robot.subsystems;
 
 import java.util.function.Supplier;
-
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonUtils;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;

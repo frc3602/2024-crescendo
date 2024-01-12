@@ -10,14 +10,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.team3602.robot.subsystems.DrivetrainSubsystem;
+import frc.team3602.robot.subsystems.IntakeSubsystem;
+import frc.team3602.robot.subsystems.ShooterSubsystem;
 
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
-import frc.team3602.robot.subsystems.drivetrain.DrivetrainSubsystem;
 
 public class RobotContainer {
   // Subsystems
   private final DrivetrainSubsystem drivetrainSubsys = DRIVETRAIN_SUBSYS;
+  private final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
+  private final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
 
   // Operator interfaces
   private final CommandXboxController xboxController = new CommandXboxController(XBOX_CONTROLLER_PORT);
