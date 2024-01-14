@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import static edu.wpi.first.units.Units.*;
 
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
@@ -20,12 +21,12 @@ import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 
 public class RobotContainer {
   // Subsystems
-  private final DrivetrainSubsystem drivetrainSubsys = DRIVETRAIN_SUBSYS;
+  private final DrivetrainSubsystem drivetrainSubsys = kDrivetrainSubsys;
   private final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
   private final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
 
   // Operator interfaces
-  private final CommandXboxController xboxController = new CommandXboxController(XBOX_CONTROLLER_PORT);
+  private final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
   private double driveSpeed = 1.0;
 
   // Autonomous
@@ -41,9 +42,9 @@ public class RobotContainer {
     drivetrainSubsys
         .setDefaultCommand(drivetrainSubsys.applyRequest(
             () -> drivetrainSubsys.fieldCentricDrive
-                .withVelocityX((-xboxController.getLeftY() * MAX_SPEED) * driveSpeed)
-                .withVelocityY((-xboxController.getLeftX() * MAX_SPEED) * driveSpeed)
-                .withRotationalRate((-xboxController.getRightX() * MAX_ANGULAR_RATE) * driveSpeed)));
+                .withVelocityX((-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond)) * driveSpeed)
+                .withVelocityY((-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond)) * driveSpeed)
+                .withRotationalRate((-xboxController.getRightX() * kMaxAngularRate.in(MetersPerSecond)) * driveSpeed)));
   }
 
   private void configButtonBindings() {

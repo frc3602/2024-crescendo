@@ -13,156 +13,160 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
+import static edu.wpi.first.units.Units.*;
+
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 
 public final class Constants {
   public final class OperatorInterfaceConstants {
-    public final static int XBOX_CONTROLLER_PORT = 0;
+    public final static int kXboxControllerPort = 0;
   }
 
   public final class ShooterConstants {
-    public static final int TOP_SHOOTER_MOTOR_ID = 67;
-    public static final int TOP_SHOOTER_MOTOR_CURRENT_LIMIT = 30;
+    public static final int kTopShooterMotorId = 67;
+    public static final int kTopShooterMotorCurrentLimit = 30;
 
-    public static final int BOTTOM_SHOOTER_MOTOR_ID = 68;
-    public static final int BOTTOM_SHOOTER_MOTOR_CURRENT_LIMIT = 30;
+    public static final int kBottomShooterMotorId = 68;
+    public static final int kBottomShooterMotorCurrentLimit = 30;
   }
 
   public final class IntakeConstants {
-    public static final int INTAKE_MOTOR_ID = 69;
-    public static final int INTAKE_MOTOR_CURRENT_LIMIT = 30;
+    public static final int kIntakeMotorId = 69;
+    public static final int kIntakeMotorCurrentLimit = 30;
 
-    public static final double INTAKE_CONVERSION_FACTOR = 0.0;
+    public static final double kIntakeConversionFactor = 0.0;
   }
 
   public final class DrivetrainConstants {
-    public static final boolean IS_OPEN_LOOP = true;
-    public static final double MAX_SPEED = 6.0;
-    public static final double MAX_ANGULAR_RATE = Math.PI;
+    public static final Measure<Velocity<Distance>> kMaxSpeed = MetersPerSecond.of(6.0);
+    public static final Measure<Velocity<Distance>> kMaxAngularRate = MetersPerSecond.of(Math.PI);
 
-    private final static int PIGEON_CAN_ID = 52;
-    private final static String CAN_BUS_NAME = "rio";
+    private final static int kPigeonId = 52;
+    private final static String kCANBusName = "rio";
 
-    private static final double DRIVE_GEAR_RATIO = 6.122448979591837;
-    private static final double TURN_GEAR_RATIO = 21.428571428571427;
-    private static final double WHEEL_RADIUS_INCHES = 2.0;
-    private static final double SLIP_CURRENT_AMPS = 300.0;
-    private static final Slot0Configs DRIVE_GAINS = new Slot0Configs()
+    private static final double kDriveGearRatio = 6.122448979591837;
+    private static final double kTurnGeatRatio = 21.428571428571427;
+    private static final double kWheelRadiusInches = 2.0;
+    private static final double kSlipCurrentAmps = 300.0;
+    private static final Slot0Configs kDriveGains = new Slot0Configs()
         .withKP(3.0).withKI(0.0).withKD(0.0)
         .withKS(0.0).withKV(0.0).withKA(0.0);
-    private static final Slot0Configs TURN_GAINS = new Slot0Configs()
+    private static final Slot0Configs kTurnGains = new Slot0Configs()
         .withKP(100.0).withKI(0.0).withKD(0.05)
         .withKS(0.0).withKV(1.5).withKA(0.0);
-    private static final double SPEED_AT_12_VOLTS_MPS = 6.0;
-    private static final double COUPLE_GEAR_RATIO = 3.5714285714285716;
-    private static final boolean TURN_MOTOR_INVERTED = true;
+    private static final double kSpeedAt12VoltsMps = 6.0;
+    private static final double kCoupleGearRatio = 3.5714285714285716;
+    private static final boolean kTurnMotorInverted = true;
 
-    private static final boolean INVERT_LEFT_SIDE = false;
-    private static final boolean INVERT_RIGHT_SIDE = true;
+    private static final boolean kInvertLeftSide = false;
+    private static final boolean kInvertRightSide = true;
 
-    private static final SwerveDrivetrainConstants DRIVETRAIN_CONSTANTS = new SwerveDrivetrainConstants()
-        .withPigeon2Id(PIGEON_CAN_ID)
-        .withCANbusName(CAN_BUS_NAME);
+    private static final SwerveDrivetrainConstants kDrivetrainConstants = new SwerveDrivetrainConstants()
+        .withPigeon2Id(kPigeonId)
+        .withCANbusName(kCANBusName);
 
-    private static final SwerveModuleConstantsFactory MODULE_CONSTANTS_FACTORY = new SwerveModuleConstantsFactory()
-        .withDriveMotorGearRatio(DRIVE_GEAR_RATIO)
-        .withSteerMotorGearRatio(TURN_GEAR_RATIO)
-        .withWheelRadius(WHEEL_RADIUS_INCHES)
-        .withSlipCurrent(SLIP_CURRENT_AMPS)
-        .withDriveMotorGains(DRIVE_GAINS)
-        .withSteerMotorGains(TURN_GAINS)
-        .withSpeedAt12VoltsMps(SPEED_AT_12_VOLTS_MPS)
-        .withCouplingGearRatio(COUPLE_GEAR_RATIO)
-        .withSteerMotorInverted(TURN_MOTOR_INVERTED)
+    private static final SwerveModuleConstantsFactory kModuleConstants = new SwerveModuleConstantsFactory()
+        .withDriveMotorGearRatio(kDriveGearRatio)
+        .withSteerMotorGearRatio(kTurnGeatRatio)
+        .withWheelRadius(kWheelRadiusInches)
+        .withSlipCurrent(kSlipCurrentAmps)
+        .withDriveMotorGains(kDriveGains)
+        .withSteerMotorGains(kTurnGains)
+        .withSpeedAt12VoltsMps(kSpeedAt12VoltsMps)
+        .withCouplingGearRatio(kCoupleGearRatio)
+        .withSteerMotorInverted(kTurnMotorInverted)
         .withFeedbackSource(SteerFeedbackType.FusedCANcoder);
 
     // Front left (Module 0)
-    private static final int FRONT_LEFT_TURN_MOTOR_ID = 49;
-    private static final int FRONT_LEFT_DRIVE_MOTOR_ID = 46;
-    private static final int FRONT_LEFT_ENCODER_ID = 41;
-    private static final double FRONT_LEFT_ENCODER_OFFSET = 0.112548828125;
-    private static final double FRONT_LEFT_X_POS_INCHES = 12.875;
-    private static final double FRONT_LEFT_Y_POS_INCHES = 12.875;
+    private static final int kFrontLeftTurnMotorId = 49;
+    private static final int kFrontLeftDriveMotorId = 46;
+    private static final int kFrontLeftEncoderId = 41;
+    private static final double kFrontLeftEncoderOffset = 0.112548828125;
+    private static final double kFrontLeftXPosInches = 12.875;
+    private static final double kFrontLeftYPosInches = 12.875;
 
-    private static final SwerveModuleConstants FRONT_LEFT_MODULE_CONSTANTS = MODULE_CONSTANTS_FACTORY
+    private static final SwerveModuleConstants kFrontLeftModuleConstants = kModuleConstants
         .createModuleConstants(
-            FRONT_LEFT_TURN_MOTOR_ID,
-            FRONT_LEFT_DRIVE_MOTOR_ID,
-            FRONT_LEFT_ENCODER_ID,
-            FRONT_LEFT_ENCODER_OFFSET,
-            Units.inchesToMeters(FRONT_LEFT_X_POS_INCHES),
-            Units.inchesToMeters(FRONT_LEFT_Y_POS_INCHES),
-            INVERT_LEFT_SIDE);
+            kFrontLeftTurnMotorId,
+            kFrontLeftDriveMotorId,
+            kFrontLeftEncoderId,
+            kFrontLeftEncoderOffset,
+            Units.inchesToMeters(kFrontLeftXPosInches),
+            Units.inchesToMeters(kFrontLeftYPosInches),
+            kInvertLeftSide);
 
     // Front right (Module 1)
-    private static final int FRONT_RIGHT_TURN_MOTOR_ID = 45;
-    private static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 44;
-    private static final int FRONT_RIGHT_ENCODER_ID = 42;
-    private static final double FRONT_RIGHT_ENCODER_OFFSET = -0.4921875;
-    private static final double FRONT_RIGHT_X_POS_INCHES = 12.875;
-    private static final double FRONT_RIGHT_Y_POS_INCHES = -12.875;
+    private static final int kFrontRightTurnMotorId = 45;
+    private static final int kFrontRightDriveMotorId = 44;
+    private static final int kFrontRightEncoderId = 42;
+    private static final double kFrontRightEncoderOffset = -0.4921875;
+    private static final double kFrontRightXPosInches = 12.875;
+    private static final double kFrontRightYPosInches = -12.875;
 
-    private static final SwerveModuleConstants FRONT_RIGHT_MODULE_CONSTANTS = MODULE_CONSTANTS_FACTORY
+    private static final SwerveModuleConstants kFrontRightModuleConstants = kModuleConstants
         .createModuleConstants(
-            FRONT_RIGHT_TURN_MOTOR_ID,
-            FRONT_RIGHT_DRIVE_MOTOR_ID,
-            FRONT_RIGHT_ENCODER_ID,
-            FRONT_RIGHT_ENCODER_OFFSET,
-            Units.inchesToMeters(FRONT_RIGHT_X_POS_INCHES),
-            Units.inchesToMeters(FRONT_RIGHT_Y_POS_INCHES),
-            INVERT_RIGHT_SIDE);
+            kFrontRightTurnMotorId,
+            kFrontRightDriveMotorId,
+            kFrontRightEncoderId,
+            kFrontRightEncoderOffset,
+            Units.inchesToMeters(kFrontRightXPosInches),
+            Units.inchesToMeters(kFrontRightYPosInches),
+            kInvertRightSide);
 
     // Back left (Module 2)
-    private static final int BACK_LEFT_TURN_MOTOR_ID = 50;
-    private static final int BACK_LEFT_DRIVE_MOTOR_ID = 51;
-    private static final int BACK_LEFT_ENCODER_ID = 40;
-    private static final double BACK_LEFT_ENCODER_OFFSET = 0.429931640625;
-    private static final double BACK_LEFT_X_POS_INCHES = -12.875;
-    private static final double BACK_LEFT_Y_POS_INCHES = 12.875;
+    private static final int kBackLeftTurnMotorId = 50;
+    private static final int kBackLeftDriveMotorId = 51;
+    private static final int kBackLeftEncoderId = 40;
+    private static final double kBackLeftEncoderOffset = 0.429931640625;
+    private static final double kBackLeftXPosInches = -12.875;
+    private static final double kBackLeftYPosInches = 12.875;
 
-    private static final SwerveModuleConstants BACK_LEFT_MODULE_CONSTANTS = MODULE_CONSTANTS_FACTORY
+    private static final SwerveModuleConstants kBackLeftModuleConstants = kModuleConstants
         .createModuleConstants(
-            BACK_LEFT_TURN_MOTOR_ID,
-            BACK_LEFT_DRIVE_MOTOR_ID,
-            BACK_LEFT_ENCODER_ID,
-            BACK_LEFT_ENCODER_OFFSET,
-            Units.inchesToMeters(BACK_LEFT_X_POS_INCHES),
-            Units.inchesToMeters(BACK_LEFT_Y_POS_INCHES),
-            INVERT_LEFT_SIDE);
+            kBackLeftTurnMotorId,
+            kBackLeftDriveMotorId,
+            kBackLeftEncoderId,
+            kBackLeftEncoderOffset,
+            Units.inchesToMeters(kBackLeftXPosInches),
+            Units.inchesToMeters(kBackLeftYPosInches),
+            kInvertLeftSide);
 
     // Back right (Module 3)
-    private static final int BACK_RIGHT_TURN_MOTOR_ID = 47;
-    private static final int BACK_RIGHT_DRIVE_MOTOR_ID = 48;
-    private static final int BACK_RIGHT_ENCODER_ID = 43;
-    private static final double BACK_RIGHT_ENCODER_OFFSET = 0.26904296875;
-    private static final double BACK_RIGHT_X_POS_INCHES = -12.875;
-    private static final double BACK_RIGHT_Y_POS_INCHES = -12.875;
+    private static final int kBackRightTurnMotorId = 47;
+    private static final int kBackRightDriveMotorId = 48;
+    private static final int kBackRightEncoderId = 43;
+    private static final double kBackRightEncoderOffset = 0.26904296875;
+    private static final double kBackRightXPosInches = -12.875;
+    private static final double kBackRightYPosInches = -12.875;
 
-    private static final SwerveModuleConstants BACK_RIGHT_MODULE_CONSTANTS = MODULE_CONSTANTS_FACTORY
+    private static final SwerveModuleConstants kBackRightModuleConstants = kModuleConstants
         .createModuleConstants(
-            BACK_RIGHT_TURN_MOTOR_ID,
-            BACK_RIGHT_DRIVE_MOTOR_ID,
-            BACK_RIGHT_ENCODER_ID,
-            BACK_RIGHT_ENCODER_OFFSET,
-            Units.inchesToMeters(BACK_RIGHT_X_POS_INCHES),
-            Units.inchesToMeters(BACK_RIGHT_Y_POS_INCHES),
-            INVERT_RIGHT_SIDE);
+            kBackRightTurnMotorId,
+            kBackRightDriveMotorId,
+            kBackRightEncoderId,
+            kBackRightEncoderOffset,
+            Units.inchesToMeters(kBackRightXPosInches),
+            Units.inchesToMeters(kBackRightYPosInches),
+            kInvertRightSide);
 
-    public static final DrivetrainSubsystem DRIVETRAIN_SUBSYS = new DrivetrainSubsystem(
-        DRIVETRAIN_CONSTANTS,
-        FRONT_LEFT_MODULE_CONSTANTS,
-        FRONT_RIGHT_MODULE_CONSTANTS,
-        BACK_LEFT_MODULE_CONSTANTS,
-        BACK_RIGHT_MODULE_CONSTANTS);
+    public static final DrivetrainSubsystem kDrivetrainSubsys = new DrivetrainSubsystem(
+        kDrivetrainConstants,
+        kFrontLeftModuleConstants,
+        kFrontRightModuleConstants,
+        kBackLeftModuleConstants,
+        kBackRightModuleConstants);
   }
 
   public final class VisionConstants {
-    public static final String PHOTON_CAMERA_NAME = "photonvision";
+    public static final String kPhotonCameraName = "photonvision";
 
-    public static final double CAMERA_HEIGHT_METERS = Units.feetToMeters(1.4375);
-    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(46.0);
-    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0.0);
+    public static final double kCameraHeightMeters = Units.feetToMeters(1.4375);
+    public static final double kTargetHeightMeters = Units.inchesToMeters(46.0);
+    public static final double kCameraPitchRadians = Units.degreesToRadians(0.0);
 
-    public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+    public static final double kGoalRangeMeters = Units.feetToMeters(3);
   }
 }

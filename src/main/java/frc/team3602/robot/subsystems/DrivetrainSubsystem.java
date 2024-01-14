@@ -24,9 +24,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import static edu.wpi.first.units.Units.*;
 
 import frc.team3602.robot.vision.Vision;
-
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 import static frc.team3602.robot.Constants.VisionConstants.*;
 
@@ -34,8 +34,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
   private final SwerveRequest.ApplyChassisSpeeds autonomousRequest = new SwerveRequest.ApplyChassisSpeeds();
   public final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric()
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-      .withDeadband(0.02 * MAX_SPEED)
-      .withRotationalDeadband(0.02 * MAX_ANGULAR_RATE);
+      .withDeadband(0.02 * kMaxSpeed.in(MetersPerSecond))
+      .withRotationalDeadband(0.02 * kMaxAngularRate.in(MetersPerSecond));
 
   private final ChoreoTrajectory trajectory = Choreo.getTrajectory("traj");
 
@@ -96,7 +96,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
       var result = vision.getLatestResult();
 
       if (result.hasTargets()) {
-        forwardSpeed = -forwardController.calculate(targetRange, GOAL_RANGE_METERS);
+        forwardSpeed = -forwardController.calculate(targetRange, kGoalRangeMeters);
         rotationSpeed = turnController.calculate(result.getBestTarget().getYaw(), 0.0);
       } else {
         forwardSpeed = 0.0;

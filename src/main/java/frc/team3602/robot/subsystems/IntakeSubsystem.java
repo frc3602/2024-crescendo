@@ -22,7 +22,7 @@ import static frc.team3602.robot.Constants.IntakeConstants.*;
 
 public class IntakeSubsystem implements Subsystem {
   // Motor controllers
-  private final CANSparkMax intakeMotor = new CANSparkMax(INTAKE_MOTOR_ID, MotorType.kBrushless);
+  private final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId, MotorType.kBrushless);
 
   // Encoders
   private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
@@ -47,7 +47,7 @@ public class IntakeSubsystem implements Subsystem {
   private void configIntakeSubsys() {
     // Intake motor config
     intakeMotor.setIdleMode(IdleMode.kBrake);
-    intakeMotor.setSmartCurrentLimit(INTAKE_MOTOR_CURRENT_LIMIT);
+    intakeMotor.setSmartCurrentLimit(kIntakeMotorCurrentLimit);
     intakeMotor.burnFlash();
 
     intakeMotorEncoder.setVelocityConversionFactor(0.0);

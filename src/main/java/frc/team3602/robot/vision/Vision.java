@@ -23,7 +23,7 @@ public class Vision {
   private final AprilTagFieldLayout fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
   public Vision() {
-    photonCamera = new PhotonCamera(PHOTON_CAMERA_NAME);
+    photonCamera = new PhotonCamera(kPhotonCameraName);
   }
 
   public PhotonPipelineResult getLatestResult() {
@@ -38,7 +38,7 @@ public class Vision {
       targetHeight = fieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get().getZ();
     } else {
       targetHeight = 0.0;
-      DriverStation.reportError("PhotonCamera: " + PHOTON_CAMERA_NAME + "has no Targets", false);
+      DriverStation.reportError("PhotonCamera: " + kPhotonCameraName + "has no Targets", false);
     }
 
     return targetHeight;
@@ -49,11 +49,11 @@ public class Vision {
     var result = getLatestResult();
 
     if (result.hasTargets()) {
-      targetRange = PhotonUtils.calculateDistanceToTargetMeters(CAMERA_HEIGHT_METERS, targetHeightMeters,
-          CAMERA_PITCH_RADIANS, Units.degreesToRadians(result.getBestTarget().getPitch()));
+      targetRange = PhotonUtils.calculateDistanceToTargetMeters(kCameraHeightMeters, targetHeightMeters,
+          kCameraPitchRadians, Units.degreesToRadians(result.getBestTarget().getPitch()));
     } else {
       targetRange = 0.0;
-      DriverStation.reportError("PhotonCamera: " + PHOTON_CAMERA_NAME + "has no Targets", false);
+      DriverStation.reportError("PhotonCamera: " + kPhotonCameraName + "has no Targets", false);
     }
 
     return targetRange;

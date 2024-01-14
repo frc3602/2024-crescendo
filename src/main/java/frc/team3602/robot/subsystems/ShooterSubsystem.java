@@ -18,8 +18,8 @@ import static frc.team3602.robot.Constants.ShooterConstants.*;
 
 public class ShooterSubsystem implements Subsystem {
   // Motor controllers
-  private final CANSparkMax topShooterMotor = new CANSparkMax(TOP_SHOOTER_MOTOR_ID, MotorType.kBrushless);
-  private final CANSparkMax bottomShooterMotor = new CANSparkMax(BOTTOM_SHOOTER_MOTOR_ID, MotorType.kBrushless);
+  private final CANSparkMax topShooterMotor = new CANSparkMax(kTopShooterMotorId, MotorType.kBrushless);
+  private final CANSparkMax bottomShooterMotor = new CANSparkMax(kBottomShooterMotorId, MotorType.kBrushless);
 
   // Encoders
   private final RelativeEncoder topShooterMotorEncoder = topShooterMotor.getEncoder();
@@ -36,12 +36,12 @@ public class ShooterSubsystem implements Subsystem {
   private void configShooterSubsys() {
     // Top shooter motor config
     topShooterMotor.setIdleMode(IdleMode.kCoast);
-    topShooterMotor.setSmartCurrentLimit(TOP_SHOOTER_MOTOR_CURRENT_LIMIT);
+    topShooterMotor.setSmartCurrentLimit(kTopShooterMotorCurrentLimit);
     topShooterMotor.burnFlash();
 
     // Bottom shooter motor config
     bottomShooterMotor.setIdleMode(IdleMode.kCoast);
-    bottomShooterMotor.setSmartCurrentLimit(BOTTOM_SHOOTER_MOTOR_CURRENT_LIMIT);
+    bottomShooterMotor.setSmartCurrentLimit(kBottomShooterMotorCurrentLimit);
     bottomShooterMotor.burnFlash();
   }
 }
