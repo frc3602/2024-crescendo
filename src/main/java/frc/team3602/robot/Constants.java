@@ -22,11 +22,17 @@ public final class Constants {
 
   public final class ShooterConstants {
     public static final int TOP_SHOOTER_MOTOR_ID = 67;
+    public static final int TOP_SHOOTER_MOTOR_CURRENT_LIMIT = 30;
+
     public static final int BOTTOM_SHOOTER_MOTOR_ID = 68;
+    public static final int BOTTOM_SHOOTER_MOTOR_CURRENT_LIMIT = 30;
   }
 
   public final class IntakeConstants {
     public static final int INTAKE_MOTOR_ID = 69;
+    public static final int INTAKE_MOTOR_CURRENT_LIMIT = 30;
+
+    public static final double INTAKE_CONVERSION_FACTOR = 0.0;
   }
 
   public final class DrivetrainConstants {

@@ -8,6 +8,8 @@ package frc.team3602.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -23,7 +25,23 @@ public class ShooterSubsystem implements Subsystem {
   private final RelativeEncoder topShooterMotorEncoder = topShooterMotor.getEncoder();
   private final RelativeEncoder bottomShooterMotorEncoder = bottomShooterMotor.getEncoder();
 
-  public ShooterSubsystem() {
+  // PID controllers
+  private final SparkPIDController topShooterMotorController = topShooterMotor.getPIDController();
+  private final SparkPIDController bottomShooterMotorController = bottomShooterMotor.getPIDController();
 
+  public ShooterSubsystem() {
+    configShooterSubsys();
+  }
+
+  private void configShooterSubsys() {
+    // Top shooter motor config
+    topShooterMotor.setIdleMode(IdleMode.kCoast);
+    topShooterMotor.setSmartCurrentLimit(TOP_SHOOTER_MOTOR_CURRENT_LIMIT);
+    topShooterMotor.burnFlash();
+
+    // Bottom shooter motor config
+    bottomShooterMotor.setIdleMode(IdleMode.kCoast);
+    bottomShooterMotor.setSmartCurrentLimit(BOTTOM_SHOOTER_MOTOR_CURRENT_LIMIT);
+    bottomShooterMotor.burnFlash();
   }
 }
