@@ -17,6 +17,10 @@ import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
+
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
+
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 
 public class RobotContainer {
@@ -31,6 +35,8 @@ public class RobotContainer {
 
   // Autonomous
   private final SendableChooser<Command> sendableChooser = new SendableChooser<>();
+
+  private final ChoreoTrajectory trajectory = Choreo.getTrajectory("traj");
 
   public RobotContainer() {
     configDefaultCommands();
@@ -66,7 +72,7 @@ public class RobotContainer {
   private void configAutonomous() {
     SmartDashboard.putData(sendableChooser);
 
-    sendableChooser.addOption("Autonomous", drivetrainSubsys.swerveControllerCommand());
+    sendableChooser.addOption("Autonomous", drivetrainSubsys.choreoSwerveCommand(trajectory));
   }
 
   public Command getAutonomousCommand() {
