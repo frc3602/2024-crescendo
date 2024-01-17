@@ -6,6 +6,8 @@
 
 package frc.team3602.robot.vision;
 
+import java.util.Optional;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -15,11 +17,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 
 import static frc.team3602.robot.Constants.VisionConstants.*;
 
@@ -30,7 +28,7 @@ public class Vision {
   private final PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(kFieldLayout,
       PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, photonCamera, kRobotToCamera);
 
-  public static record VisionMeasurement(EstimatedRobotPose estimate, Matrix<N3, N1> confidence) {}
+  private double lastEstimateTimestamp = 0.0;
 
   public Vision() {
     configVision();
@@ -38,6 +36,18 @@ public class Vision {
 
   public PhotonPipelineResult getLatestResult() {
     return photonCamera.getLatestResult();
+  }
+
+  public Optional<EstimatedRobotPose> getEstimatedRobotPose() {
+    var visionEstimate = photonPoseEstimator.update();
+    double latestTimestamp = getLatestResult().getTimestampSeconds();
+    boolean newResult = Math.abs(latestTimestamp - lastEstimateTimestamp) > 1e-5;
+
+    if (newResult) {
+      lastEstimateTimestamp = latestTimestamp;
+    }
+
+    return visionEstimate;
   }
 
   public double getTargetHeight() {
@@ -48,7 +58,6 @@ public class Vision {
       targetHeight = kFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get().getZ();
     } else {
       targetHeight = 0.0;
-      DriverStation.reportError("PhotonCamera: " + kPhotonCameraName + "has no Targets", false);
     }
 
     return targetHeight;
@@ -63,14 +72,9 @@ public class Vision {
           kCameraPitchRadians, Units.degreesToRadians(result.getBestTarget().getPitch()));
     } else {
       targetRange = 0.0;
-      DriverStation.reportError("PhotonCamera: " + kPhotonCameraName + "has no Targets", false);
     }
 
     return targetRange;
-  }
-
-  private void findVisionMeasurements() {
-    
   }
 
   private void configVision() {

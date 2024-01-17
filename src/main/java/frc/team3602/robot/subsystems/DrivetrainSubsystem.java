@@ -8,6 +8,8 @@ package frc.team3602.robot.subsystems;
 
 import java.util.function.Supplier;
 
+import org.photonvision.EstimatedRobotPose;
+
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
 
@@ -66,7 +68,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
     // SmartDashboard.putNumber("Distance to Target",
     // Units.metersToFeet(targetRange));
 
-    this.m_odometry.addVisionMeasurement(this.m_odometry.getEstimatedPosition(), Timer.getFPGATimestamp());
+    updateOdometry();
   }
 
   public Pose2d getPose() {
@@ -117,6 +119,14 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
     });
   }
 
-  public void updateVision() {
+  private void updateOdometry() {
+    var result = vision.getEstimatedRobotPose();
+
+    if (result.isPresent()) {
+      EstimatedRobotPose estimatedRobotPose = result.get();
+
+      this.m_odometry.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(),
+          estimatedRobotPose.timestampSeconds);
+    }
   }
 }
