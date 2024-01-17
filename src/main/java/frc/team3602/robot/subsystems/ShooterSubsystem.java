@@ -18,16 +18,16 @@ import static frc.team3602.robot.Constants.ShooterConstants.*;
 
 public class ShooterSubsystem implements Subsystem {
   // Motor controllers
-  private final CANSparkMax topShooterMotor = new CANSparkMax(kTopShooterMotorId, MotorType.kBrushless);
-  private final CANSparkMax bottomShooterMotor = new CANSparkMax(kBottomShooterMotorId, MotorType.kBrushless);
+  // private final CANSparkMax topShooterMotor = new CANSparkMax(kTopShooterMotorId, MotorType.kBrushless);
+  // private final CANSparkMax bottomShooterMotor = new CANSparkMax(kBottomShooterMotorId, MotorType.kBrushless);
 
   // Encoders
-  private final RelativeEncoder topShooterMotorEncoder = topShooterMotor.getEncoder();
-  private final RelativeEncoder bottomShooterMotorEncoder = bottomShooterMotor.getEncoder();
+  // private final RelativeEncoder topShooterMotorEncoder = topShooterMotor.getEncoder();
+  // private final RelativeEncoder bottomShooterMotorEncoder = bottomShooterMotor.getEncoder();
 
   // PID controllers
-  private final SparkPIDController topShooterMotorController = topShooterMotor.getPIDController();
-  private final SparkPIDController bottomShooterMotorController = bottomShooterMotor.getPIDController();
+  // private final SparkPIDController topShooterMotorController = topShooterMotor.getPIDController();
+  // private final SparkPIDController bottomShooterMotorController = bottomShooterMotor.getPIDController();
 
   public ShooterSubsystem() {
     configShooterSubsys();
@@ -35,13 +35,15 @@ public class ShooterSubsystem implements Subsystem {
 
   private void configShooterSubsys() {
     // Top shooter motor config
-    topShooterMotor.setIdleMode(IdleMode.kCoast);
-    topShooterMotor.setSmartCurrentLimit(kTopShooterMotorCurrentLimit);
-    topShooterMotor.burnFlash();
+    // topShooterMotor.setIdleMode(IdleMode.kCoast);
+    // topShooterMotor.setSmartCurrentLimit(kTopShooterMotorCurrentLimit);
+    // topShooterMotor.enableVoltageCompensation(topShooterMotor.getBusVoltage());
+    // topShooterMotor.burnFlash();
 
     // Bottom shooter motor config
-    bottomShooterMotor.setIdleMode(IdleMode.kCoast);
-    bottomShooterMotor.setSmartCurrentLimit(kBottomShooterMotorCurrentLimit);
-    bottomShooterMotor.burnFlash();
+    // bottomShooterMotor.setIdleMode(IdleMode.kCoast);
+    // bottomShooterMotor.setSmartCurrentLimit(kBottomShooterMotorCurrentLimit);
+    // bottomShooterMotor.enableVoltageCompensation(bottomShooterMotor.getBusVoltage());
+    // bottomShooterMotor.burnFlash();
   }
 }

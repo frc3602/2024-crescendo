@@ -18,9 +18,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -59,9 +61,16 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
 
   @Override
   public void periodic() {
-    targetRange = vision.getTargetHeight();
+    // targetRange = vision.getTargetHeight();
 
-    SmartDashboard.putNumber("Distance to Target", Units.metersToFeet(targetRange));
+    // SmartDashboard.putNumber("Distance to Target",
+    // Units.metersToFeet(targetRange));
+
+    this.m_odometry.addVisionMeasurement(this.m_odometry.getEstimatedPosition(), Timer.getFPGATimestamp());
+  }
+
+  public Pose2d getPose() {
+    return this.m_odometry.getEstimatedPosition();
   }
 
   public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -106,5 +115,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
       this.setControl(autonomousRequest
           .withSpeeds(new ChassisSpeeds(forwardSpeed, 0.0, rotationSpeed)));
     });
+  }
+
+  public void updateVision() {
   }
 }

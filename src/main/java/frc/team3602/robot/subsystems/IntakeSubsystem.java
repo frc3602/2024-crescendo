@@ -22,38 +22,39 @@ import static frc.team3602.robot.Constants.IntakeConstants.*;
 
 public class IntakeSubsystem implements Subsystem {
   // Motor controllers
-  private final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId, MotorType.kBrushless);
+  // private final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId, MotorType.kBrushless);
 
   // Encoders
-  private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
+  // private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
 
   // PID controllers
-  private final SparkPIDController intakeMotorPIDController = intakeMotor.getPIDController();
-
+  // private final SparkPIDController intakeMotorPIDController = intakeMotor.getPIDController();
+  
   public IntakeSubsystem() {
     configIntakeSubsys();
   }
 
   public Command runIntake(DoubleSupplier velocity) {
     return run(() -> {
-      intakeMotorPIDController.setReference(velocity.getAsDouble(), ControlType.kVelocity);
+      // intakeMotorPIDController.setReference(velocity.getAsDouble(), ControlType.kVelocity);
     });
   }
 
   public void stopIntake() {
-    intakeMotor.stopMotor();
+    // intakeMotor.stopMotor();
   }
 
   private void configIntakeSubsys() {
     // Intake motor config
-    intakeMotor.setIdleMode(IdleMode.kBrake);
-    intakeMotor.setSmartCurrentLimit(kIntakeMotorCurrentLimit);
-    intakeMotor.burnFlash();
+    // intakeMotor.setIdleMode(IdleMode.kBrake);
+    // intakeMotor.setSmartCurrentLimit(kIntakeMotorCurrentLimit);
+    // intakeMotor.enableVoltageCompensation(intakeMotor.getBusVoltage());
+    // intakeMotor.burnFlash();
 
-    intakeMotorEncoder.setVelocityConversionFactor(0.0);
+    // intakeMotorEncoder.setVelocityConversionFactor(0.0);
 
-    intakeMotorPIDController.setP(0.0);
-    intakeMotorPIDController.setI(0.0);
-    intakeMotorPIDController.setD(0.0);
+    // intakeMotorPIDController.setP(0.0);
+    // intakeMotorPIDController.setI(0.0);
+    // intakeMotorPIDController.setD(0.0);
   }
 }
