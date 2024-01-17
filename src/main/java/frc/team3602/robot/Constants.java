@@ -12,16 +12,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
@@ -35,18 +30,30 @@ public final class Constants {
   }
 
   public final class ShooterConstants {
-    public static final int kTopShooterMotorId = 67;
+    public static final int kTopShooterMotorId = 2;
     public static final int kTopShooterMotorCurrentLimit = 30;
 
-    public static final int kBottomShooterMotorId = 68;
+    public static final int kBottomShooterMotorId = 3;
     public static final int kBottomShooterMotorCurrentLimit = 30;
   }
 
   public final class IntakeConstants {
-    public static final int kIntakeMotorId = 69;
+    public static final int kIntakeMotorId = 4;
     public static final int kIntakeMotorCurrentLimit = 30;
 
     public static final double kIntakeConversionFactor = 0.0;
+  }
+
+  public final class VisionConstants {
+    public static final String kPhotonCameraName = "photonvision";
+
+    public static final Transform3d kRobotToCamera = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
+        new Rotation3d(0.0, 0.0, 0.0));
+
+    public static final Measure<Distance> kCameraHeight = Feet.of(1.4375);
+    public static final Measure<Angle> kCameraPitch = Degrees.of(0.0);
+
+    public static final Measure<Distance> kGoalRange = Feet.of(3.0);
   }
 
   public final class DrivetrainConstants {
@@ -167,21 +174,5 @@ public final class Constants {
         kFrontRightModuleConstants,
         kBackLeftModuleConstants,
         kBackRightModuleConstants);
-  }
-
-  public final class VisionConstants {
-    public static final String kPhotonCameraName = "photonvision";
-
-    public static final Transform3d kRobotToCamera = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
-        new Rotation3d(0.0, 0.0, 0.0));
-
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-
-    public static final double kCameraHeightMeters = Units.feetToMeters(1.4375);
-    public static final double kTargetHeightMeters = Units.inchesToMeters(46.0);
-    public static final double kCameraPitchRadians = Units.degreesToRadians(0.0);
-
-    public static final double kGoalRangeMeters = Units.feetToMeters(3);
   }
 }

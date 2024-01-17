@@ -27,7 +27,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,7 +48,6 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
   private final SwerveDriveBrake brake = new SwerveDriveBrake();
 
   // Vision
-  double targetRange;
   private final Vision vision = new Vision();
 
   private final PIDController forwardController = new PIDController(0.1, 0.0, 0.05);
@@ -68,8 +66,6 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
 
   @Override
   public void periodic() {
-    // targetRange = vision.getTargetHeight();
-
     // SmartDashboard.putNumber("Distance to Target",
     // Units.metersToFeet(targetRange));
 
@@ -118,7 +114,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
       var result = vision.getLatestResult();
 
       if (result.hasTargets()) {
-        forwardSpeed = -forwardController.calculate(targetRange, kGoalRangeMeters);
+        forwardSpeed = -forwardController.calculate(vision.getTargetRange(Meters.of(vision.getTargetHeight())),
+            kGoalRange.in(Meters));
         rotationSpeed = turnController.calculate(result.getBestTarget().getYaw(), 0.0);
       } else {
         forwardSpeed = 0.0;
