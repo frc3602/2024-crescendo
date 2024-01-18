@@ -50,8 +50,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
   // Vision
   private final Vision vision = new Vision();
 
-  private final PIDController forwardController = new PIDController(0.1, 0.0, 0.05);
-  private final PIDController turnController = new PIDController(0.1, 0.0, 0.05);
+  private final PIDController forwardController = new PIDController(0.25, 0.0, 0.05);
+  private final PIDController turnController = new PIDController(0.015, 0.0, 0.001);
 
   public DrivetrainSubsystem(SwerveDrivetrainConstants drivetrainConstants, double odometryUpdateFrequency,
       SwerveModuleConstants... moduleConstants) {
