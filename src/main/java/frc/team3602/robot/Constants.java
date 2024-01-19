@@ -38,12 +38,21 @@ public final class Constants {
   }
 
   public final class IntakeConstants {
-    public static final int kIntakeMotorId = 4;
-    public static final int kIntakeMotorCurrentLimit = 30;
+    public static final int kIntakeMotorId = 5;
+    public static final int kIntakeMotorCurrentLimit = 17;
 
-    public static final double kIntakeConversionFactor = 0.0;
+    public static final int kColorSensorId = 0;
+
+    public static final double kIntakeSpeedForward = 500;
+    public static final double kIntakeSpeedReverse = -500;
+
+    public static final double kIntakeConversionFactor = (Math.PI * Units.inchesToMeters(1.0)) / (3.0 / 1.0) * (1/60.0);
   }
+ public final class PivotConstants {
+    public static final int kPivotMotorId = 4;
+    public static final int kPivotMotorCurrentLimit = 30;
 
+  }
   public final class VisionConstants {
     public static final String kPhotonCameraName = "photonvision";
 

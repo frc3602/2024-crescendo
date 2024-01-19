@@ -15,6 +15,8 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -22,21 +24,54 @@ import static frc.team3602.robot.Constants.IntakeConstants.*;
 
 public class IntakeSubsystem implements Subsystem {
   // Motor controllers
-  // private final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId, MotorType.kBrushless);
+  // private final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId,
+  // MotorType.kBrushless);
 
   // Encoders
   // private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
 
   // PID controllers
-  // private final SparkPIDController intakeMotorPIDController = intakeMotor.getPIDController();
-  
+  // private final SparkPIDController intakeMotorPIDController =
+  // intakeMotor.getPIDController();
+
+  // Sensors
+  private boolean hasNote;
+  private final DigitalInput colorSensor = new DigitalInput(1);
+
   public IntakeSubsystem() {
     configIntakeSubsys();
+
+    // SmartDashboard.putBoolean("Color Sensor", hasNote);
   }
 
-  public Command runIntake(DoubleSupplier velocity) {
+  public boolean getColorSensor() {
+    return colorSensor.get();
+  }
+
+  @Override
+  public void periodic() {
+    // SmartDashboard.putBoolean("Color Sensor", getColorSensor());
+
+    hasNote = colorSensor.get();
+  }
+
+  // public Command runIntake(DoubleSupplier velocity) {
+  // return run(() -> {
+  // intakeMotorPIDController.setReference(velocity.getAsDouble(),
+  // ControlType.kVelocity);
+  // }).until(() -> getColorSensor());
+  // }
+
+  // public Command runIntake(DoubleSupplier percentage) {
+  // return run(() -> {
+  // intakeMotorPIDController.setReference(percentage.getAsDouble(),
+  // ControlType.kDutyCycle);
+  // });
+  // }
+
+  public Command runIntake(DoubleSupplier percentage) {
     return run(() -> {
-      // intakeMotorPIDController.setReference(velocity.getAsDouble(), ControlType.kVelocity);
+      // intakeMotor.set(percentage.getAsDouble());
     });
   }
 
@@ -51,10 +86,11 @@ public class IntakeSubsystem implements Subsystem {
     // intakeMotor.enableVoltageCompensation(intakeMotor.getBusVoltage());
     // intakeMotor.burnFlash();
 
-    // intakeMotorEncoder.setVelocityConversionFactor(0.0);
+    // intakeMotorEncoder.setVelocityConversionFactor(kIntakeConversionFactor);
 
     // intakeMotorPIDController.setP(0.0);
     // intakeMotorPIDController.setI(0.0);
     // intakeMotorPIDController.setD(0.0);
+
   }
 }

@@ -27,7 +27,7 @@ public class RobotContainer {
   // Subsystems
   private final DrivetrainSubsystem drivetrainSubsys = kDrivetrainSubsys;
   private final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
-  private final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
+  public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
 
   // Operator interfaces
   private final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
@@ -63,10 +63,12 @@ public class RobotContainer {
     xboxController.a().whileTrue(drivetrainSubsys.alignWithTarget());
 
     // While holding b button, run the intake at 500 RPM
-    xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 500));
+    xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
+        .whileFalse(intakeSubsys.run(() -> intakeSubsys.stopIntake()));
 
     // While holding x button, reverse the intake at 500 RPM
-    xboxController.x().whileTrue(intakeSubsys.runIntake(() -> -500));
+    xboxController.x().whileTrue(intakeSubsys.runIntake(() -> -0.75))
+        .whileFalse(intakeSubsys.run(() -> intakeSubsys.stopIntake()));
   }
 
   private void configAutonomous() {
