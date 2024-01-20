@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
+    SmartDashboard.putNumber("Intake Motor Current", robotContainer.powerDistribution.getCurrent(12));
     SmartDashboard.putBoolean("Color Sensor", robotContainer.intakeSubsys.getColorSensor());
   }
 

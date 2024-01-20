@@ -12,18 +12,21 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import static frc.team3602.robot.Constants.ShooterConstants.*;
 
+import java.util.function.DoubleSupplier;
+
 public class ShooterSubsystem implements Subsystem {
   // Motor controllers
-  // private final CANSparkMax topShooterMotor = new CANSparkMax(kTopShooterMotorId, MotorType.kBrushless);
-  // private final CANSparkMax bottomShooterMotor = new CANSparkMax(kBottomShooterMotorId, MotorType.kBrushless);
+  private final CANSparkMax topShooterMotor = new CANSparkMax(kTopShooterMotorId, MotorType.kBrushless);
+  private final CANSparkMax bottomShooterMotor = new CANSparkMax(kBottomShooterMotorId, MotorType.kBrushless);
 
   // Encoders
-  // private final RelativeEncoder topShooterMotorEncoder = topShooterMotor.getEncoder();
-  // private final RelativeEncoder bottomShooterMotorEncoder = bottomShooterMotor.getEncoder();
+  private final RelativeEncoder topShooterMotorEncoder = topShooterMotor.getEncoder();
+  private final RelativeEncoder bottomShooterMotorEncoder = bottomShooterMotor.getEncoder();
 
   // PID controllers
   // private final SparkPIDController topShooterMotorController = topShooterMotor.getPIDController();
@@ -32,18 +35,34 @@ public class ShooterSubsystem implements Subsystem {
   public ShooterSubsystem() {
     configShooterSubsys();
   }
+public Command runShooter(DoubleSupplier percentage) {
+    return run(() -> {
+      topShooterMotor.set(percentage.getAsDouble());
+      // bottomShooterMotor.set(percentage.getAsDouble());
+    });
+  }
+
+  public void stopShooter() {
+    topShooterMotor.stopMotor();
+    // bottomShooterMotor.stopMotor();
+
+  }
 
   private void configShooterSubsys() {
     // Top shooter motor config
-    // topShooterMotor.setIdleMode(IdleMode.kCoast);
-    // topShooterMotor.setSmartCurrentLimit(kTopShooterMotorCurrentLimit);
-    // topShooterMotor.enableVoltageCompensation(topShooterMotor.getBusVoltage());
-    // topShooterMotor.burnFlash();
+    topShooterMotor.setIdleMode(IdleMode.kCoast);
+    topShooterMotor.setSmartCurrentLimit(kTopShooterMotorCurrentLimit);
+    topShooterMotor.enableVoltageCompensation(topShooterMotor.getBusVoltage());
+    topShooterMotor.setOpenLoopRampRate(0.01);
+    topShooterMotor.burnFlash();
 
     // Bottom shooter motor config
-    // bottomShooterMotor.setIdleMode(IdleMode.kCoast);
-    // bottomShooterMotor.setSmartCurrentLimit(kBottomShooterMotorCurrentLimit);
-    // bottomShooterMotor.enableVoltageCompensation(bottomShooterMotor.getBusVoltage());
-    // bottomShooterMotor.burnFlash();
+    bottomShooterMotor.setIdleMode(IdleMode.kCoast);
+    bottomShooterMotor.follow(topShooterMotor, true);
+    bottomShooterMotor.setSmartCurrentLimit(kBottomShooterMotorCurrentLimit);
+    bottomShooterMotor.enableVoltageCompensation(bottomShooterMotor.getBusVoltage());
+    // bottomShooterMotor.setInverted(true);
+    bottomShooterMotor.setOpenLoopRampRate(0.01);
+    bottomShooterMotor.burnFlash();
   }
 }

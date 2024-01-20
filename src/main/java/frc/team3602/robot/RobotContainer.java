@@ -6,6 +6,8 @@
 
 package frc.team3602.robot;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,6 +40,8 @@ public class RobotContainer {
 
   private final ChoreoTrajectory trajectory = Choreo.getTrajectory("traj");
 
+public final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
+
   public RobotContainer() {
     configDefaultCommands();
     configButtonBindings();
@@ -66,9 +70,18 @@ public class RobotContainer {
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
         .whileFalse(intakeSubsys.run(() -> intakeSubsys.stopIntake()));
 
-    // While holding x button, reverse the intake at 500 RPM
-    xboxController.x().whileTrue(intakeSubsys.runIntake(() -> -0.75))
+    // While holding x button, run the intake at 250 RPM
+    xboxController.x().whileTrue(intakeSubsys.runIntake(() -> 0.15))
         .whileFalse(intakeSubsys.run(() -> intakeSubsys.stopIntake()));
+
+    // While holding right bumper, run the shooter at 500 RPM
+    xboxController.rightBumper().whileTrue(shooterSubsys.runShooter(() -> -0.75))
+        .whileFalse(shooterSubsys.run(() -> shooterSubsys.stopShooter()));
+
+    // While holding left bumper, run the shooter at 250 RPM
+    xboxController.leftBumper().whileTrue(shooterSubsys.runShooter(() -> -0.15))
+        .whileFalse(shooterSubsys.run(() -> shooterSubsys.stopShooter()));
+
   }
 
   private void configAutonomous() {

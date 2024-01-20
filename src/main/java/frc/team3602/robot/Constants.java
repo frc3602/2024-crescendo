@@ -31,10 +31,10 @@ public final class Constants {
 
   public final class ShooterConstants {
     public static final int kTopShooterMotorId = 2;
-    public static final int kTopShooterMotorCurrentLimit = 30;
+    public static final int kTopShooterMotorCurrentLimit = 27;
 
     public static final int kBottomShooterMotorId = 3;
-    public static final int kBottomShooterMotorCurrentLimit = 30;
+    public static final int kBottomShooterMotorCurrentLimit = 27;
   }
 
   public final class IntakeConstants {
