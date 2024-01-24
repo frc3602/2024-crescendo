@@ -11,17 +11,11 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import static edu.wpi.first.units.Units.*;
 
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
-
-import com.choreo.lib.Choreo;
-import com.choreo.lib.ChoreoTrajectory;
-
 
 public class RobotContainer {
   // Subsystems
