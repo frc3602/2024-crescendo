@@ -29,13 +29,16 @@ public class ShooterSubsystem implements Subsystem {
   private final RelativeEncoder bottomShooterMotorEncoder = bottomShooterMotor.getEncoder();
 
   // PID controllers
-  // private final SparkPIDController topShooterMotorController = topShooterMotor.getPIDController();
-  // private final SparkPIDController bottomShooterMotorController = bottomShooterMotor.getPIDController();
+  // private final SparkPIDController topShooterMotorController =
+  // topShooterMotor.getPIDController();
+  // private final SparkPIDController bottomShooterMotorController =
+  // bottomShooterMotor.getPIDController();
 
   public ShooterSubsystem() {
     configShooterSubsys();
   }
-public Command runShooter(DoubleSupplier percentage) {
+
+  public Command runShooter(DoubleSupplier percentage) {
     return run(() -> {
       topShooterMotor.set(percentage.getAsDouble());
       // bottomShooterMotor.set(percentage.getAsDouble());
@@ -58,7 +61,7 @@ public Command runShooter(DoubleSupplier percentage) {
 
     // Bottom shooter motor config
     bottomShooterMotor.setIdleMode(IdleMode.kCoast);
-    bottomShooterMotor.follow(topShooterMotor, true);
+    bottomShooterMotor.follow(topShooterMotor, false);
     bottomShooterMotor.setSmartCurrentLimit(kBottomShooterMotorCurrentLimit);
     bottomShooterMotor.enableVoltageCompensation(bottomShooterMotor.getBusVoltage());
     // bottomShooterMotor.setInverted(true);

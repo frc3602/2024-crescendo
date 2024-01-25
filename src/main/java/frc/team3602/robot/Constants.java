@@ -39,7 +39,7 @@ public final class Constants {
 
   public final class IntakeConstants {
     public static final int kIntakeMotorId = 5;
-    public static final int kIntakeMotorCurrentLimit = 17;
+    public static final int kIntakeMotorCurrentLimit = 29;
 
     public static final int kColorSensorId = 0;
 
