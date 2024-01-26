@@ -44,27 +44,27 @@ public class RobotContainer {
   private void configButtonBindings() {
     // While holding b button, run the intake at 75% duty cycle
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
-        .whileFalse(intakeSubsys.run(() -> intakeSubsys.stopIntake()));
+        .whileFalse(intakeSubsys.stopIntake());
 
     // While holding x button, run the intake at 15% duty cycle
     xboxController.x().whileTrue(intakeSubsys.runIntake(() -> 0.15))
-        .whileFalse(intakeSubsys.run(() -> intakeSubsys.stopIntake()));
+        .whileFalse(intakeSubsys.stopIntake());
 
     // While holding b button, reverse the intake at 15% duty cycle
     xboxController.a().whileTrue(intakeSubsys.runIntake(() -> -0.15))
-        .whileFalse(intakeSubsys.run(() -> intakeSubsys.stopIntake()));
+        .whileFalse(intakeSubsys.stopIntake());
 
     // While holding right bumper, run the shooter at 75% duty cycle
     xboxController.rightBumper().whileTrue(shooterSubsys.runShooter(() -> -0.75))
-        .whileFalse(shooterSubsys.run(() -> shooterSubsys.stopShooter()));
+        .whileFalse(shooterSubsys.stopShooter());
 
     // While holding left bumper, run the shooter at 15% duty cycle
     xboxController.leftBumper().whileTrue(shooterSubsys.runShooter(() -> -0.15))
-        .whileFalse(shooterSubsys.run(() -> shooterSubsys.stopShooter()));
+        .whileFalse(shooterSubsys.stopShooter());
 
     // While holding d-pad up, reverse the shooter at 15% duty cycle
     xboxController.pov(0).whileTrue(shooterSubsys.runShooter(() -> 0.15))
-        .whileFalse(shooterSubsys.run(() -> shooterSubsys.stopShooter()));
+        .whileFalse(shooterSubsys.stopShooter());
   }
 
   private void configAutonomous() {

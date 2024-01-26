@@ -39,16 +39,11 @@ public class ShooterSubsystem implements Subsystem {
   }
 
   public Command runShooter(DoubleSupplier percentage) {
-    return run(() -> {
-      topShooterMotor.set(percentage.getAsDouble());
-      // bottomShooterMotor.set(percentage.getAsDouble());
-    });
+    return run(() -> topShooterMotor.set(percentage.getAsDouble()));
   }
 
-  public void stopShooter() {
-    topShooterMotor.stopMotor();
-    // bottomShooterMotor.stopMotor();
-
+  public Command stopShooter() {
+    return runOnce(() -> topShooterMotor.stopMotor());
   }
 
   private void configShooterSubsys() {
