@@ -25,14 +25,13 @@ import static frc.team3602.robot.Constants.IntakeConstants.*;
 public class IntakeSubsystem implements Subsystem {
   // Motor controllers
   private final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId,
-  MotorType.kBrushless);
+      MotorType.kBrushless);
 
   // Encoders
   private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
 
   // PID controllers
-  private final SparkPIDController intakeMotorPIDController =
-  intakeMotor.getPIDController();
+  private final SparkPIDController intakeMotorPIDController = intakeMotor.getPIDController();
 
   // Sensors
   private boolean hasNote;
@@ -70,13 +69,11 @@ public class IntakeSubsystem implements Subsystem {
   // }
 
   public Command runIntake(DoubleSupplier percentage) {
-    return run(() -> {
-      intakeMotor.set(percentage.getAsDouble());
-    });
+    return run(() -> intakeMotor.set(percentage.getAsDouble()));
   }
 
-  public void stopIntake() {
-    intakeMotor.stopMotor();
+  public Command stopIntake() {
+    return runOnce(() -> intakeMotor.stopMotor());
   }
 
   private void configIntakeSubsys() {
