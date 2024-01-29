@@ -59,7 +59,6 @@ public class ShooterSubsystem implements Subsystem {
     bottomShooterMotor.follow(topShooterMotor, false);
     bottomShooterMotor.setSmartCurrentLimit(kBottomShooterMotorCurrentLimit);
     bottomShooterMotor.enableVoltageCompensation(bottomShooterMotor.getBusVoltage());
-    // bottomShooterMotor.setInverted(true);
     bottomShooterMotor.setOpenLoopRampRate(0.01);
     bottomShooterMotor.burnFlash();
   }
