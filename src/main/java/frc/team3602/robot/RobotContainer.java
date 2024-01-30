@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
+import frc.team3602.robot.Constants.DrivetrainConstants;
+import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
@@ -25,7 +27,6 @@ public class RobotContainer {
 
   // Operator interfaces
   private final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
-  private double driveSpeed = 1.0;
 
   // Autonomous
   private final SendableChooser<Command> sendableChooser = new SendableChooser<>();
