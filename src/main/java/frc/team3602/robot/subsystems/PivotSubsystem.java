@@ -10,11 +10,13 @@ import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -29,8 +31,7 @@ public class PivotSubsystem implements Subsystem, Logged {
   private final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
 
   // Encoders
-  private static final SparkMaxAlternateEncoder.Type pivotMotorEncoderType = SparkMaxAlternateEncoder.Type.kQuadrature;
-  private final RelativeEncoder pivotMotorEncoder = pivotMotor.getAlternateEncoder(pivotMotorEncoderType, 8192);
+  private final SparkAbsoluteEncoder pivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
   // PID controllers
   private final SparkPIDController pivotMotorPIDController = pivotMotor.getPIDController();
@@ -48,8 +49,8 @@ public class PivotSubsystem implements Subsystem, Logged {
     configPivotSubsys();
   }
 
-  public double getEncoder() {
-    return pivotMotorEncoder.getPosition();
+  public double getPivotPosition() {
+    return pivotEncoder.getPosition();
   }
 
   public Command setAngle(DoubleSupplier angleDegrees) {
@@ -64,7 +65,7 @@ public class PivotSubsystem implements Subsystem, Logged {
 
   @Override
   public void periodic() {
-    encoderPosition = getEncoder();
+    encoderPosition = getPivotPosition();
 
     motorOutput = pivotMotor.getAppliedOutput();
   }
@@ -75,9 +76,9 @@ public class PivotSubsystem implements Subsystem, Logged {
     pivotMotor.setSmartCurrentLimit(kPivotMotorCurrentLimit);
     pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
 
-    pivotMotorEncoder.setPositionConversionFactor(kPivotConversionFactor);
+    pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
 
-    pivotMotorPIDController.setFeedbackDevice(pivotMotorEncoder);
+    pivotMotorPIDController.setFeedbackDevice(pivotEncoder);
     pivotMotorPIDController.setP(kPivotGains.kP);
     pivotMotorPIDController.setD(kPivotGains.kD);
     pivotMotorPIDController.setFF(kPivotGains.kF);
