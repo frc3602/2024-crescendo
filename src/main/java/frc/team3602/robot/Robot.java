@@ -6,10 +6,11 @@
 
 package frc.team3602.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import monologue.Monologue;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
@@ -18,13 +19,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    Monologue.setupMonologue(robotContainer, "Robot", false, false);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    SmartDashboard.putBoolean("Color Sensor", robotContainer.intakeSubsys.getColorSensor());
+    Monologue.setFileOnly(DriverStation.isFMSAttached());
+    Monologue.updateAll();
   }
 
   @Override

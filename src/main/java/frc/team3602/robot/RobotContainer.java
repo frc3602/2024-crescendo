@@ -15,15 +15,19 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.team3602.robot.Constants.DrivetrainConstants;
-import frc.team3602.robot.subsystems.DrivetrainSubsystem;
+// import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
+import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
+import monologue.Logged;
+
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
 
-public class RobotContainer {
+public class RobotContainer implements Logged {
   // Subsystems
   private final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
+  private final PivotSubsystem pivotSubsys = new PivotSubsystem();
 
   // Operator interfaces
   private final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
@@ -40,9 +44,14 @@ public class RobotContainer {
   }
 
   private void configDefaultCommands() {
+    pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
   }
 
   private void configButtonBindings() {
+    xboxController.pov(180).whileTrue(pivotSubsys.setAngle(() -> 90.0));
+
+    xboxController.pov(90).whileTrue(pivotSubsys.setAngle(() -> 45.0));
+
     // While holding b button, run the intake at 75% duty cycle
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
         .whileFalse(intakeSubsys.stopIntake());

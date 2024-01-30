@@ -22,7 +22,8 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import static edu.wpi.first.units.Units.*;
 
-import frc.team3602.robot.subsystems.DrivetrainSubsystem;
+import frc.team3602.lib.control.PIDGains;
+// import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 
 public final class Constants {
   public final class OperatorInterfaceConstants {
@@ -46,13 +47,19 @@ public final class Constants {
     public static final double kIntakeSpeedForward = 500;
     public static final double kIntakeSpeedReverse = -500;
 
-    public static final double kIntakeConversionFactor = (Math.PI * Units.inchesToMeters(1.0)) / (3.0 / 1.0) * (1/60.0);
+    public static final double kIntakeConversionFactor = (Math.PI * Units.inchesToMeters(1.0)) / (3.0 / 1.0)
+        * (1 / 60.0);
   }
- public final class PivotConstants {
+
+  public final class PivotConstants {
     public static final int kPivotMotorId = 4;
     public static final int kPivotMotorCurrentLimit = 30;
 
+    public static final double kPivotConversionFactor = 360;
+
+    public static final PIDGains kPivotGains = new PIDGains().withKp(0.001).withKd(0.0).withKf(0.0);
   }
+
   public final class VisionConstants {
     public static final String kPhotonCameraName = "photonvision";
 
@@ -177,11 +184,12 @@ public final class Constants {
             Units.inchesToMeters(kBackRightYPosInches),
             kInvertRightSide);
 
-    public static final DrivetrainSubsystem kDrivetrainSubsys = new DrivetrainSubsystem(
-        kDrivetrainConstants,
-        kFrontLeftModuleConstants,
-        kFrontRightModuleConstants,
-        kBackLeftModuleConstants,
-        kBackRightModuleConstants);
+    // public static final DrivetrainSubsystem kDrivetrainSubsys = new
+    // DrivetrainSubsystem(
+    // kDrivetrainConstants,
+    // kFrontLeftModuleConstants,
+    // kFrontRightModuleConstants,
+    // kBackLeftModuleConstants,
+    // kBackRightModuleConstants);
   }
 }
