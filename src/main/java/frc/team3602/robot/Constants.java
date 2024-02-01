@@ -46,13 +46,29 @@ public final class Constants {
     public static final double kIntakeSpeedForward = 500;
     public static final double kIntakeSpeedReverse = -500;
 
-    public static final double kIntakeConversionFactor = (Math.PI * Units.inchesToMeters(1.0)) / (3.0 / 1.0) * (1/60.0);
+    public static final double kIntakeConversionFactor = (Math.PI * Units.inchesToMeters(1.0)) / (3.0 / 1.0)
+        * (1 / 60.0);
   }
- public final class PivotConstants {
-    public static final int kPivotMotorId = 4;
-    public static final int kPivotMotorCurrentLimit = 30;
 
+  public final class PivotConstants {
+    public static final int kPivotMotorId = 4;
+    public static final int kPivotMotorFollowerId = 5;
+
+    public static final int kPivotMotorCurrentLimit = 40;
+    public static final int kPivotMotorFollowerCurrentLimit = 40;
+
+    public static final double kPivotConversionFactor = 360;
+
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+
+    public static final double kS = 6.8;
+    public static final double kG = 5.09;
+    public static final double kV = 0.44;
+    public static final double kA = 0.46;
   }
+
   public final class VisionConstants {
     public static final String kPhotonCameraName = "photonvision";
 
