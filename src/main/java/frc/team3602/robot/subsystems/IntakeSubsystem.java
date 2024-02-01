@@ -16,7 +16,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -24,8 +23,7 @@ import static frc.team3602.robot.Constants.IntakeConstants.*;
 
 public class IntakeSubsystem implements Subsystem {
   // Motor controllers
-  private final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId,
-      MotorType.kBrushless);
+  private final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId, MotorType.kBrushless);
 
   // Encoders
   private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
@@ -39,8 +37,6 @@ public class IntakeSubsystem implements Subsystem {
 
   public IntakeSubsystem() {
     configIntakeSubsys();
-
-    // SmartDashboard.putBoolean("Color Sensor", hasNote);
   }
 
   public boolean getColorSensor() {
@@ -49,8 +45,6 @@ public class IntakeSubsystem implements Subsystem {
 
   @Override
   public void periodic() {
-    // SmartDashboard.putBoolean("Color Sensor", getColorSensor());
-
     hasNote = colorSensor.get();
   }
 
@@ -89,6 +83,5 @@ public class IntakeSubsystem implements Subsystem {
     intakeMotorPIDController.setP(0.0);
     intakeMotorPIDController.setI(0.0);
     intakeMotorPIDController.setD(0.0);
-
   }
 }
