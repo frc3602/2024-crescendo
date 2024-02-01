@@ -22,7 +22,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import static edu.wpi.first.units.Units.*;
 
-import frc.team3602.robot.subsystems.DrivetrainSubsystem;
+// import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 
 public final class Constants {
   public final class OperatorInterfaceConstants {
@@ -193,11 +193,11 @@ public final class Constants {
             Units.inchesToMeters(kBackRightYPosInches),
             kInvertRightSide);
 
-    public static final DrivetrainSubsystem kDrivetrainSubsys = new DrivetrainSubsystem(
-        kDrivetrainConstants,
-        kFrontLeftModuleConstants,
-        kFrontRightModuleConstants,
-        kBackLeftModuleConstants,
-        kBackRightModuleConstants);
+    // public static final DrivetrainSubsystem kDrivetrainSubsys = new DrivetrainSubsystem(
+    //     kDrivetrainConstants,
+    //     kFrontLeftModuleConstants,
+    //     kFrontRightModuleConstants,
+    //     kBackLeftModuleConstants,
+    //     kBackRightModuleConstants);
   }
 }

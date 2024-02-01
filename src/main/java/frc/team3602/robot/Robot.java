@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import monologue.Monologue;
 
-import monologue.Monologue;
-
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
 
