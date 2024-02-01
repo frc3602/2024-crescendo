@@ -9,9 +9,6 @@ package frc.team3602.robot.subsystems;
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -25,15 +22,9 @@ public class IntakeSubsystem implements Subsystem {
   // Motor controllers
   private final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId, MotorType.kBrushless);
 
-  // Encoders
-  private final RelativeEncoder intakeMotorEncoder = intakeMotor.getEncoder();
-
-  // PID controllers
-  private final SparkPIDController intakeMotorPIDController = intakeMotor.getPIDController();
-
   // Sensors
   private boolean hasNote;
-  private final DigitalInput colorSensor = new DigitalInput(1);
+  private final DigitalInput colorSensor = new DigitalInput(kColorSensorId);
 
   public IntakeSubsystem() {
     configIntakeSubsys();
@@ -43,31 +34,17 @@ public class IntakeSubsystem implements Subsystem {
     return colorSensor.get();
   }
 
-  @Override
-  public void periodic() {
-    hasNote = colorSensor.get();
-  }
-
-  // public Command runIntake(DoubleSupplier velocity) {
-  // return run(() -> {
-  // intakeMotorPIDController.setReference(velocity.getAsDouble(),
-  // ControlType.kVelocity);
-  // }).until(() -> getColorSensor());
-  // }
-
-  // public Command runIntake(DoubleSupplier percentage) {
-  // return run(() -> {
-  // intakeMotorPIDController.setReference(percentage.getAsDouble(),
-  // ControlType.kDutyCycle);
-  // });
-  // }
-
   public Command runIntake(DoubleSupplier percentage) {
     return run(() -> intakeMotor.set(percentage.getAsDouble()));
   }
 
   public Command stopIntake() {
     return runOnce(() -> intakeMotor.stopMotor());
+  }
+
+  @Override
+  public void periodic() {
+    hasNote = getColorSensor();
   }
 
   private void configIntakeSubsys() {
@@ -77,11 +54,5 @@ public class IntakeSubsystem implements Subsystem {
     intakeMotor.enableVoltageCompensation(intakeMotor.getBusVoltage());
     intakeMotor.setOpenLoopRampRate(0.000001);
     intakeMotor.burnFlash();
-
-    intakeMotorEncoder.setVelocityConversionFactor(kIntakeConversionFactor);
-
-    intakeMotorPIDController.setP(0.0);
-    intakeMotorPIDController.setI(0.0);
-    intakeMotorPIDController.setD(0.0);
   }
 }

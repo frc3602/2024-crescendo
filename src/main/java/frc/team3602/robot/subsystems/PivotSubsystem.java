@@ -9,11 +9,7 @@ package frc.team3602.robot.subsystems;
 import java.util.function.Supplier;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -23,7 +19,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -36,26 +31,26 @@ import static frc.team3602.robot.Constants.PivotConstants.*;
 
 public class PivotSubsystem implements Subsystem, Logged {
   // Motor controllers
+  @Log.NT
+  public double motorOutput;
+
   private final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
-  private final CANSparkMax pivotMotorFollower = new CANSparkMax(kPivotMotorFollowerId, MotorType.kBrushless);
+  private final CANSparkMax pivotFollower = new CANSparkMax(kPivotFollowerId, MotorType.kBrushless);
 
   // Encoders
+  @Log.NT
+  public double encoderPosition;
+
   private final SparkAbsoluteEncoder pivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
   // Controls
   private double kP, kI, kD;
 
-  private final PIDController controller = new PIDController(kP, kI, kD);
-  private final ArmFeedforward feedforward = new ArmFeedforward(kS, kG, kV, kA);
-
-  @Log.NT
-  public double encoderPosition;
-
   @Log.NT
   public MutableMeasure<Angle> targetAngle;
 
-  @Log.NT
-  public double motorOutput;
+  private final PIDController controller = new PIDController(kP, kI, kD);
+  private final ArmFeedforward feedforward = new ArmFeedforward(kS, kG, kV, kA);
 
   public PivotSubsystem() {
     SmartDashboard.putNumber("Pivot kP", kP);
@@ -104,16 +99,15 @@ public class PivotSubsystem implements Subsystem, Logged {
     pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
 
     // Pivot motor follower config
-    pivotMotorFollower.setIdleMode(IdleMode.kBrake);
-    pivotMotorFollower.follow(pivotMotor, true);
-    pivotMotorFollower.setSmartCurrentLimit(kPivotMotorFollowerCurrentLimit);
-    pivotMotorFollower.enableVoltageCompensation(pivotMotorFollower.getBusVoltage());
-
+    pivotFollower.setIdleMode(IdleMode.kBrake);
+    pivotFollower.follow(pivotMotor, false);
+    pivotFollower.setSmartCurrentLimit(kPivotFollowerCurrentLimit);
+    pivotFollower.enableVoltageCompensation(pivotFollower.getBusVoltage());
 
     // Pivot encoder config
     pivotEncoder.setVelocityConversionFactor(kPivotConversionFactor);
 
     pivotMotor.burnFlash();
-    pivotMotorFollower.burnFlash();
+    pivotFollower.burnFlash();
   }
 }

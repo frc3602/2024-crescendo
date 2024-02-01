@@ -39,23 +39,17 @@ public final class Constants {
 
   public final class IntakeConstants {
     public static final int kIntakeMotorId = 5;
-    public static final int kIntakeMotorCurrentLimit = 29;
+    public static final int kIntakeMotorCurrentLimit = 30;
 
     public static final int kColorSensorId = 0;
-
-    public static final double kIntakeSpeedForward = 500;
-    public static final double kIntakeSpeedReverse = -500;
-
-    public static final double kIntakeConversionFactor = (Math.PI * Units.inchesToMeters(1.0)) / (3.0 / 1.0)
-        * (1 / 60.0);
   }
 
   public final class PivotConstants {
     public static final int kPivotMotorId = 4;
-    public static final int kPivotMotorFollowerId = 5;
+    public static final int kPivotFollowerId = 6; // TODO: CHANGE MOTOR CONTROLLER TO CAN ID 6
 
     public static final int kPivotMotorCurrentLimit = 40;
-    public static final int kPivotMotorFollowerCurrentLimit = 40;
+    public static final int kPivotFollowerCurrentLimit = 40;
 
     public static final double kPivotConversionFactor = 360;
 
