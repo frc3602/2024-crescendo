@@ -19,6 +19,8 @@ import frc.team3602.robot.Constants.DrivetrainConstants;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
+import frc.team3602.robot.superstructure.Superstructure;
+
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
 
 import monologue.Logged;
@@ -28,6 +30,8 @@ public class RobotContainer implements Logged {
   private final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final PivotSubsystem pivotSubsys = new PivotSubsystem();
+
+  private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys);
 
   // Operator interfaces
   private final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
@@ -48,8 +52,10 @@ public class RobotContainer implements Logged {
   }
 
   private void configButtonBindings() {
-    // xboxController.pov(180).whileTrue(pivotSubsys.setTarget(() -> Degrees.of(90)));
-    // xboxController.pov(90).whileTrue(pivotSubsys.setTarget(() -> Degrees.of(45)));
+    // xboxController.pov(180).whileTrue(pivotSubsys.setTarget(() ->
+    // Degrees.of(90)));
+    // xboxController.pov(90).whileTrue(pivotSubsys.setTarget(() ->
+    // Degrees.of(45)));
 
     // While holding b button, run the intake at 75% duty cycle
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
