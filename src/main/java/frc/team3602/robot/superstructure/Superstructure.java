@@ -6,10 +6,10 @@
 
 package frc.team3602.robot.superstructure;
 
-import static edu.wpi.first.units.Units.Degrees;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import static edu.wpi.first.units.Units.*;
+
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
@@ -30,5 +30,13 @@ public class Superstructure {
         intakeSubsys.runIntake(() -> 0.75).until(intakeSubsys::getColorSensor),
         pivotSubsys.setTarget(() -> Degrees.of(90)),
         shooterSubsys.runShooter(() -> 0.75).alongWith(intakeSubsys.runIntake(() -> 0.75)));
+  }
+
+  public Command ampCmd() {
+    return Commands.sequence();
+  }
+
+  public Command trapCmd() {
+    return Commands.sequence();
   }
 }
