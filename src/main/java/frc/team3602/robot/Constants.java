@@ -31,10 +31,20 @@ public final class Constants {
 
   public final class ShooterConstants {
     public static final int kTopShooterMotorId = 2;
-    public static final int kTopShooterMotorCurrentLimit = 27;
-
     public static final int kBottomShooterMotorId = 3;
-    public static final int kBottomShooterMotorCurrentLimit = 27;
+
+    public static final int kTopShooterMotorCurrentLimit = 30;
+    public static final int kBottomShooterMotorCurrentLimit = 30;
+
+    public static final double kShooterConversionFactor = 360;
+
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+
+    public static final double kS = 0.0;
+    public static final double kV = 0.0;
+    public static final double kA = 0.0;
   }
 
   public final class IntakeConstants {
@@ -187,11 +197,12 @@ public final class Constants {
             Units.inchesToMeters(kBackRightYPosInches),
             kInvertRightSide);
 
-    // public static final DrivetrainSubsystem kDrivetrainSubsys = new DrivetrainSubsystem(
-    //     kDrivetrainConstants,
-    //     kFrontLeftModuleConstants,
-    //     kFrontRightModuleConstants,
-    //     kBackLeftModuleConstants,
-    //     kBackRightModuleConstants);
+    // public static final DrivetrainSubsystem kDrivetrainSubsys = new
+    // DrivetrainSubsystem(
+    // kDrivetrainConstants,
+    // kFrontLeftModuleConstants,
+    // kFrontRightModuleConstants,
+    // kBackLeftModuleConstants,
+    // kBackRightModuleConstants);
   }
 }

@@ -13,16 +13,20 @@ import static edu.wpi.first.units.Units.*;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
+import frc.team3602.robot.vision.Vision;
 
 public class Superstructure {
   private final IntakeSubsystem intakeSubsys;
   private final PivotSubsystem pivotSubsys;
   private final ShooterSubsystem shooterSubsys;
+  private final Vision vision;
 
-  public Superstructure(IntakeSubsystem intakeSubsys, PivotSubsystem pivotSubsys, ShooterSubsystem shooterSubsys) {
+  public Superstructure(IntakeSubsystem intakeSubsys, PivotSubsystem pivotSubsys, ShooterSubsystem shooterSubsys,
+      Vision vision) {
     this.intakeSubsys = intakeSubsys;
     this.pivotSubsys = pivotSubsys;
     this.shooterSubsys = shooterSubsys;
+    this.vision = vision;
   }
 
   public Command speakerCmd() {

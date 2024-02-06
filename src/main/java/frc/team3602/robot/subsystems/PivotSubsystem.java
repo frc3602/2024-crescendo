@@ -31,22 +31,19 @@ import static frc.team3602.robot.Constants.PivotConstants.*;
 
 public class PivotSubsystem implements Subsystem, Logged {
   // Motor controllers
-  @Log.NT
+  @Log
   public double motorOutput;
 
   private final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
   private final CANSparkMax pivotFollower = new CANSparkMax(kPivotFollowerId, MotorType.kBrushless);
 
   // Encoders
-  @Log.NT
-  public double encoderPosition;
-
   private final SparkAbsoluteEncoder pivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
   // Controls
   private double kP, kI, kD;
 
-  @Log.NT
+  @Log
   public MutableMeasure<Angle> targetAngle;
 
   private final PIDController controller = new PIDController(kP, kI, kD);
@@ -60,6 +57,7 @@ public class PivotSubsystem implements Subsystem, Logged {
     configPivotSubsys();
   }
 
+  @Log
   private Measure<Angle> getDegrees() {
     return Degrees.of(pivotEncoder.getPosition());
   }
@@ -81,10 +79,15 @@ public class PivotSubsystem implements Subsystem, Logged {
     });
   }
 
+  public Command stopMotors() {
+    return runOnce(() -> {
+      pivotMotor.stopMotor();
+      pivotFollower.stopMotor();
+    });
+  }
+
   @Override
   public void periodic() {
-    encoderPosition = getDegrees().in(Degrees);
-
     motorOutput = pivotMotor.getAppliedOutput();
 
     kP = SmartDashboard.getNumber("Pivot kP", 0);

@@ -18,11 +18,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Measure;
+import static edu.wpi.first.units.Units.*;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
 import static frc.team3602.robot.Constants.VisionConstants.*;
 
 public class Vision {
@@ -67,18 +64,18 @@ public class Vision {
     return targetHeight;
   }
 
-  public double getTargetRange(Measure<Distance> targetHeight) {
-    double targetRange;
+  public double getTargetDistance() {
+    double targetDistance;
     var result = getLatestResult();
 
     if (result.hasTargets()) {
-      targetRange = PhotonUtils.calculateDistanceToTargetMeters(kCameraHeight.in(Meters), targetHeight.in(Meters),
+      targetDistance = PhotonUtils.calculateDistanceToTargetMeters(kCameraHeight.in(Meters), getTargetHeight(),
           kCameraPitch.in(Radians), Units.degreesToRadians(result.getBestTarget().getPitch()));
     } else {
-      targetRange = 0.0;
+      targetDistance = 0.0;
     }
 
-    return targetRange;
+    return targetDistance;
   }
 
   private void configVision() {

@@ -20,6 +20,7 @@ import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 import frc.team3602.robot.superstructure.Superstructure;
+import frc.team3602.robot.vision.Vision;
 
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
 
@@ -31,7 +32,8 @@ public class RobotContainer implements Logged {
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final PivotSubsystem pivotSubsys = new PivotSubsystem();
 
-  private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys);
+  private final Vision vision = new Vision();
+  private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
 
   // Operator interfaces
   private final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
@@ -71,15 +73,15 @@ public class RobotContainer implements Logged {
 
     // While holding right bumper, run the shooter at 75% duty cycle
     xboxController.rightBumper().whileTrue(shooterSubsys.runShooter(() -> -0.75))
-        .whileFalse(shooterSubsys.stopShooter());
+        .whileFalse(shooterSubsys.stopMotors());
 
     // While holding left bumper, run the shooter at 15% duty cycle
     xboxController.leftBumper().whileTrue(shooterSubsys.runShooter(() -> -0.15))
-        .whileFalse(shooterSubsys.stopShooter());
+        .whileFalse(shooterSubsys.stopMotors());
 
     // While holding d-pad up, reverse the shooter at 15% duty cycle
     xboxController.pov(0).whileTrue(shooterSubsys.runShooter(() -> 0.15))
-        .whileFalse(shooterSubsys.stopShooter());
+        .whileFalse(shooterSubsys.stopMotors());
   }
 
   private void configAutonomous() {
