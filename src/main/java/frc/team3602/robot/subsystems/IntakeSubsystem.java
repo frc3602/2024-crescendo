@@ -16,20 +16,23 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
+import monologue.Logged;
+import monologue.Annotations.Log;
+
 import static frc.team3602.robot.Constants.IntakeConstants.*;
 
-public class IntakeSubsystem implements Subsystem {
+public class IntakeSubsystem implements Subsystem, Logged {
   // Motor controllers
   private final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId, MotorType.kBrushless);
 
   // Sensors
-  private boolean hasNote;
   private final DigitalInput colorSensor = new DigitalInput(kColorSensorId);
 
   public IntakeSubsystem() {
     configIntakeSubsys();
   }
 
+  @Log
   public boolean getColorSensor() {
     return colorSensor.get();
   }
@@ -44,7 +47,6 @@ public class IntakeSubsystem implements Subsystem {
 
   @Override
   public void periodic() {
-    hasNote = getColorSensor();
   }
 
   private void configIntakeSubsys() {

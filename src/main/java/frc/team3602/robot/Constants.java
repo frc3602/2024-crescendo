@@ -71,6 +71,9 @@ public final class Constants {
     public static final double kG = 5.09;
     public static final double kV = 0.44;
     public static final double kA = 0.46;
+
+    public static final Measure<Angle> kInFramePos = Degrees.of(45);
+    public static final Measure<Angle> kPickupPos = Degrees.of(90);
   }
 
   public final class VisionConstants {

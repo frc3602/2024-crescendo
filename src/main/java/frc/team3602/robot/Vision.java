@@ -4,7 +4,7 @@
  * in the root directory of this project.
  */
 
-package frc.team3602.robot.vision;
+package frc.team3602.robot;
 
 import java.util.Optional;
 

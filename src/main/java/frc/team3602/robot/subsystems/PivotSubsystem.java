@@ -62,7 +62,7 @@ public class PivotSubsystem implements Subsystem, Logged {
     return Degrees.of(pivotEncoder.getPosition());
   }
 
-  public Command setTarget(Supplier<Measure<Angle>> angleDegrees) {
+  public Command setAngle(Supplier<Measure<Angle>> angleDegrees) {
     return runOnce(() -> targetAngle = angleDegrees.get().mutableCopy());
   }
 

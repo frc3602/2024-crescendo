@@ -4,7 +4,7 @@
  * in the root directory of this project.
  */
 
-package frc.team3602.robot.superstructure;
+package frc.team3602.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -13,7 +13,8 @@ import static edu.wpi.first.units.Units.*;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
-import frc.team3602.robot.vision.Vision;
+
+import static frc.team3602.robot.Constants.PivotConstants.*;
 
 public class Superstructure {
   private final IntakeSubsystem intakeSubsys;
@@ -29,10 +30,20 @@ public class Superstructure {
     this.vision = vision;
   }
 
+  public Command inFrameCmd() {
+    return pivotSubsys.setAngle(() -> kInFramePos);
+  }
+
+  public Command pickupCmd() {
+    return Commands.sequence(
+        pivotSubsys.setAngle(() -> kPickupPos),
+        intakeSubsys.runIntake(() -> 0.50).until(intakeSubsys::getColorSensor));
+  }
+
   public Command speakerCmd() {
     return Commands.sequence(
         intakeSubsys.runIntake(() -> 0.75).until(intakeSubsys::getColorSensor),
-        pivotSubsys.setTarget(() -> Degrees.of(90)),
+        pivotSubsys.setAngle(() -> Degrees.of(90)),
         shooterSubsys.runShooter(() -> 0.75).alongWith(intakeSubsys.runIntake(() -> 0.75)));
   }
 

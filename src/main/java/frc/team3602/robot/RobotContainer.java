@@ -19,8 +19,6 @@ import frc.team3602.robot.Constants.DrivetrainConstants;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
-import frc.team3602.robot.superstructure.Superstructure;
-import frc.team3602.robot.vision.Vision;
 
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
 
@@ -34,14 +32,13 @@ public class RobotContainer implements Logged {
 
   private final Vision vision = new Vision();
   private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
+  public final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
   // Operator interfaces
   private final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
 
   // Autonomous
   private final SendableChooser<Command> sendableChooser = new SendableChooser<>();
-
-  public final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
   public RobotContainer() {
     configDefaultCommands();
@@ -54,34 +51,11 @@ public class RobotContainer implements Logged {
   }
 
   private void configButtonBindings() {
-    // xboxController.pov(180).whileTrue(pivotSubsys.setTarget(() ->
-    // Degrees.of(90)));
-    // xboxController.pov(90).whileTrue(pivotSubsys.setTarget(() ->
-    // Degrees.of(45)));
+    // When a is pressed go to pickup note
+    xboxController.a().whileTrue(superstructure.pickupCmd());
 
-    // While holding b button, run the intake at 75% duty cycle
-    xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
-        .whileFalse(intakeSubsys.stopIntake());
-
-    // While holding x button, run the intake at 15% duty cycle
-    xboxController.x().whileTrue(intakeSubsys.runIntake(() -> 0.15))
-        .whileFalse(intakeSubsys.stopIntake());
-
-    // While holding b button, reverse the intake at 15% duty cycle
-    xboxController.a().whileTrue(intakeSubsys.runIntake(() -> -0.15))
-        .whileFalse(intakeSubsys.stopIntake());
-
-    // While holding right bumper, run the shooter at 75% duty cycle
-    xboxController.rightBumper().whileTrue(shooterSubsys.runShooter(() -> -0.75))
-        .whileFalse(shooterSubsys.stopMotors());
-
-    // While holding left bumper, run the shooter at 15% duty cycle
-    xboxController.leftBumper().whileTrue(shooterSubsys.runShooter(() -> -0.15))
-        .whileFalse(shooterSubsys.stopMotors());
-
-    // While holding d-pad up, reverse the shooter at 15% duty cycle
-    xboxController.pov(0).whileTrue(shooterSubsys.runShooter(() -> 0.15))
-        .whileFalse(shooterSubsys.stopMotors());
+    // When y is pressed go to inside frame
+    xboxController.y().whileTrue(superstructure.inFrameCmd());
   }
 
   private void configAutonomous() {
