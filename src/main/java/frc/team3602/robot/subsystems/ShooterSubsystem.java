@@ -39,8 +39,6 @@ public class ShooterSubsystem implements Subsystem, Logged {
   private final RelativeEncoder topShooterMotorEncoder = topShooterMotor.getEncoder();
 
   // Controls
-  private final InterpolatingTreeMap lerpTable = new InterpolatingTreeMap<Measure<Distance>, Measure<Angle>>();
-
   private final PIDController controller = new PIDController(kP, kI, kD);
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
 

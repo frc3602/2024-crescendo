@@ -42,9 +42,7 @@ public class Superstructure {
 
   public Command speakerCmd() {
     return Commands.sequence(
-        intakeSubsys.runIntake(() -> 0.75).until(intakeSubsys::getColorSensor),
-        pivotSubsys.setAngle(() -> Degrees.of(90)),
-        shooterSubsys.runShooter(() -> 0.75).alongWith(intakeSubsys.runIntake(() -> 0.75)));
+        pivotSubsys.setAngle(() -> Degrees.of(pivotSubsys.lerpTable.get(vision.getTargetDistance()))));
   }
 
   public Command ampCmd() {

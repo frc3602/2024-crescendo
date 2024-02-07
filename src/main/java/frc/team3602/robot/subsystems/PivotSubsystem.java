@@ -16,7 +16,12 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
+import edu.wpi.first.math.interpolation.Interpolator;
+import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,6 +50,8 @@ public class PivotSubsystem implements Subsystem, Logged {
 
   @Log
   public MutableMeasure<Angle> targetAngle;
+
+  public final InterpolatingDoubleTreeMap lerpTable = new InterpolatingDoubleTreeMap();
 
   private final PIDController controller = new PIDController(kP, kI, kD);
   private final ArmFeedforward feedforward = new ArmFeedforward(kS, kG, kV, kA);
@@ -113,5 +120,9 @@ public class PivotSubsystem implements Subsystem, Logged {
 
     pivotMotor.burnFlash();
     pivotFollower.burnFlash();
+
+    // Interpolation table config
+    lerpTable.put(5.0, 25.0); // 5 feet, 25 degrees
+    lerpTable.put(10.0, 35.0); // 10 feet, 35 degrees
   }
 }
