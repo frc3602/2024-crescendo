@@ -14,18 +14,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import static edu.wpi.first.units.Units.*;
 
-import frc.team3602.robot.Constants.DrivetrainConstants;
-// import frc.team3602.robot.subsystems.DrivetrainSubsystem;
+import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 
+import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
 
 import monologue.Logged;
 
 public class RobotContainer implements Logged {
   // Subsystems
+  private final DrivetrainSubsystem driveSubsys = kDrivetrainSubsys;
   private final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final PivotSubsystem pivotSubsys = new PivotSubsystem();
@@ -47,6 +48,13 @@ public class RobotContainer implements Logged {
   }
 
   private void configDefaultCommands() {
+    driveSubsys
+        .setDefaultCommand(driveSubsys.applyRequest(
+            () -> driveSubsys.fieldCentricDrive
+                .withVelocityX(-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond))
+                .withVelocityY(-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond))
+                .withRotationalRate(-xboxController.getRightX() * kMaxAngularRate.in(MetersPerSecond))));
+
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
   }
 
