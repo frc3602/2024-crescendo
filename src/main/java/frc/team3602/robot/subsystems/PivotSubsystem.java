@@ -108,7 +108,8 @@ public class PivotSubsystem implements Subsystem, Logged {
     pivotFollower.enableVoltageCompensation(pivotFollower.getBusVoltage());
 
     // Pivot encoder config
-    pivotEncoder.setVelocityConversionFactor(kPivotConversionFactor);
+    pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
+    pivotEncoder.setZeroOffset(kAbsoluteOffset);
 
     pivotMotor.burnFlash();
     pivotFollower.burnFlash();

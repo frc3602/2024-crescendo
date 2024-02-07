@@ -62,6 +62,7 @@ public final class Constants {
     public static final int kPivotFollowerCurrentLimit = 40;
 
     public static final double kPivotConversionFactor = 360;
+    public static final double kAbsoluteOffset = 0;
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
