@@ -23,9 +23,6 @@ import static frc.team3602.robot.Constants.ClimberConstants.*;
 
 public class ClimberSubsystem implements Subsystem, Logged {
   // Motor controllers
- //@Log
- //public double motorOutput;
-
   private final CANSparkMax rightMotor = new CANSparkMax(kRightClimberId, MotorType.kBrushless);
   private final CANSparkMax leftMotor = new CANSparkMax(kLeftClimberId, MotorType.kBrushless);
 

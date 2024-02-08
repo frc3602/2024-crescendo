@@ -34,7 +34,7 @@ public class RobotContainer implements Logged {
   private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
 
   private final Vision vision = new Vision();
-  private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
+  private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, climberSubsys, vision);
   public final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
   // Operator interfaces
@@ -58,6 +58,8 @@ public class RobotContainer implements Logged {
                 .withRotationalRate(-xboxController.getRightX() * kMaxAngularRate.in(MetersPerSecond))));
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
+
+    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {

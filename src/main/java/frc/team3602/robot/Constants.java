@@ -48,10 +48,10 @@ public final class Constants {
     public static double kRightD = 0.0; //TODO: set final after tuning
 
     //Right feedforward Constants
-    public static final double kRS = 0.0;
-    public static final double kRG = 0.0;
-    public static final double kRV = 0.0;
-    public static final double kRA = 0.0;
+    public static final double kRS = 0.0; //TODO: set final after tuning
+    public static final double kRG = 0.0; //TODO: set final after tuning
+    public static final double kRV = 0.0; //TODO: set final after tuning
+    public static final double kRA = 0.0; //TODO: set final after tuning
 
     //Left PID tuning constants (:
     public static double kLeftP = 0.0; //TODO: set final after tuning
@@ -59,10 +59,10 @@ public final class Constants {
     public static double kLeftD = 0.0; //TODO: set final after tuning
 
     //Left feedforward Constants
-    public static final double kLS = 0.0;
-    public static final double kLG = 0.0;
-    public static final double kLV = 0.0;
-    public static final double kLA = 0.0;
+    public static final double kLS = 0.0; //TODO: set final after tuning
+    public static final double kLG = 0.0; //TODO: set final after tuning
+    public static final double kLV = 0.0; //TODO: set final after tuning
+    public static final double kLA = 0.0; //TODO: set final after tuning
 
   }
 
@@ -93,7 +93,7 @@ public final class Constants {
 
   public final class PivotConstants {
     public static final int kPivotMotorId = 4;
-    public static final int kPivotFollowerId = 6; // TODO: CHANGE MOTOR CONTROLLER TO CAN ID 6
+    public static final int kPivotFollowerId = 6; //TODO: CHANGE MOTOR CONTROLLER TO CAN ID 6
 
     public static final int kPivotMotorCurrentLimit = 40;
     public static final int kPivotFollowerCurrentLimit = 40;
