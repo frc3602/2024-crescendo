@@ -32,29 +32,33 @@ public final class Constants {
     public static final int kRightClimberId = 10;
     public static final int kLeftClimberId =11;
 
-    public static final int kRightMotorCurrentLimit = 30;
-    public static final int kLeftMotorCurrentLimit = 30;
+    public static final int kMotorCurrentLimit = 30;
 
-    public static final double kRightGear = 5.0;
-    public static final double kLeftGear = 5.0;
+    /*Conversion factor in inches per turn calculated as follows:
+     Drum diameter*pi/gear ratio
+    */
+    public static final double kHeightConvFact = (2.0*Math.PI)/5.0;
+
+    //Retracted height of arms from floor. The arm postion will be set to this on init
+    public static final double kRetractedHeight=0.0;
 
     //Right PID tuning constants :)
-    public static final double kRightP = 0.0;
-    public static final double kRightI = 0.0;
-    public static final double kRightD = 0.0;
+    public static double kRightP = 0.0; //TODO: set final after tuning
+    public static double kRightI = 0.0; //TODO: set final after tuning
+    public static double kRightD = 0.0; //TODO: set final after tuning
 
-    //Feedforward Constants
+    //Right feedforward Constants
     public static final double kRS = 0.0;
     public static final double kRG = 0.0;
     public static final double kRV = 0.0;
     public static final double kRA = 0.0;
 
     //Left PID tuning constants (:
-    public static final double kLeftP = 0.0;
-    public static final double kLeftI = 0.0;
-    public static final double kLeftD = 0.0;
+    public static double kLeftP = 0.0; //TODO: set final after tuning
+    public static double kLeftI = 0.0; //TODO: set final after tuning
+    public static double kLeftD = 0.0; //TODO: set final after tuning
 
-    //Feedforward Constants
+    //Left feedforward Constants
     public static final double kLS = 0.0;
     public static final double kLG = 0.0;
     public static final double kLV = 0.0;

@@ -6,27 +6,15 @@
 
 package frc.team3602.robot.subsystems;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
-
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import static edu.wpi.first.units.Units.*;
 
 import monologue.Logged;
 import monologue.Annotations.Log;
@@ -46,90 +34,114 @@ public class ClimberSubsystem implements Subsystem, Logged {
   private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
 
   // Controls
-  private double kRP, kRI, kRD, kLP, kLI, kLD;
+  private double rightTarget, leftTarget;
 
-  //@Log
-  //public MutableMeasure<Angle> targetAngle;
-
-  //public final InterpolatingDoubleTreeMap lerpTable = new InterpolatingDoubleTreeMap();
-
-  private final PIDController rightController = new PIDController(kRP, kRI, kRD);
+  private final PIDController rightController = new PIDController(kRightP, kRightI, kRightD);
   private final ElevatorFeedforward rightFeedforward = new ElevatorFeedforward(kRS, kRG, kRV, kRA);
 
-  private final PIDController leftController = new PIDController(kLP, kLI, kLD);
+  private final PIDController leftController = new PIDController(kLeftP, kLeftI, kLeftD);
   private final ElevatorFeedforward leftFeedforward = new ElevatorFeedforward(kLS, kLG, kLV, kLA);
 
   public ClimberSubsystem() {
-    SmartDashboard.putNumber("Right kP", kRP);
-    SmartDashboard.putNumber("Right kI", kRI);
-    SmartDashboard.putNumber("Right kD", kRD);
-    SmartDashboard.putNumber("Left kP", kLP);
-    SmartDashboard.putNumber("Left kI", kLI);
-    SmartDashboard.putNumber("Left kD", kLD);
+    SmartDashboard.putNumber("Right Proportional", kRightP);
+    SmartDashboard.putNumber("Right Integral", kRightI);
+    SmartDashboard.putNumber("Right Derivitave", kRightD);
+    SmartDashboard.putNumber("Left Proportional", kLeftP);
+    SmartDashboard.putNumber("Left Integral", kLeftI);
+    SmartDashboard.putNumber("Left Derivitive", kLeftD);
 
     resetEncoders();
     configClimberSubsys();
   }
   
   public void resetEncoders(){
-    rightEncoder.setPosition(0.0);
-    leftEncoder.setPosition(0.0);
+    rightEncoder.setPosition(kRetractedHeight);
+    leftEncoder.setPosition(kRetractedHeight);
   }
-  
-  public void getRightEncoder(){
-    rightEncoder.getPosition();
+  @Log
+  public double getRightEncoder(){
+    return rightEncoder.getPosition();
   }
-  
-  public void getLeftEncoder(){
-    leftEncoder.getPosition();
-  }
-
-  public Command setRightHeight(DoubleSupplier rightTarget) {
-    return runOnce(() -> targetAngle = angleDegrees.get().mutableCopy());
+  @Log
+  public double getLeftEncoder(){
+    return leftEncoder.getPosition();
   }
 
+  @Log
+  public Command setRightHeight(double setpoint) {
+    return runOnce(() ->  rightTarget= setpoint);
+  }
+
+  @Log
+  public Command setLeftHeight(double setpoint){
+    return runOnce(()-> leftTarget=setpoint);
+  }
+@Log
   private double getRightEffort() {
     var ffEffort = rightFeedforward.calculate(2.0, 0);
-    var pidEffort = rightController.calculate(getRightEncoder(), targetAngle.in(Degrees));
+    var pidEffort = rightController.calculate(getRightEncoder(), rightTarget);
+
+    return ffEffort + pidEffort;
+  }
+@Log
+  private double getLeftEffort() {
+    var ffEffort = leftFeedforward.calculate(2.0, 0);
+    var pidEffort = leftController.calculate(getLeftEncoder(), leftTarget);
 
     return ffEffort + pidEffort;
   }
 
+  public Command holdHeights() {
+    return runOnce(() -> {
+      rightMotor.setVoltage(getRightEffort());
+      leftMotor.setVoltage(getLeftEffort());
+    });
+  }
+
   public Command stopMotors() {
     return runOnce(() -> {
-      pivotMotor.stopMotor();
-      pivotFollower.stopMotor();
+      rightMotor.stopMotor();
+      leftMotor.stopMotor();
     });
   }
 
   @Override
   public void periodic() {
-    motorOutput = pivotMotor.getAppliedOutput();
+    //Get new tuning numbers from shuffleboard
+    double rp =SmartDashboard.getNumber("Right Proportional", kRightP);
+    double ri =SmartDashboard.getNumber("Right Integral", kRightI);
+    double rd =SmartDashboard.getNumber("Right Derivitave", kRightD);
+    double lp =SmartDashboard.getNumber("Left Proportional", kLeftP);
+    double li =SmartDashboard.getNumber("Left Integral", kLeftI);
+    double ld =SmartDashboard.getNumber("Left Derivitive", kLeftD);
 
-    kP = SmartDashboard.getNumber("Pivot kP", 0);
-    kI = SmartDashboard.getNumber("Pivot kI", 0);
-    kD = SmartDashboard.getNumber("Pivot kD", 0);
+    // Check if tuning numbers changed and updat controller values
+    if ((rp != kRightP)){kRightP=rp;}
+    if((ri != kRightI)){kRightI=ri;}
+    if((rd !=kRightD)){kRightD=rd;}
+    if ((lp != kLeftP)){kLeftP=lp;}
+    if((li != kLeftI)){kLeftI=li;}
+    if((ld !=kLeftD)){kLeftD=ld;}
   }
 
   private void configClimberSubsys() {
     // Right motor config
     rightMotor.setIdleMode(IdleMode.kBrake);
-    rightMotor.setSmartCurrentLimit(kRightMotorCurrentLimit);
+    rightMotor.setSmartCurrentLimit(kMotorCurrentLimit);
     rightMotor.enableVoltageCompensation(rightMotor.getBusVoltage());
 
     // Left motor follower config
     leftMotor.setIdleMode(IdleMode.kBrake);
-    leftMotor.setSmartCurrentLimit(kLeftMotorCurrentLimit);
+    leftMotor.setSmartCurrentLimit(kMotorCurrentLimit);
     leftMotor.enableVoltageCompensation(leftMotor.getBusVoltage());
 
     // Encoder config
-    rightEncoder.setPositionConversionFactor(kPivotConversionFactor);
+    rightEncoder.setPositionConversionFactor(kHeightConvFact);
+    leftEncoder.setPositionConversionFactor(kHeightConvFact);
 
     rightMotor.burnFlash();
     leftMotor.burnFlash();
 
-    // Interpolation table config
-    lerpTable.put(5.0, 25.0); // 5 feet, 25 degrees
-    lerpTable.put(10.0, 35.0); // 10 feet, 35 degrees
+
   }
 }
