@@ -28,6 +28,39 @@ public final class Constants {
   public final class OperatorInterfaceConstants {
     public final static int kXboxControllerPort = 0;
   }
+  public final class ClimberConstants {
+    public static final int kRightClimberId = 10;
+    public static final int kLeftClimberId =11;
+
+    public static final int kRightMotorCurrentLimit = 30;
+    public static final int kLeftMotorCurrentLimit = 30;
+
+    public static final double kRightGear = 5.0;
+    public static final double kLeftGear = 5.0;
+
+    //Right PID tuning constants :)
+    public static final double kRightP = 0.0;
+    public static final double kRightI = 0.0;
+    public static final double kRightD = 0.0;
+
+    //Feedforward Constants
+    public static final double kRS = 0.0;
+    public static final double kRG = 0.0;
+    public static final double kRV = 0.0;
+    public static final double kRA = 0.0;
+
+    //Left PID tuning constants (:
+    public static final double kLeftP = 0.0;
+    public static final double kLeftI = 0.0;
+    public static final double kLeftD = 0.0;
+
+    //Feedforward Constants
+    public static final double kLS = 0.0;
+    public static final double kLG = 0.0;
+    public static final double kLV = 0.0;
+    public static final double kLA = 0.0;
+
+  }
 
   public final class ShooterConstants {
     public static final int kTopShooterMotorId = 2;
