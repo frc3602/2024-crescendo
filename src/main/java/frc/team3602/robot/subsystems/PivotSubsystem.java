@@ -20,6 +20,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -45,6 +46,11 @@ public class PivotSubsystem implements Subsystem, Logged {
   private double kP, kI, kD;
 
   @Log
+  public double encoderValue;
+
+  @Log.NT
+  public double anotherEncoderValue;
+
   public MutableMeasure<Angle> targetAngle;
 
   public final InterpolatingDoubleTreeMap lerpTable = new InterpolatingDoubleTreeMap();
@@ -60,7 +66,6 @@ public class PivotSubsystem implements Subsystem, Logged {
     configPivotSubsys();
   }
 
-  @Log
   private Measure<Angle> getDegrees() {
     return Degrees.of(pivotEncoder.getPosition());
   }
@@ -93,6 +98,10 @@ public class PivotSubsystem implements Subsystem, Logged {
   public void periodic() {
     motorOutput = pivotMotor.getAppliedOutput();
 
+    encoderValue = getDegrees().in(Degrees);
+
+    anotherEncoderValue = pivotEncoder.getPosition();
+
     kP = SmartDashboard.getNumber("Pivot kP", 0);
     kI = SmartDashboard.getNumber("Pivot kI", 0);
     kD = SmartDashboard.getNumber("Pivot kD", 0);
@@ -100,19 +109,19 @@ public class PivotSubsystem implements Subsystem, Logged {
 
   private void configPivotSubsys() {
     // Pivot motor config
-    pivotMotor.setIdleMode(IdleMode.kBrake);
+    pivotMotor.setIdleMode(IdleMode.kCoast);
     pivotMotor.setSmartCurrentLimit(kPivotMotorCurrentLimit);
     pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
 
     // Pivot motor follower config
-    pivotFollower.setIdleMode(IdleMode.kBrake);
+    pivotFollower.setIdleMode(IdleMode.kCoast);
     pivotFollower.follow(pivotMotor, false);
     pivotFollower.setSmartCurrentLimit(kPivotFollowerCurrentLimit);
     pivotFollower.enableVoltageCompensation(pivotFollower.getBusVoltage());
 
     // Pivot encoder config
     pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
-    pivotEncoder.setZeroOffset(kAbsoluteOffset);
+    // pivotEncoder.setZeroOffset(kAbsoluteOffset);
 
     pivotMotor.burnFlash();
     pivotFollower.burnFlash();

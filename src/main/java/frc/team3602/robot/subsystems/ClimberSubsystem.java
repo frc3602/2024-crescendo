@@ -50,37 +50,39 @@ public class ClimberSubsystem implements Subsystem, Logged {
     resetEncoders();
     configClimberSubsys();
   }
-  
-  public void resetEncoders(){
+
+  public void resetEncoders() {
     rightEncoder.setPosition(kRetractedHeight);
     leftEncoder.setPosition(kRetractedHeight);
   }
+
   @Log
-  public double getRightEncoder(){
+  public double getRightEncoder() {
     return rightEncoder.getPosition();
   }
+
   @Log
-  public double getLeftEncoder(){
+  public double getLeftEncoder() {
     return leftEncoder.getPosition();
   }
 
-  @Log
   public Command setRightHeight(double setpoint) {
-    return runOnce(() ->  rightTarget= setpoint);
+    return runOnce(() -> rightTarget = setpoint);
+  }
+
+  public Command setLeftHeight(double setpoint) {
+    return runOnce(() -> leftTarget = setpoint);
   }
 
   @Log
-  public Command setLeftHeight(double setpoint){
-    return runOnce(()-> leftTarget=setpoint);
-  }
-@Log
   private double getRightEffort() {
     var ffEffort = rightFeedforward.calculate(2.0, 0);
     var pidEffort = rightController.calculate(getRightEncoder(), rightTarget);
 
     return ffEffort + pidEffort;
   }
-@Log
+
+  @Log
   private double getLeftEffort() {
     var ffEffort = leftFeedforward.calculate(2.0, 0);
     var pidEffort = leftController.calculate(getLeftEncoder(), leftTarget);
@@ -104,21 +106,33 @@ public class ClimberSubsystem implements Subsystem, Logged {
 
   @Override
   public void periodic() {
-    //Get new tuning numbers from shuffleboard
-    double rp =SmartDashboard.getNumber("Right Proportional", kRightP);
-    double ri =SmartDashboard.getNumber("Right Integral", kRightI);
-    double rd =SmartDashboard.getNumber("Right Derivitave", kRightD);
-    double lp =SmartDashboard.getNumber("Left Proportional", kLeftP);
-    double li =SmartDashboard.getNumber("Left Integral", kLeftI);
-    double ld =SmartDashboard.getNumber("Left Derivitive", kLeftD);
+    // Get new tuning numbers from shuffleboard
+    double rp = SmartDashboard.getNumber("Right Proportional", kRightP);
+    double ri = SmartDashboard.getNumber("Right Integral", kRightI);
+    double rd = SmartDashboard.getNumber("Right Derivitave", kRightD);
+    double lp = SmartDashboard.getNumber("Left Proportional", kLeftP);
+    double li = SmartDashboard.getNumber("Left Integral", kLeftI);
+    double ld = SmartDashboard.getNumber("Left Derivitive", kLeftD);
 
     // Check if tuning numbers changed and updat controller values
-    if ((rp != kRightP)){kRightP=rp;}
-    if((ri != kRightI)){kRightI=ri;}
-    if((rd !=kRightD)){kRightD=rd;}
-    if ((lp != kLeftP)){kLeftP=lp;}
-    if((li != kLeftI)){kLeftI=li;}
-    if((ld !=kLeftD)){kLeftD=ld;}
+    if ((rp != kRightP)) {
+      kRightP = rp;
+    }
+    if ((ri != kRightI)) {
+      kRightI = ri;
+    }
+    if ((rd != kRightD)) {
+      kRightD = rd;
+    }
+    if ((lp != kLeftP)) {
+      kLeftP = lp;
+    }
+    if ((li != kLeftI)) {
+      kLeftI = li;
+    }
+    if ((ld != kLeftD)) {
+      kLeftD = ld;
+    }
   }
 
   private void configClimberSubsys() {
@@ -138,7 +152,6 @@ public class ClimberSubsystem implements Subsystem, Logged {
 
     rightMotor.burnFlash();
     leftMotor.burnFlash();
-
 
   }
 }

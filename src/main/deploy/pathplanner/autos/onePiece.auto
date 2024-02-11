@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 14.493876457214355,
+      "y": 2.739488124847412
+    },
+    "rotation": 2358.8059509912177
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "runShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "traj"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "speakerCmd"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}

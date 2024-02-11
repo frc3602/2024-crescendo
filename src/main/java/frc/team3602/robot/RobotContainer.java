@@ -31,10 +31,10 @@ public class RobotContainer implements Logged {
   private final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final PivotSubsystem pivotSubsys = new PivotSubsystem();
-  private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
+  // private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
 
   private final Vision vision = new Vision();
-  private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, climberSubsys, vision);
+  private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
   public final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
   // Operator interfaces
@@ -50,16 +50,16 @@ public class RobotContainer implements Logged {
   }
 
   private void configDefaultCommands() {
-    driveSubsys
-        .setDefaultCommand(driveSubsys.applyRequest(
-            () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond))
-                .withVelocityY(-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond))
-                .withRotationalRate(-xboxController.getRightX() * kMaxAngularRate.in(MetersPerSecond))));
+    // driveSubsys
+    //     .setDefaultCommand(driveSubsys.applyRequest(
+    //         () -> driveSubsys.fieldCentricDrive
+    //             .withVelocityX(-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond))
+    //             .withVelocityY(-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond))
+    //             .withRotationalRate(-xboxController.getRightX() * kMaxAngularRate.in(MetersPerSecond))));
 
-    pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
+    // pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
-    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {
