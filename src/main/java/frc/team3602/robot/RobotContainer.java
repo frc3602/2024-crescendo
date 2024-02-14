@@ -26,13 +26,12 @@ import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
 import monologue.Logged;
 
 public class RobotContainer implements Logged {
-  public final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
-
+  private final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
   // Subsystems
   private final DrivetrainSubsystem driveSubsys = kDrivetrainSubsys;
   private final ShooterSubsystem shooterSubsys = new ShooterSubsystem(powerDistribution);
-  public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
+  private final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final PivotSubsystem pivotSubsys = new PivotSubsystem();
   // private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
 
@@ -53,11 +52,12 @@ public class RobotContainer implements Logged {
 
   private void configDefaultCommands() {
     // driveSubsys
-    //     .setDefaultCommand(driveSubsys.applyRequest(
-    //         () -> driveSubsys.fieldCentricDrive
-    //             .withVelocityX(-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond))
-    //             .withVelocityY(-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond))
-    //             .withRotationalRate(-xboxController.getRightX() * kMaxAngularRate.in(MetersPerSecond))));
+    // .setDefaultCommand(driveSubsys.applyRequest(
+    // () -> driveSubsys.fieldCentricDrive
+    // .withVelocityX(-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond))
+    // .withVelocityY(-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond))
+    // .withRotationalRate(-xboxController.getRightX() *
+    // kMaxAngularRate.in(MetersPerSecond))));
 
     // pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
@@ -65,12 +65,11 @@ public class RobotContainer implements Logged {
   }
 
   private void configButtonBindings() {
-    xboxController.a().whileTrue(superstructure.shootCmd());
+    xboxController.a().whileTrue(superstructure.pickupCmd());
 
     // xboxController.b().whileTrue(shooterSubsys.runShooter(() -> 0.50));
 
     // xboxController.x().whileTrue(shooterSubsys.runShooter(() -> 0.0));
-
 
     // When a is pressed go to pickup note
     // xboxController.a().onTrue(pivotSubsys.setAngle(() -> 5));

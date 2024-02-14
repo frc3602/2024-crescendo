@@ -28,7 +28,7 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
 
   // Sensors
   @Log
-  private boolean isPressed;
+  private boolean hasNote;
 
   private final SparkLimitSwitch colorSensor = intakeMotor.getForwardLimitSwitch(Type.kNormallyClosed);
 
@@ -50,7 +50,7 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
 
   @Override
   public void periodic() {
-    isPressed = getColorSensor();
+    hasNote = getColorSensor();
   }
 
   private void configIntakeSubsys() {
@@ -61,6 +61,7 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
     intakeMotor.enableVoltageCompensation(intakeMotor.getBusVoltage());
     intakeMotor.setOpenLoopRampRate(0.000001);
 
+    // Sensors config
     colorSensor.enableLimitSwitch(true);
 
     intakeMotor.burnFlash();
