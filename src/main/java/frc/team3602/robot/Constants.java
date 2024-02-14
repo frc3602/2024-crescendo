@@ -70,8 +70,8 @@ public final class Constants {
     public static final int kTopShooterMotorId = 2;
     public static final int kBottomShooterMotorId = 3;
 
-    public static final int kTopShooterMotorCurrentLimit = 30;
-    public static final int kBottomShooterMotorCurrentLimit = 30;
+    public static final int kTopShooterMotorCurrentLimit = 25;
+    public static final int kBottomShooterMotorCurrentLimit = 25;
 
     public static final double kShooterConversionFactor = 360;
 
@@ -95,8 +95,8 @@ public final class Constants {
     public static final int kPivotMotorId = 4;
     public static final int kPivotFollowerId = 6; //TODO: CHANGE MOTOR CONTROLLER TO CAN ID 6
 
-    public static final int kPivotMotorCurrentLimit = 40;
-    public static final int kPivotFollowerCurrentLimit = 40;
+    public static final int kPivotMotorCurrentLimit = 30;
+    public static final int kPivotFollowerCurrentLimit = 30;
 
     public static final double kPivotConversionFactor = 360;
     public static final double kAbsoluteOffset = 0;
@@ -105,10 +105,10 @@ public final class Constants {
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 
-    public static final double kS = 6.8;
-    public static final double kG = 5.09;
-    public static final double kV = 0.44;
-    public static final double kA = 0.46;
+    public static final double kS = 6.8; // 6.8
+    public static final double kG = 0.48; // 0.49
+    public static final double kV = 4.68; // 4.68
+    public static final double kA = 0.03; // 0.03
 
     public static final Measure<Angle> kInFramePos = Degrees.of(45);
     public static final Measure<Angle> kPickupPos = Degrees.of(90);

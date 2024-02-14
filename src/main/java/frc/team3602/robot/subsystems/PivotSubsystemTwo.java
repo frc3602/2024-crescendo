@@ -10,8 +10,6 @@ import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -34,7 +32,7 @@ import monologue.Annotations.Log;
 
 import static frc.team3602.robot.Constants.PivotConstants.*;
 
-public class PivotSubsystem extends SubsystemBase implements Logged {
+public class PivotSubsystemTwo extends SubsystemBase implements Logged {
   // Motor controllers
   @Log
   public double motorOutput;
@@ -68,19 +66,17 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
 
   public final InterpolatingDoubleTreeMap lerpTable = new InterpolatingDoubleTreeMap();
 
-  private final SparkPIDController controller = pivotMotor.getPIDController();
-
-  // private final PIDController controller = new PIDController(0.001, 0, 0.0);
+  private final PIDController controller = new PIDController(0.001, 0, 0.0);
   private final ArmFeedforward feedforward = new ArmFeedforward(kS, kG, kV, kA);
 
   private final TrapezoidProfile profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(20, 40));
 
-  public PivotSubsystem() {
+  public PivotSubsystemTwo() {
     SmartDashboard.putNumber("Pivot kP", kP);
     SmartDashboard.putNumber("Pivot kI", kI);
     SmartDashboard.putNumber("Pivot kD", kD);
 
-    angle = -65;
+    controller.setSetpoint(45);
 
     configPivotSubsys();
   }
@@ -90,17 +86,17 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
   }
 
   public Command setAngle(DoubleSupplier angleDegrees) {
-    return runOnce(() -> {
-      angle = angleDegrees.getAsDouble();
-    });
+    return runOnce(() -> controller.setSetpoint(angleDegrees.getAsDouble()));
   }
 
   private double getEffort() {
-    var ffEffort = feedforward.calculate(Units.degreesToRadians(angle), 0);
+    var ffEffort = feedforward.calculate(Units.degreesToRadians(controller.getSetpoint()), 0);
+    var pidEffort = controller.calculate(pivotEncoder.getPosition(), controller.getSetpoint());
 
     this.ffEffort = ffEffort;
+    this.pidEffort = pidEffort;
 
-    return ffEffort;
+    return ffEffort + pidEffort;
   }
 
   public Command holdAngle() {
@@ -108,8 +104,7 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
       var effort = getEffort();
       this.effort = effort;
 
-      controller.setReference(angle, ControlType.kPosition);
-      // pivotMotor.setVoltage(effort);
+      pivotMotor.setVoltage(effort);
     });
   }
 
@@ -127,6 +122,8 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     motorOutputTwo = pivotFollower.getAppliedOutput();
 
     encoderValue = pivotEncoder.getPosition();
+
+    angle = controller.getSetpoint();
 
     kP = SmartDashboard.getNumber("Pivot kP", 0);
     kI = SmartDashboard.getNumber("Pivot kI", 0);
@@ -149,21 +146,11 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     // Pivot encoder config
     // pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
 
-    controller.setP(0.009);
-    controller.setI(0);
-    controller.setD(0.1);
-
-    controller.setFeedbackDevice(pivotEncoder);
-
-    controller.setPositionPIDWrappingEnabled(true);
-    controller.setPositionPIDWrappingMinInput(0);
-    controller.setPositionPIDWrappingMaxInput(90);
-
-    // controller.setTolerance(1);
-    // controller.enableContinuousInput(0, 45);
-
     pivotMotor.burnFlash();
     pivotFollower.burnFlash();
+
+    controller.setTolerance(1);
+    controller.enableContinuousInput(0, 45);
 
     // Interpolation table config
     lerpTable.put(5.0, 25.0); // 5 feet, 25 degrees

@@ -33,20 +33,28 @@ public class Superstructure {
     this.vision = vision;
   }
 
-  public Command inFrameCmd() {
-    return pivotSubsys.setAngle(() -> kInFramePos);
-  }
+  // public Command inFrameCmd() {
+  //   return pivotSubsys.setAngle(() -> kInFramePos);
+  // }
 
-  public Command pickupCmd() {
-    return Commands.sequence(
-        pivotSubsys.setAngle(() -> kPickupPos),
-        intakeSubsys.runIntake(() -> 0.50).until(intakeSubsys::getColorSensor));
-  }
+  // public Command pickupCmd() {
+  //   return Commands.sequence(
+  //       pivotSubsys.setAngle(() -> kPickupPos),
+  //       intakeSubsys.runIntake(() -> 0.50).until(intakeSubsys::getColorSensor));
+  // }
 
-  public Command speakerCmd() {
-    return Commands.sequence(
-        pivotSubsys.setAngle(() -> Degrees.of(pivotSubsys.lerpTable.get(vision.getTargetDistance()))));
-  }
+  // public Command speakerCmd() {
+  //   return Commands.sequence(
+  //       pivotSubsys.setAngle(() -> Degrees.of(pivotSubsys.lerpTable.get(vision.getTargetDistance()))));
+  // }
+
+public Command shootCmd() {
+  return Commands.sequence(
+    // intakeSubsys.intake(() -> 0.15)
+    intakeSubsys.runIntake(() -> 0.15).until(intakeSubsys::getColorSensor)
+    // shooterSubsys.runShooter(() -> 0.25).alongWith(intakeSubsys.runIntake(() -> 0.50).unless(intakeSubsys))
+  );
+}
 
   public Command ampCmd() {
     return Commands.sequence();

@@ -26,16 +26,18 @@ import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
 import monologue.Logged;
 
 public class RobotContainer implements Logged {
+  public final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
+
+
   // Subsystems
   private final DrivetrainSubsystem driveSubsys = kDrivetrainSubsys;
-  private final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
+  private final ShooterSubsystem shooterSubsys = new ShooterSubsystem(powerDistribution);
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final PivotSubsystem pivotSubsys = new PivotSubsystem();
   // private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
 
   private final Vision vision = new Vision();
   private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
-  public final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
   // Operator interfaces
   private final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
@@ -60,14 +62,23 @@ public class RobotContainer implements Logged {
     // pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
     // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+
+    intakeSubsys.setDefaultCommand(intakeSubsys.run(() -> intakeSubsys.getColorSensor()));
   }
 
   private void configButtonBindings() {
+    xboxController.a().whileTrue(superstructure.shootCmd());
+
+    // xboxController.b().whileTrue(shooterSubsys.runShooter(() -> 0.50));
+
+    // xboxController.x().whileTrue(shooterSubsys.runShooter(() -> 0.0));
+
+
     // When a is pressed go to pickup note
-    xboxController.a().whileTrue(superstructure.pickupCmd());
+    // xboxController.a().onTrue(pivotSubsys.setAngle(() -> 5));
 
     // When y is pressed go to inside frame
-    xboxController.y().whileTrue(superstructure.inFrameCmd());
+    // xboxController.b().onTrue(pivotSubsys.setAngle(() -> 10));
   }
 
   private void configAutonomous() {
