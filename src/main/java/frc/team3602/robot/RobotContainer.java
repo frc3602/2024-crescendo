@@ -62,8 +62,6 @@ public class RobotContainer implements Logged {
     // pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
     // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
-
-    intakeSubsys.setDefaultCommand(intakeSubsys.run(() -> intakeSubsys.getColorSensor()));
   }
 
   private void configButtonBindings() {

@@ -14,12 +14,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkLimitSwitch.Type;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import monologue.Logged;
@@ -33,60 +28,21 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
 
   // Sensors
   @Log
-  private boolean color;
+  private boolean isPressed;
 
-  @Log
-  public boolean anotherBool;
-
-  @Log
-  public boolean isChanged;
-
-  private final DigitalInput colorSensor = new DigitalInput(1);
-  // private final SparkLimitSwitch colorSensor = intakeMotor.getForwardLimitSwitch(Type.kNormallyClosed);
+  private final SparkLimitSwitch colorSensor = intakeMotor.getForwardLimitSwitch(Type.kNormallyClosed);
 
   public IntakeSubsystem() {
-    SmartDashboard.putBoolean("Color Sensor", getColorSensor());
-
     configIntakeSubsys();
   }
 
   public boolean getColorSensor() {
-    var colorSensor = !this.colorSensor.get();
-
-    anotherBool = colorSensor;
-
-    return colorSensor;
+    return colorSensor.isPressed();
   }
 
   public Command runIntake(DoubleSupplier percentage) {
-    return runOnce(() -> intakeMotor.set(percentage.getAsDouble()));
+    return startEnd(() -> intakeMotor.set(percentage.getAsDouble()), this::stopIntake);
   }
-
-  public Command intake(DoubleSupplier percentage) {
-    return new FunctionalCommand(() -> {
-
-    }, () -> {
-      intakeMotor.set(percentage.getAsDouble());
-
-      if (getColorSensor()) {
-        CommandScheduler.getInstance().cancelAll();
-      }
-    }, (onEnd) -> {
-      CommandScheduler.getInstance().cancelAll();
-    },
-        this::getColorSensor, this);
-  }
-
-  // public Command isChanged() {
-  // return runOnce(() -> isChanged = true);
-  // }
-
-  // public Command intakeParallel() {
-  // return Commands.parallel(
-  // isChanged(),
-  // runIntake()
-  // );
-  // }
 
   public Command stopIntake() {
     return runOnce(() -> intakeMotor.stopMotor());
@@ -94,9 +50,7 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
 
   @Override
   public void periodic() {
-    isChanged = getColorSensor();
-
-    color = getColorSensor();
+    isPressed = getColorSensor();
   }
 
   private void configIntakeSubsys() {
@@ -107,7 +61,8 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
     intakeMotor.enableVoltageCompensation(intakeMotor.getBusVoltage());
     intakeMotor.setOpenLoopRampRate(0.000001);
 
-    // colorSensor.enableLimitSwitch(true);
+    colorSensor.enableLimitSwitch(true);
+
     intakeMotor.burnFlash();
   }
 }

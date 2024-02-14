@@ -50,7 +50,6 @@ public class Superstructure {
 
 public Command shootCmd() {
   return Commands.sequence(
-    // intakeSubsys.intake(() -> 0.15)
     intakeSubsys.runIntake(() -> 0.15).until(intakeSubsys::getColorSensor)
     // shooterSubsys.runShooter(() -> 0.25).alongWith(intakeSubsys.runIntake(() -> 0.50).unless(intakeSubsys))
   );
