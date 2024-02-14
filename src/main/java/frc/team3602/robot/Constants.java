@@ -143,7 +143,7 @@ public final class Constants {
     private static final Slot0Configs kTurnGains = new Slot0Configs()
         .withKP(100.0).withKI(0.0).withKD(0.05)
         .withKS(0.0).withKV(1.5).withKA(0.0);
-    private static final double kSpeedAt12VoltsMps = 6.0;
+    public static final double kSpeedAt12VoltsMps = 6.0;
     private static final double kCoupleGearRatio = 3.5714285714285716;
     private static final boolean kTurnMotorInverted = true;
 

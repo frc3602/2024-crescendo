@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import static edu.wpi.first.units.Units.*;
 
@@ -22,6 +23,9 @@ import frc.team3602.robot.subsystems.ClimberSubsystem;
 
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import monologue.Logged;
 
@@ -42,7 +46,7 @@ public class RobotContainer implements Logged {
   private final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
 
   // Autonomous
-  private final SendableChooser<Command> sendableChooser = new SendableChooser<>();
+  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
 
   public RobotContainer() {
     configDefaultCommands();
@@ -79,10 +83,12 @@ public class RobotContainer implements Logged {
   }
 
   private void configAutonomous() {
-    SmartDashboard.putData(sendableChooser);
+    NamedCommands.registerCommand("onePieceCommand", Commands.none());
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   public Command getAutonomousCommand() {
-    return sendableChooser.getSelected();
+    return autoChooser.getSelected();
   }
 }

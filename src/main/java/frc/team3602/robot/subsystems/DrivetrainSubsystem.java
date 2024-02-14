@@ -7,23 +7,21 @@
 package frc.team3602.robot.subsystems;
 
 import java.util.function.Supplier;
-import java.util.Optional;
-import java.util.function.BooleanSupplier;
-
-import com.choreo.lib.Choreo;
-import com.choreo.lib.ChoreoTrajectory;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import static edu.wpi.first.units.Units.*;
@@ -33,7 +31,7 @@ import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 
 public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
   // Drivetrain
-  private final SwerveRequest.ApplyChassisSpeeds autonomousRequest = new SwerveRequest.ApplyChassisSpeeds();
+  private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
   public final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric()
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
       .withDeadband(0.02 * kMaxSpeed.in(MetersPerSecond))
@@ -47,10 +45,14 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
   public DrivetrainSubsystem(SwerveDrivetrainConstants drivetrainConstants, double odometryUpdateFrequency,
       SwerveModuleConstants... moduleConstants) {
     super(drivetrainConstants, odometryUpdateFrequency, moduleConstants);
+
+    configPathPlanner();
   }
 
   public DrivetrainSubsystem(SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants... moduleConstants) {
     super(drivetrainConstants, moduleConstants);
+
+    configPathPlanner();
   }
 
   @Override
@@ -62,26 +64,12 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
     return this.m_odometry.getEstimatedPosition();
   }
 
-  public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-    return run(() -> this.setControl(requestSupplier.get()));
+  public ChassisSpeeds getChassisSpeeds() {
+    return m_kinematics.toChassisSpeeds(getState().ModuleStates);
   }
 
-  public Command choreoSwerveCommand(ChoreoTrajectory trajectory) {
-    BooleanSupplier shouldMirror = () -> {
-      Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
-
-      return alliance.isPresent() && alliance.get() == Alliance.Red;
-    };
-
-    return Choreo.choreoSwerveCommand(
-        trajectory,
-        () -> getState().Pose,
-        new PIDController(1.0, 0.0, 0.0),
-        new PIDController(1.0, 0.0, 0.0),
-        new PIDController(1.0, 0.0, 0.0),
-        (speeds) -> setControl(autonomousRequest.withSpeeds(speeds)),
-        shouldMirror,
-        this);
+  public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
+    return run(() -> this.setControl(requestSupplier.get()));
   }
 
   public Command alignWithTarget() {
@@ -96,7 +84,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
         rotationSpeed = 0.0;
       }
 
-      this.setControl(autonomousRequest.withSpeeds(new ChassisSpeeds(0.0, 0.0, rotationSpeed)));
+      this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(0.0, 0.0, rotationSpeed)));
     });
   }
 
@@ -109,5 +97,29 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
       this.m_odometry.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(),
           estimatedRobotPose.timestampSeconds);
     }
+  }
+
+  private void configPathPlanner() {
+    double driveBaseRadius = 0;
+
+    for (var moduleLocation : m_moduleLocations) {
+      driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
+    }
+
+    AutoBuilder.configureHolonomic(
+        () -> this.getState().Pose,
+        this::seedFieldRelative,
+        this::getChassisSpeeds,
+        (chassisSpeeds) -> this.setControl(autoRequest.withSpeeds(chassisSpeeds)),
+        new HolonomicPathFollowerConfig(new PIDConstants(1, 0, 0), new PIDConstants(1, 0, 0), kSpeedAt12VoltsMps,
+            driveBaseRadius, new ReplanningConfig()),
+        () -> {
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this);
   }
 }
