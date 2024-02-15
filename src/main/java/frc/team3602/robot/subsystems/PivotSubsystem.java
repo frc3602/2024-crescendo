@@ -36,11 +36,11 @@ import static frc.team3602.robot.Constants.PivotConstants.*;
 
 public class PivotSubsystem extends SubsystemBase implements Logged {
   // Motor controllers
-  @Log
-  public double motorOutput;
+  // @Log
+  // public double motorOutput;
 
-  @Log
-  public double motorOutputTwo;
+  // @Log
+  // public double motorOutputTwo;
 
   private final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
   private final CANSparkMax pivotFollower = new CANSparkMax(kPivotFollowerId, MotorType.kBrushless);
@@ -122,9 +122,9 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
 
   @Override
   public void periodic() {
-    motorOutput = pivotMotor.getAppliedOutput();
+    // motorOutput = pivotMotor.getAppliedOutput();
 
-    motorOutputTwo = pivotFollower.getAppliedOutput();
+    // motorOutputTwo = pivotFollower.getAppliedOutput();
 
     encoderValue = pivotEncoder.getPosition();
 

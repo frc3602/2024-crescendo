@@ -23,29 +23,28 @@ import monologue.Annotations.Log;
 
 public class ShooterSubsystem extends SubsystemBase implements Logged {
   // Motor controllers
-  private final CANSparkMax topShooterMotor = new CANSparkMax(kTopShooterMotorId, MotorType.kBrushless);
-  private final CANSparkMax bottomShooterMotor = new CANSparkMax(kBottomShooterMotorId, MotorType.kBrushless);
+  public final CANSparkMax topShooterMotor = new CANSparkMax(kTopShooterMotorId, MotorType.kBrushless);
+  public final CANSparkMax bottomShooterMotor = new CANSparkMax(kBottomShooterMotorId, MotorType.kBrushless);
 
   private final PowerDistribution powerDistribution;
 
-  @Log
-  private double topCurr;
+  // @Log
+  // private double topCurr;
 
-  @Log
-  private double topOut;
+  // @Log
+  // private double topOut;
 
-  @Log
-  private double bottomCurr;
+  // @Log
+  // private double bottomCurr;
 
-  @Log
-  private double bottomOut;
+  // @Log
+  // private double bottomOut;
 
   public ShooterSubsystem(PowerDistribution powerDistribution) {
     this.powerDistribution = powerDistribution;
 
     configShooterSubsys();
   }
-
 
   public Command runShooter(DoubleSupplier percentage) {
     return run(() -> {
@@ -63,11 +62,11 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
 
   @Override
   public void periodic() {
-    topCurr = powerDistribution.getCurrent(6);
-    topOut = topShooterMotor.getAppliedOutput();
+    // topCurr = powerDistribution.getCurrent(6);
+    // topOut = topShooterMotor.getAppliedOutput();
 
-    bottomCurr = powerDistribution.getCurrent(5);
-    bottomOut = bottomShooterMotor.getAppliedOutput();
+    // bottomCurr = powerDistribution.getCurrent(5);
+    // bottomOut = bottomShooterMotor.getAppliedOutput();
   }
 
   private void configShooterSubsys() {

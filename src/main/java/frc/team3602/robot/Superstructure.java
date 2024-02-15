@@ -6,8 +6,11 @@
 
 package frc.team3602.robot;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 import static edu.wpi.first.units.Units.*;
 
 import frc.team3602.robot.subsystems.IntakeSubsystem;
@@ -23,14 +26,16 @@ public class Superstructure {
   private final ShooterSubsystem shooterSubsys;
   // private final ClimberSubsystem climberSubsys;
   private final Vision vision;
+  private final XboxController xboxController;
 
   public Superstructure(IntakeSubsystem intakeSubsys, PivotSubsystem pivotSubsys, ShooterSubsystem shooterSubsys,
-      Vision vision) {
+      Vision vision, XboxController xboxController) {
     this.intakeSubsys = intakeSubsys;
     this.pivotSubsys = pivotSubsys;
     this.shooterSubsys = shooterSubsys;
     // this.climberSubsys = climberSubsys;
     this.vision = vision;
+    this.xboxController = xboxController;
   }
 
   // public Command inFrameCmd() {
@@ -40,7 +45,7 @@ public class Superstructure {
   public Command pickupCmd() {
     return Commands.sequence(
         // pivotSubsys.setAngle(() -> kPickupPos),
-        intakeSubsys.runIntake(() -> 0.15).until(intakeSubsys::getColorSensor));
+        intakeSubsys.runIntakeTwo(() -> 0.15).until(() -> xboxController.getBButton()).until(intakeSubsys::getColorSensor));
   }
 
   // public Command speakerCmd() {
