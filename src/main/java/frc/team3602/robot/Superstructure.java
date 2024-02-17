@@ -6,10 +6,8 @@
 
 package frc.team3602.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -26,16 +24,14 @@ public class Superstructure {
   private final ShooterSubsystem shooterSubsys;
   // private final ClimberSubsystem climberSubsys;
   private final Vision vision;
-  private final XboxController xboxController;
 
   public Superstructure(IntakeSubsystem intakeSubsys, PivotSubsystem pivotSubsys, ShooterSubsystem shooterSubsys,
-      Vision vision, XboxController xboxController) {
+      Vision vision) {
     this.intakeSubsys = intakeSubsys;
     this.pivotSubsys = pivotSubsys;
     this.shooterSubsys = shooterSubsys;
     // this.climberSubsys = climberSubsys;
     this.vision = vision;
-    this.xboxController = xboxController;
   }
 
   // public Command inFrameCmd() {
@@ -45,7 +41,13 @@ public class Superstructure {
   public Command pickupCmd() {
     return Commands.sequence(
         // pivotSubsys.setAngle(() -> kPickupPos),
-        intakeSubsys.runIntakeTwo(() -> 0.15).until(() -> xboxController.getBButton()).until(intakeSubsys::getColorSensor));
+        intakeSubsys.runIntake(() -> 0.15).until(() -> intakeSubsys.getColorSensor()));
+  }
+
+  public Command shootCmd() {
+    return Commands.sequence(
+      shooterSubsys.runShooter(() -> 0.50).alongWith(Commands.waitSeconds(2.0)).andThen(intakeSubsys.runIntake(() -> 0.75))
+    );
   }
 
   // public Command speakerCmd() {

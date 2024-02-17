@@ -28,42 +28,33 @@ public final class Constants {
   public final class OperatorInterfaceConstants {
     public final static int kXboxControllerPort = 0;
   }
+
   public final class ClimberConstants {
     public static final int kRightClimberId = 10;
-    public static final int kLeftClimberId =11;
+    public static final int kLeftClimberId = 11;
 
     public static final int kMotorCurrentLimit = 30;
 
-    /*Conversion factor in inches per turn calculated as follows:
-     Drum diameter*pi/gear ratio
-    */
-    public static final double kHeightConvFact = (2.0*Math.PI)/5.0;
+    /**
+     * Conversion factor in inches per turn calculated as follows:
+     * Drum diameter*pi/gear ratio
+     */
+    public static final double kHeightConvFact = (2.0 * Math.PI) / 5.0;
 
-    //Retracted height of arms from floor. The arm postion will be set to this on init
-    public static final double kRetractedHeight=0.0;
+    // Retracted height of arms from floor. The arm postion will be set to this on
+    // init
+    public static final double kRetractedHeight = 0.0;
 
-    //Right PID tuning constants :)
-    public static double kRightP = 0.0; //TODO: set final after tuning
-    public static double kRightI = 0.0; //TODO: set final after tuning
-    public static double kRightD = 0.0; //TODO: set final after tuning
+    // PID tuning constants :)
+    public static double kP = 0.0; // TODO: set final after tuning
+    public static double kI = 0.0; // TODO: set final after tuning
+    public static double kD = 0.0; // TODO: set final after tuning
 
-    //Right feedforward Constants
-    public static final double kRS = 0.0; //TODO: set final after tuning
-    public static final double kRG = 0.0; //TODO: set final after tuning
-    public static final double kRV = 0.0; //TODO: set final after tuning
-    public static final double kRA = 0.0; //TODO: set final after tuning
-
-    //Left PID tuning constants (:
-    public static double kLeftP = 0.0; //TODO: set final after tuning
-    public static double kLeftI = 0.0; //TODO: set final after tuning
-    public static double kLeftD = 0.0; //TODO: set final after tuning
-
-    //Left feedforward Constants
-    public static final double kLS = 0.0; //TODO: set final after tuning
-    public static final double kLG = 0.0; //TODO: set final after tuning
-    public static final double kLV = 0.0; //TODO: set final after tuning
-    public static final double kLA = 0.0; //TODO: set final after tuning
-
+    // Feedforward Constants
+    public static final double kS = 6.38;
+    public static final double kG = 4.76;
+    public static final double kV = 1.53;
+    public static final double kA = 0.53;
   }
 
   public final class ShooterConstants {
@@ -93,10 +84,10 @@ public final class Constants {
 
   public final class PivotConstants {
     public static final int kPivotMotorId = 4;
-    public static final int kPivotFollowerId = 6; //TODO: CHANGE MOTOR CONTROLLER TO CAN ID 6
+    public static final int kPivotFollowerId = 6; // TODO: CHANGE MOTOR CONTROLLER TO CAN ID 6
 
-    public static final int kPivotMotorCurrentLimit = 30;
-    public static final int kPivotFollowerCurrentLimit = 30;
+    public static final int kPivotMotorCurrentLimit = 20;
+    public static final int kPivotFollowerCurrentLimit = 20;
 
     public static final double kPivotConversionFactor = 360;
     public static final double kAbsoluteOffset = 0;
@@ -106,7 +97,7 @@ public final class Constants {
     public static final double kD = 0.0;
 
     public static final double kS = 6.8; // 6.8
-    public static final double kG = 0.48; // 0.49
+    public static final double kG = 0.49; // 0.49
     public static final double kV = 4.68; // 4.68
     public static final double kA = 0.03; // 0.03
 

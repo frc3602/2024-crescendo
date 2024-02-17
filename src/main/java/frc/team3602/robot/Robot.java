@@ -29,26 +29,6 @@ public class Robot extends TimedRobot {
 
     Monologue.setFileOnly(DriverStation.isFMSAttached());
     Monologue.updateAll();
-
-    if (robotContainer.xboxController.getBButton()) {
-      robotContainer.shooterSubsys.topShooterMotor.set(0.5);
-      robotContainer.shooterSubsys.bottomShooterMotor.set(0.5);
-    } else {
-      robotContainer.shooterSubsys.topShooterMotor.set(0.0);
-      robotContainer.shooterSubsys.bottomShooterMotor.set(0.0);
-    }
-
-    if (robotContainer.xboxController.getAButton() && robotContainer.intakeSubsys.getColorSensor()) {
-      robotContainer.intakeSubsys.intakeMotor.set(0.75);
-    } else {
-      robotContainer.intakeSubsys.intakeMotor.set(0.0);
-    }
-
-    if (robotContainer.xboxController.getXButton()) {
-      robotContainer.intakeSubsys.intakeMotor.set(0.15);
-    } else {
-      robotContainer.intakeSubsys.intakeMotor.set(0.0);
-    }
   }
 
   @Override

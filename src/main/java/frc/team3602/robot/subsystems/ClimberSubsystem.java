@@ -8,20 +8,23 @@ package frc.team3602.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
+
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import monologue.Logged;
 import monologue.Annotations.Log;
 
 import static frc.team3602.robot.Constants.ClimberConstants.*;
 
-public class ClimberSubsystem implements Subsystem, Logged {
+public class ClimberSubsystem extends SubsystemBase implements Logged {
   // Motor controllers
   private final CANSparkMax rightMotor = new CANSparkMax(kRightClimberId, MotorType.kBrushless);
   private final CANSparkMax leftMotor = new CANSparkMax(kLeftClimberId, MotorType.kBrushless);
@@ -33,19 +36,16 @@ public class ClimberSubsystem implements Subsystem, Logged {
   // Controls
   private double rightTarget, leftTarget;
 
-  private final PIDController rightController = new PIDController(kRightP, kRightI, kRightD);
-  private final ElevatorFeedforward rightFeedforward = new ElevatorFeedforward(kRS, kRG, kRV, kRA);
+  private final SparkPIDController rightController = rightMotor.getPIDController();
+  private final SparkPIDController leftController = leftMotor.getPIDController();
 
-  private final PIDController leftController = new PIDController(kLeftP, kLeftI, kLeftD);
-  private final ElevatorFeedforward leftFeedforward = new ElevatorFeedforward(kLS, kLG, kLV, kLA);
+  private final ArmFeedforward rightFeedforward = new ArmFeedforward(kS, kG, kV, kA);
+  private final ArmFeedforward leftFeedforward = new ArmFeedforward(kS, kG, kV, kA);
 
   public ClimberSubsystem() {
-    SmartDashboard.putNumber("Right Proportional", kRightP);
-    SmartDashboard.putNumber("Right Integral", kRightI);
-    SmartDashboard.putNumber("Right Derivitave", kRightD);
-    SmartDashboard.putNumber("Left Proportional", kLeftP);
-    SmartDashboard.putNumber("Left Integral", kLeftI);
-    SmartDashboard.putNumber("Left Derivitive", kLeftD);
+    SmartDashboard.putNumber("Proportional", kP);
+    SmartDashboard.putNumber("Integral", kI);
+    SmartDashboard.putNumber(" Derivitave", kD);
 
     resetEncoders();
     configClimberSubsys();
@@ -76,24 +76,23 @@ public class ClimberSubsystem implements Subsystem, Logged {
 
   @Log
   private double getRightEffort() {
-    var ffEffort = rightFeedforward.calculate(2.0, 0);
-    var pidEffort = rightController.calculate(getRightEncoder(), rightTarget);
+    var ffEffort = rightFeedforward.calculate(Units.degreesToRadians(rightTarget), 0.0);
 
-    return ffEffort + pidEffort;
+    return ffEffort;
   }
 
   @Log
   private double getLeftEffort() {
-    var ffEffort = leftFeedforward.calculate(2.0, 0);
-    var pidEffort = leftController.calculate(getLeftEncoder(), leftTarget);
+    var ffEffort = leftFeedforward.calculate(Units.degreesToRadians(leftTarget), 0.0);
 
-    return ffEffort + pidEffort;
+    return ffEffort;
   }
 
   public Command holdHeights() {
     return runOnce(() -> {
-      rightMotor.setVoltage(getRightEffort());
-      leftMotor.setVoltage(getLeftEffort());
+      rightController.setReference(rightTarget, ControlType.kPosition, 0, getRightEffort());
+      leftController.setReference(leftTarget, ControlType.kPosition, 0, getLeftEffort());
+
     });
   }
 
@@ -107,31 +106,19 @@ public class ClimberSubsystem implements Subsystem, Logged {
   @Override
   public void periodic() {
     // Get new tuning numbers from shuffleboard
-    double rp = SmartDashboard.getNumber("Right Proportional", kRightP);
-    double ri = SmartDashboard.getNumber("Right Integral", kRightI);
-    double rd = SmartDashboard.getNumber("Right Derivitave", kRightD);
-    double lp = SmartDashboard.getNumber("Left Proportional", kLeftP);
-    double li = SmartDashboard.getNumber("Left Integral", kLeftI);
-    double ld = SmartDashboard.getNumber("Left Derivitive", kLeftD);
+    double _kP = SmartDashboard.getNumber("Proportional", kP);
+    double _kI = SmartDashboard.getNumber("Integral", kI);
+    double _kD = SmartDashboard.getNumber("Derivitave", kD);
 
-    // Check if tuning numbers changed and updat controller values
-    if ((rp != kRightP)) {
-      kRightP = rp;
+    // Check if tuning numbers changed and update controller values
+    if ((_kP != kP)) {
+      kP = _kP;
     }
-    if ((ri != kRightI)) {
-      kRightI = ri;
+    if ((_kI != kI)) {
+      kI = _kI;
     }
-    if ((rd != kRightD)) {
-      kRightD = rd;
-    }
-    if ((lp != kLeftP)) {
-      kLeftP = lp;
-    }
-    if ((li != kLeftI)) {
-      kLeftI = li;
-    }
-    if ((ld != kLeftD)) {
-      kLeftD = ld;
+    if ((_kD != kD)) {
+      kD = _kD;
     }
   }
 
@@ -141,7 +128,7 @@ public class ClimberSubsystem implements Subsystem, Logged {
     rightMotor.setSmartCurrentLimit(kMotorCurrentLimit);
     rightMotor.enableVoltageCompensation(rightMotor.getBusVoltage());
 
-    // Left motor follower config
+    // Left motor config
     leftMotor.setIdleMode(IdleMode.kBrake);
     leftMotor.setSmartCurrentLimit(kMotorCurrentLimit);
     leftMotor.enableVoltageCompensation(leftMotor.getBusVoltage());
@@ -149,6 +136,18 @@ public class ClimberSubsystem implements Subsystem, Logged {
     // Encoder config
     rightEncoder.setPositionConversionFactor(kHeightConvFact);
     leftEncoder.setPositionConversionFactor(kHeightConvFact);
+
+    // Controls config
+    rightController.setP(kP);
+    rightController.setI(kI);
+    rightController.setD(kD);
+
+    leftController.setP(kP);
+    leftController.setI(kI);
+    leftController.setD(kD);
+
+    rightController.setFeedbackDevice(rightEncoder);
+    leftController.setFeedbackDevice(leftEncoder);
 
     rightMotor.burnFlash();
     leftMotor.burnFlash();

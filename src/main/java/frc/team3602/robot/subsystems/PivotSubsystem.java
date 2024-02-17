@@ -36,13 +36,13 @@ import static frc.team3602.robot.Constants.PivotConstants.*;
 
 public class PivotSubsystem extends SubsystemBase implements Logged {
   // Motor controllers
-  // @Log
-  // public double motorOutput;
+  @Log
+  public double motorOutput;
 
-  // @Log
-  // public double motorOutputTwo;
+  @Log
+  public double motorOutputTwo;
 
-  private final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
+  public final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
   private final CANSparkMax pivotFollower = new CANSparkMax(kPivotFollowerId, MotorType.kBrushless);
 
   // Encoders
@@ -54,8 +54,8 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
   @Log
   public double encoderValue;
 
-  @Log
-  public double angle;
+  // @Log
+  public double angle = 60;
 
   @Log
   public double effort;
@@ -80,13 +80,21 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     SmartDashboard.putNumber("Pivot kI", kI);
     SmartDashboard.putNumber("Pivot kD", kD);
 
-    angle = -65;
+    SmartDashboard.putNumber("Angle", angle);
+
+    angle = 60;
 
     configPivotSubsys();
   }
 
   private double getDegrees() {
     return pivotEncoder.getPosition();
+  }
+
+  public Command runPivot(DoubleSupplier percentage) {
+    return run(() -> {
+      pivotMotor.set(percentage.getAsDouble());
+    });
   }
 
   public Command setAngle(DoubleSupplier angleDegrees) {
@@ -96,7 +104,7 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
   }
 
   private double getEffort() {
-    var ffEffort = feedforward.calculate(Units.degreesToRadians(angle), 0);
+    var ffEffort = feedforward.calculate(Math.abs(Units.degreesToRadians(angle) - 81.84), 0);
 
     this.ffEffort = ffEffort;
 
@@ -108,7 +116,7 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
       var effort = getEffort();
       this.effort = effort;
 
-      controller.setReference(angle, ControlType.kPosition);
+      controller.setReference(angle, ControlType.kPosition, 0, effort);
       // pivotMotor.setVoltage(effort);
     });
   }
@@ -122,21 +130,40 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
 
   @Override
   public void periodic() {
-    // motorOutput = pivotMotor.getAppliedOutput();
+    motorOutput = pivotMotor.getAppliedOutput();
 
-    // motorOutputTwo = pivotFollower.getAppliedOutput();
+    motorOutputTwo = pivotFollower.getAppliedOutput();
 
     encoderValue = pivotEncoder.getPosition();
 
-    kP = SmartDashboard.getNumber("Pivot kP", 0);
-    kI = SmartDashboard.getNumber("Pivot kI", 0);
-    kD = SmartDashboard.getNumber("Pivot kD", 0);
+    var kP = SmartDashboard.getNumber("Pivot kP", this.kP);
+    var kI = SmartDashboard.getNumber("Pivot kI", this.kI);
+    var kD = SmartDashboard.getNumber("Pivot kD", this.kD);
+
+    if (kP != this.kP) {
+      this.kP = kP;
+      controller.setP(kP);
+    }
+    if (kI != this.kI) {
+      this.kI = kI;
+      controller.setI(kI);
+    }
+    if (kD != this.kD) {
+      this.kD = kD;
+      controller.setD(kD);
+    }
+
+    var angle = SmartDashboard.getNumber("Angle", this.angle);
+
+    if (angle != this.angle) {
+      this.angle = angle;
+    }
   }
 
   private void configPivotSubsys() {
     // Pivot motor config
     pivotMotor.setIdleMode(IdleMode.kBrake);
-    pivotMotor.setInverted(true);
+    pivotMotor.setInverted(false);
     pivotMotor.setSmartCurrentLimit(kPivotMotorCurrentLimit);
     pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
 
@@ -148,10 +175,6 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
 
     // Pivot encoder config
     // pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
-
-    controller.setP(0.009);
-    controller.setI(0);
-    controller.setD(0.1);
 
     controller.setFeedbackDevice(pivotEncoder);
 
