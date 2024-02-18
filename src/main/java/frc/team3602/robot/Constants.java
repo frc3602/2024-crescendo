@@ -43,7 +43,7 @@ public final class Constants {
 
     // Retracted height of arms from floor. The arm postion will be set to this on
     // init
-    public static final double kRetractedHeight = 0.0;
+    public static final double kRetractedHeight = 47.75;
 
     // PID tuning constants :)
     public static double kP = 0.0; // TODO: set final after tuning
@@ -92,7 +92,7 @@ public final class Constants {
     public static final double kPivotConversionFactor = 360;
     public static final double kAbsoluteOffset = 0;
 
-    public static final double kP = 0.01;
+    public static final double kP = 0.02;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 

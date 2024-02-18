@@ -24,8 +24,13 @@ import monologue.Annotations.Log;
 
 import static frc.team3602.robot.Constants.ClimberConstants.*;
 
+import java.util.function.DoubleSupplier;
+
 public class ClimberSubsystem extends SubsystemBase implements Logged {
   // Motor controllers
+  @Log
+  private double rightOut, leftOut;
+
   private final CANSparkMax rightMotor = new CANSparkMax(kRightClimberId, MotorType.kBrushless);
   private final CANSparkMax leftMotor = new CANSparkMax(kLeftClimberId, MotorType.kBrushless);
 
@@ -34,6 +39,7 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
   private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
 
   // Controls
+  @Log
   private double rightTarget, leftTarget;
 
   private final SparkPIDController rightController = rightMotor.getPIDController();
@@ -46,6 +52,9 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     SmartDashboard.putNumber("Proportional", kP);
     SmartDashboard.putNumber("Integral", kI);
     SmartDashboard.putNumber(" Derivitave", kD);
+
+    rightTarget = 28.0;
+    leftTarget = 28.0;
 
     resetEncoders();
     configClimberSubsys();
@@ -74,6 +83,13 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     return runOnce(() -> leftTarget = setpoint);
   }
 
+  public Command setHeight(DoubleSupplier heightInches) {
+    return runOnce(() -> {
+      rightTarget = heightInches.getAsDouble();
+      leftTarget = heightInches.getAsDouble();
+    });
+  }
+
   @Log
   private double getRightEffort() {
     var ffEffort = rightFeedforward.calculate(Units.degreesToRadians(rightTarget), 0.0);
@@ -89,9 +105,12 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
   }
 
   public Command holdHeights() {
-    return runOnce(() -> {
-      rightController.setReference(rightTarget, ControlType.kPosition, 0, getRightEffort());
-      leftController.setReference(leftTarget, ControlType.kPosition, 0, getLeftEffort());
+    return run(() -> {
+      // rightController.setReference(rightTarget, ControlType.kPosition, 0, getRightEffort());
+      // leftController.setReference(leftTarget, ControlType.kPosition, 0, getLeftEffort());
+
+      rightController.setReference(rightTarget, ControlType.kPosition);
+      leftController.setReference(leftTarget, ControlType.kPosition);
 
     });
   }
@@ -105,6 +124,9 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
 
   @Override
   public void periodic() {
+    rightOut = rightMotor.getAppliedOutput();
+    leftOut = leftMotor.getAppliedOutput();
+
     // Get new tuning numbers from shuffleboard
     double _kP = SmartDashboard.getNumber("Proportional", kP);
     double _kI = SmartDashboard.getNumber("Integral", kI);
@@ -125,11 +147,13 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
   private void configClimberSubsys() {
     // Right motor config
     rightMotor.setIdleMode(IdleMode.kBrake);
+    rightMotor.setInverted(true);
     rightMotor.setSmartCurrentLimit(kMotorCurrentLimit);
     rightMotor.enableVoltageCompensation(rightMotor.getBusVoltage());
 
     // Left motor config
     leftMotor.setIdleMode(IdleMode.kBrake);
+    leftMotor.setInverted(true);
     leftMotor.setSmartCurrentLimit(kMotorCurrentLimit);
     leftMotor.enableVoltageCompensation(leftMotor.getBusVoltage());
 
@@ -141,10 +165,13 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     rightController.setP(kP);
     rightController.setI(kI);
     rightController.setD(kD);
+    rightController.setFF(0.0);
 
     leftController.setP(kP);
     leftController.setI(kI);
     leftController.setD(kD);
+    leftController.setFF(0.0);
+
 
     rightController.setFeedbackDevice(rightEncoder);
     leftController.setFeedbackDevice(leftEncoder);

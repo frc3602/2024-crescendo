@@ -66,7 +66,7 @@ public class RobotContainer implements Logged {
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
-    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {
@@ -75,6 +75,12 @@ public class RobotContainer implements Logged {
     xboxController.leftBumper().whileTrue(shooterSubsys.runShooter(() -> 0.75)).onFalse(shooterSubsys.stopShooter());
 
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75)).onFalse(intakeSubsys.stopIntake());
+
+    xboxController.x().onTrue(pivotSubsys.setAngle(() -> 40));
+
+    xboxController.y().onTrue(climberSubsys.setHeight(() -> 28.0));
+
+    xboxController.rightBumper().onTrue(climberSubsys.setHeight(() -> 47.75));
   }
 
   private void configAutonomous() {

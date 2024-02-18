@@ -40,8 +40,8 @@ public class Superstructure {
 
   public Command pickupCmd() {
     return Commands.sequence(
-        // pivotSubsys.setAngle(() -> kPickupPos),
-        intakeSubsys.runIntake(() -> 0.15).until(() -> intakeSubsys.getColorSensor()));
+        pivotSubsys.setAngle(() -> 3),
+        intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()));
   }
 
   public Command shootCmd() {
