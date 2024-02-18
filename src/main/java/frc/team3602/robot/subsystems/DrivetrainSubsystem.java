@@ -10,9 +10,11 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -27,9 +29,13 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import static edu.wpi.first.units.Units.*;
 
 import frc.team3602.robot.Vision;
+
+import monologue.Logged;
+import monologue.Annotations.Log;
+
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 
-public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
+public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, Logged {
   // Drivetrain
   private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
   public final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric()
@@ -47,12 +53,14 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
     super(drivetrainConstants, odometryUpdateFrequency, moduleConstants);
 
     configPathPlanner();
+    configDriveSubsys();
   }
 
   public DrivetrainSubsystem(SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants... moduleConstants) {
     super(drivetrainConstants, moduleConstants);
 
     configPathPlanner();
+    configDriveSubsys();
   }
 
   @Override
@@ -121,5 +129,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem {
           return false;
         },
         this);
+  }
+
+  private void configDriveSubsys() {
   }
 }

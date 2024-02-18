@@ -49,13 +49,11 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
   private final SparkAbsoluteEncoder pivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
   // Controls
-  private double kP, kI, kD;
-
   @Log
   public double encoderValue;
 
   // @Log
-  public double angle = 60;
+  public double angle = 0;
 
   @Log
   public double effort;
@@ -76,10 +74,6 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
   private final TrapezoidProfile profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(20, 40));
 
   public PivotSubsystem() {
-    SmartDashboard.putNumber("Pivot kP", kP);
-    SmartDashboard.putNumber("Pivot kI", kI);
-    SmartDashboard.putNumber("Pivot kD", kD);
-
     SmartDashboard.putNumber("Angle", angle);
 
     angle = 60;
@@ -104,7 +98,7 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
   }
 
   private double getEffort() {
-    var ffEffort = feedforward.calculate(Math.abs(Units.degreesToRadians(angle) - 81.84), 0);
+    var ffEffort = feedforward.calculate(Units.degreesToRadians(angle), 0);
 
     this.ffEffort = ffEffort;
 
@@ -136,23 +130,6 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
 
     encoderValue = pivotEncoder.getPosition();
 
-    var kP = SmartDashboard.getNumber("Pivot kP", this.kP);
-    var kI = SmartDashboard.getNumber("Pivot kI", this.kI);
-    var kD = SmartDashboard.getNumber("Pivot kD", this.kD);
-
-    if (kP != this.kP) {
-      this.kP = kP;
-      controller.setP(kP);
-    }
-    if (kI != this.kI) {
-      this.kI = kI;
-      controller.setI(kI);
-    }
-    if (kD != this.kD) {
-      this.kD = kD;
-      controller.setD(kD);
-    }
-
     var angle = SmartDashboard.getNumber("Angle", this.angle);
 
     if (angle != this.angle) {
@@ -163,7 +140,7 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
   private void configPivotSubsys() {
     // Pivot motor config
     pivotMotor.setIdleMode(IdleMode.kBrake);
-    pivotMotor.setInverted(false);
+    pivotMotor.setInverted(true);
     pivotMotor.setSmartCurrentLimit(kPivotMotorCurrentLimit);
     pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
 
@@ -175,12 +152,20 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
 
     // Pivot encoder config
     // pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
+    double offset = pivotEncoder.getZeroOffset();
+    if (getDegrees() > 300.0) {
+      pivotEncoder.setZeroOffset(offset + (360 - getDegrees()));
+    }
 
     controller.setFeedbackDevice(pivotEncoder);
 
-    controller.setPositionPIDWrappingEnabled(true);
-    controller.setPositionPIDWrappingMinInput(0);
-    controller.setPositionPIDWrappingMaxInput(90);
+    controller.setP(kP);
+    controller.setI(kI);
+    controller.setD(kD);
+
+    // controller.setPositionPIDWrappingEnabled(true);
+    // controller.setPositionPIDWrappingMinInput(0);
+    // controller.setPositionPIDWrappingMaxInput(90);
 
     // controller.setTolerance(1);
     // controller.enableContinuousInput(0, 45);

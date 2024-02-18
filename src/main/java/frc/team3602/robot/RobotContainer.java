@@ -56,13 +56,13 @@ public class RobotContainer implements Logged {
   }
 
   private void configDefaultCommands() {
-    // driveSubsys
-    // .setDefaultCommand(driveSubsys.applyRequest(s
-    // () -> driveSubsys.fieldCentricDrive
-    // .withVelocityX(-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond))
-    // .withVelocityY(-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond))
-    // .withRotationalRate(-xboxController.getRightX() *
-    // kMaxAngularRate.in(MetersPerSecond))));
+    driveSubsys
+        .setDefaultCommand(driveSubsys.applyRequest(
+            () -> driveSubsys.fieldCentricDrive
+                .withVelocityX(-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond))
+                .withVelocityY(-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond))
+                .withRotationalRate(-xboxController.getRightX() *
+                    kMaxAngularRate.in(MetersPerSecond))));
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
@@ -75,8 +75,6 @@ public class RobotContainer implements Logged {
     xboxController.leftBumper().whileTrue(shooterSubsys.runShooter(() -> 0.75)).onFalse(shooterSubsys.stopShooter());
 
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75)).onFalse(intakeSubsys.stopIntake());
-
-    // xboxController.x().whileTrue(pivotSubsys.runPivot(() -> xboxController.getHID().getRightY() * 0.5));
   }
 
   private void configAutonomous() {
