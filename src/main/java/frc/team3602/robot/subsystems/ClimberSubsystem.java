@@ -135,12 +135,18 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     // Check if tuning numbers changed and update controller values
     if ((_kP != kP)) {
       kP = _kP;
+      rightController.setP(kP);
+      leftController.setP(kP);
     }
     if ((_kI != kI)) {
       kI = _kI;
+      rightController.setI(kI);
+      leftController.setI(kI);
     }
     if ((_kD != kD)) {
       kD = _kD;
+      rightController.setD(kD);
+      leftController.setD(kD);
     }
   }
 
