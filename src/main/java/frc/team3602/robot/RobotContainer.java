@@ -56,15 +56,15 @@ public class RobotContainer implements Logged {
   }
 
   private void configDefaultCommands() {
-    driveSubsys
-        .setDefaultCommand(driveSubsys.applyRequest(
-            () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond))
-                .withVelocityY(-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond))
-                .withRotationalRate(-xboxController.getRightX() *
-                    kMaxAngularRate.in(MetersPerSecond))));
+    // driveSubsys
+    //     .setDefaultCommand(driveSubsys.applyRequest(
+    //         () -> driveSubsys.fieldCentricDrive
+    //             .withVelocityX(-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond))
+    //             .withVelocityY(-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond))
+    //             .withRotationalRate(-xboxController.getRightX() *
+    //                 kMaxAngularRate.in(MetersPerSecond))));
 
-    pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
+    // pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
     climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }

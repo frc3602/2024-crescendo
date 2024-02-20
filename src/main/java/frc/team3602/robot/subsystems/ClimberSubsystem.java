@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,8 +43,14 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
   @Log
   private double rightTarget, leftTarget;
 
-  private final SparkPIDController rightController = rightMotor.getPIDController();
-  private final SparkPIDController leftController = leftMotor.getPIDController();
+  private double kP, kI, kD;
+
+  private final PIDController rightController = new PIDController(kP, kI, kD);
+  private final PIDController leftController = new PIDController(kP, kI, kD);
+  // private final SparkPIDController rightController =
+  // rightMotor.getPIDController();
+  // private final SparkPIDController leftController =
+  // leftMotor.getPIDController();
 
   private final ArmFeedforward rightFeedforward = new ArmFeedforward(kS, kG, kV, kA);
   private final ArmFeedforward leftFeedforward = new ArmFeedforward(kS, kG, kV, kA);
@@ -93,25 +100,28 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
   @Log
   private double getRightEffort() {
     var ffEffort = rightFeedforward.calculate(Units.degreesToRadians(rightTarget), 0.0);
+    var pidEffort = rightController.calculate(getRightEncoder(), rightTarget);
 
-    return ffEffort;
+    return ffEffort + pidEffort;
   }
 
   @Log
   private double getLeftEffort() {
     var ffEffort = leftFeedforward.calculate(Units.degreesToRadians(leftTarget), 0.0);
+    var pidEffort = leftController.calculate(getLeftEncoder(), leftTarget);
 
-    return ffEffort;
+    return ffEffort + pidEffort;
   }
 
   public Command holdHeights() {
-    return run(() -> {
-      // rightController.setReference(rightTarget, ControlType.kPosition, 0, getRightEffort());
-      // leftController.setReference(leftTarget, ControlType.kPosition, 0, getLeftEffort());
+    return runOnce(() -> {
+      // rightController.setReference(rightTarget, ControlType.kPosition, 0,
+      // getRightEffort());
+      // leftController.setReference(leftTarget, ControlType.kPosition, 0,
+      // getLeftEffort());
 
-      rightController.setReference(rightTarget, ControlType.kPosition);
-      leftController.setReference(leftTarget, ControlType.kPosition);
-
+      rightMotor.setVoltage(getRightEffort());
+      leftMotor.setVoltage(getLeftEffort());
     });
   }
 
@@ -168,19 +178,16 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     leftEncoder.setPositionConversionFactor(kHeightConvFact);
 
     // Controls config
-    rightController.setP(kP);
-    rightController.setI(kI);
-    rightController.setD(kD);
-    rightController.setFF(0.0);
+    // rightController.setP(kP);
+    // rightController.setI(kI);
+    // rightController.setD(kD);
 
-    leftController.setP(kP);
-    leftController.setI(kI);
-    leftController.setD(kD);
-    leftController.setFF(0.0);
+    // leftController.setP(kP);
+    // leftController.setI(kI);
+    // leftController.setD(kD);
 
-
-    rightController.setFeedbackDevice(rightEncoder);
-    leftController.setFeedbackDevice(leftEncoder);
+    // rightController.setFeedbackDevice(rightEncoder);
+    // leftController.setFeedbackDevice(leftEncoder);
 
     rightMotor.burnFlash();
     leftMotor.burnFlash();
