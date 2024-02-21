@@ -6,6 +6,7 @@
 
 package frc.team3602.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +26,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    robotContainer.targetDistance = Units.metersToFeet(robotContainer.vision.getTargetDistance());
+
     CommandScheduler.getInstance().run();
 
     Monologue.setFileOnly(DriverStation.isFMSAttached());

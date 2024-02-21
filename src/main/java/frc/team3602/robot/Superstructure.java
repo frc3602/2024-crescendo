@@ -34,19 +34,19 @@ public class Superstructure {
     this.vision = vision;
   }
 
-  // public Command inFrameCmd() {
-  // return pivotSubsys.setAngle(() -> kInFramePos);
-  // }
+  public Command inFrameCmd() {
+  return pivotSubsys.setAngle(() -> 45);
+  }
 
   public Command pickupCmd() {
     return Commands.sequence(
-        pivotSubsys.setAngle(() -> 3),
+        pivotSubsys.setAngle(() -> 1.75),
         intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()));
   }
 
   public Command shootCmd() {
     return Commands.sequence(
-      shooterSubsys.runShooter(() -> 0.50).alongWith(Commands.waitSeconds(2.0)).andThen(intakeSubsys.runIntake(() -> 0.75))
+      // shooterSubsys.runShooter(() -> 0.50).alongWith(Commands.waitSeconds(2.0)).andThen(intakeSubsys.runIntake(() -> 0.75))
     );
   }
 
