@@ -64,7 +64,7 @@ public final class Constants {
     public static final int kTopShooterMotorCurrentLimit = 25;
     public static final int kBottomShooterMotorCurrentLimit = 25;
 
-    public static final double kShooterConversionFactor = 360;
+    public static final double kTopConvFactor = (Math.PI * 4.0);
 
     public static final double kP = 0.0;
     public static final double kI = 0.0;
@@ -111,7 +111,7 @@ public final class Constants {
     public static final Transform3d kRobotToCamera = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
         new Rotation3d(0.0, 0.0, 0.0));
 
-    public static final Measure<Distance> kCameraHeight = Feet.of(1.4375);
+    public static final Measure<Distance> kCameraHeight = Feet.of(1.3);
     public static final Measure<Angle> kCameraPitch = Degrees.of(0.0);
 
     public static final Measure<Distance> kGoalRange = Feet.of(9.0);

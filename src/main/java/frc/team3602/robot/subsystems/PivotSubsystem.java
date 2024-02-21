@@ -117,11 +117,11 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
 
     encoderValue = pivotEncoder.getPosition();
 
-    // var angle = SmartDashboard.getNumber("Angle", this.angle);
+    var angle = SmartDashboard.getNumber("Angle", this.angle);
 
-    // if (angle != this.angle) {
-    //   this.angle = angle;
-    // }
+    if (angle != this.angle) {
+      this.angle = angle;
+    }
   }
 
   private void configPivotSubsys() {
@@ -139,10 +139,10 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
 
     // Pivot encoder config
     // pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
-    double offset = pivotEncoder.getZeroOffset();
-    if (getDegrees() > 300.0) {
-      pivotEncoder.setZeroOffset(offset + (360 - getDegrees()));
-    }
+    // double offset = pivotEncoder.getZeroOffset();
+    // if (getDegrees() > 300.0) {
+    //   pivotEncoder.setZeroOffset(offset + (360 - getDegrees()));
+    // }
 
     controller.setFeedbackDevice(pivotEncoder);
 
@@ -161,7 +161,7 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     pivotFollower.burnFlash();
 
     // Interpolation table config
-    lerpTable.put(5.0, 25.0); // 5 feet, 25 degrees
+    lerpTable.put(0.0, 26.0); // 5 feet, 25 degrees
     lerpTable.put(10.0, 35.0); // 10 feet, 35 degrees
   }
 }
