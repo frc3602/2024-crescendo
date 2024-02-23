@@ -15,6 +15,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackTy
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
@@ -39,16 +40,16 @@ public final class Constants {
      * Conversion factor in inches per turn calculated as follows:
      * Drum diameter*pi/gear ratio
      */
-    public static final double kHeightConvFact = (2.0 * Math.PI) / 5.0;
+    public static final double kHeightConvFact = (2.0 * Math.PI) / 25.0;
 
     // Retracted height of arms from floor. The arm postion will be set to this on
     // init
     public static final double kRetractedHeight = 47.75;
 
     // PID tuning constants :)
-    public static double kP = 0.0; // TODO: set final after tuning
-    public static double kI = 0.0; // TODO: set final after tuning
-    public static double kD = 0.0; // TODO: set final after tuning
+    public static double kP = 1.0; // 0.2
+    public static double kI = 0.0;
+    public static double kD = 0.0;
 
     // Feedforward Constants
     public static final double kS = 6.38;
@@ -66,9 +67,9 @@ public final class Constants {
 
     public static final double kTopConvFactor = (Math.PI * 4.0);
 
-    public static final double kP = 0.0;
+    public static final double kP = 0.001;
     public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double kD = 0.1;
 
     public static final double kS = 0.0;
     public static final double kV = 0.0;
@@ -103,6 +104,9 @@ public final class Constants {
 
     public static final Measure<Angle> kInFramePos = Degrees.of(45);
     public static final Measure<Angle> kPickupPos = Degrees.of(90);
+
+    public static final double kMaxVelocity = 3; // meters/second 0.15
+    public static final double kMaxAcceleration = 6; // meters/second^2 0.50
   }
 
   public final class VisionConstants {
@@ -118,8 +122,8 @@ public final class Constants {
   }
 
   public final class DrivetrainConstants {
-    public static final Measure<Velocity<Distance>> kMaxSpeed = MetersPerSecond.of(6.0);
-    public static final Measure<Velocity<Distance>> kMaxAngularRate = MetersPerSecond.of(Math.PI);
+    public static final double kMaxSpeed = 6.0;
+    public static final double kMaxAngularRate = Math.PI;
 
     private final static int kPigeonId = 52;
     private final static String kCANBusName = "rio";

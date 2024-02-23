@@ -15,10 +15,14 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.SparkPIDController.AccelStrategy;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -51,16 +55,16 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
   @Log
   public double effort;
 
-  @Log
-  public double ffEffort;
-
-  @Log
-  public double pidEffort;
-
   public final InterpolatingDoubleTreeMap lerpTable = new InterpolatingDoubleTreeMap();
 
-  private final SparkPIDController controller = pivotMotor.getPIDController();
+  // private final TrapezoidProfile.Constraints constraints = new
+  // TrapezoidProfile.Constraints(kMaxVelocity,
+  // kMaxAcceleration);
+  // private final TrapezoidProfile.State previousProfiledReference = new
+  // TrapezoidProfile.State(0, 0);
+  // private final TrapezoidProfile profile = new TrapezoidProfile(constraints);
 
+  private final SparkPIDController controller = pivotMotor.getPIDController();
   private final ArmFeedforward feedforward = new ArmFeedforward(kS, kG, kV, kA);
 
   public PivotSubsystem() {
@@ -86,11 +90,7 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
   }
 
   private double getEffort() {
-    var ffEffort = feedforward.calculate(Units.degreesToRadians(angle), 0);
-
-    this.ffEffort = ffEffort;
-
-    return ffEffort;
+    return feedforward.calculate(Units.degreesToRadians(angle), 0);
   }
 
   public Command holdAngle() {
@@ -98,7 +98,10 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
       var effort = getEffort();
       this.effort = effort;
 
-      controller.setReference(angle, ControlType.kPosition, 0, effort);
+      // var goal = new TrapezoidProfile.State(angle, 0);
+      // var setpoint = profile.calculate(0, previousProfiledReference, goal);
+
+      controller.setReference(angle, ControlType.kPosition, 0, effort, ArbFFUnits.kVoltage);
     });
   }
 
@@ -115,7 +118,7 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
 
     motorOutputTwo = pivotFollower.getAppliedOutput();
 
-    encoderValue = pivotEncoder.getPosition();
+    encoderValue = getDegrees();
 
     var angle = SmartDashboard.getNumber("Angle", this.angle);
 
@@ -138,10 +141,12 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     pivotFollower.enableVoltageCompensation(pivotFollower.getBusVoltage());
 
     // Pivot encoder config
+    pivotEncoder.setZeroOffset(255.0);
+
     // pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
     // double offset = pivotEncoder.getZeroOffset();
     // if (getDegrees() > 300.0) {
-    //   pivotEncoder.setZeroOffset(offset + (360 - getDegrees()));
+    // pivotEncoder.setZeroOffset(offset + (360 - getDegrees()));
     // }
 
     controller.setFeedbackDevice(pivotEncoder);
@@ -149,6 +154,10 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     controller.setP(kP);
     controller.setI(kI);
     controller.setD(kD);
+
+    // controller.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
+    // controller.setSmartMotionMaxAccel(kMaxAcceleration, 0);
+    // controller.setSmartMotionMaxVelocity(kMaxVelocity, 0);
 
     // controller.setPositionPIDWrappingEnabled(true);
     // controller.setPositionPIDWrappingMinInput(0);
@@ -161,7 +170,10 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     pivotFollower.burnFlash();
 
     // Interpolation table config
-    lerpTable.put(0.0, 26.0); // 5 feet, 25 degrees
-    lerpTable.put(10.0, 35.0); // 10 feet, 35 degrees
+    lerpTable.put(5.0, 25.0); // 5 feet, 25 degrees
+    lerpTable.put(10.0, 39.5); // 10 feet, 39.5 degrees
+    lerpTable.put(15.0, 43.0); // 15 feet, 43 degrees
+    lerpTable.put(20.0, 44.5); // 20 feet, 44.5 degrees
+    lerpTable.put(25.0, 41.0); // 25 feet, 41 degrees
   }
 }

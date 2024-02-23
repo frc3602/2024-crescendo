@@ -43,7 +43,7 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
   @Log
   private double rightTarget, leftTarget;
 
-  private double kP, kI, kD;
+  // private double kP, kI, kD;
 
   private final PIDController rightController = new PIDController(kP, kI, kD);
   private final PIDController leftController = new PIDController(kP, kI, kD);
@@ -138,26 +138,26 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     leftOut = leftMotor.getAppliedOutput();
 
     // Get new tuning numbers from shuffleboard
-    double _kP = SmartDashboard.getNumber("Proportional", kP);
-    double _kI = SmartDashboard.getNumber("Integral", kI);
-    double _kD = SmartDashboard.getNumber("Derivitave", kD);
+    // double _kP = SmartDashboard.getNumber("Proportional", kP);
+    // double _kI = SmartDashboard.getNumber("Integral", kI);
+    // double _kD = SmartDashboard.getNumber("Derivitave", kD);
 
-    // Check if tuning numbers changed and update controller values
-    if ((_kP != kP)) {
-      kP = _kP;
-      rightController.setP(kP);
-      leftController.setP(kP);
-    }
-    if ((_kI != kI)) {
-      kI = _kI;
-      rightController.setI(kI);
-      leftController.setI(kI);
-    }
-    if ((_kD != kD)) {
-      kD = _kD;
-      rightController.setD(kD);
-      leftController.setD(kD);
-    }
+    // // Check if tuning numbers changed and update controller values
+    // if ((_kP != kP)) {
+    //   kP = _kP;
+    //   rightController.setP(kP);
+    //   leftController.setP(kP);
+    // }
+    // if ((_kI != kI)) {
+    //   kI = _kI;
+    //   rightController.setI(kI);
+    //   leftController.setI(kI);
+    // }
+    // if ((_kD != kD)) {
+    //   kD = _kD;
+    //   rightController.setD(kD);
+    //   leftController.setD(kD);
+    // }
   }
 
   private void configClimberSubsys() {
@@ -178,13 +178,13 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     leftEncoder.setPositionConversionFactor(kHeightConvFact);
 
     // Controls config
-    // rightController.setP(kP);
-    // rightController.setI(kI);
-    // rightController.setD(kD);
+    rightController.setP(kP);
+    rightController.setI(kI);
+    rightController.setD(kD);
 
-    // leftController.setP(kP);
-    // leftController.setI(kI);
-    // leftController.setD(kD);
+    leftController.setP(kP);
+    leftController.setI(kI);
+    leftController.setD(kD);
 
     // rightController.setFeedbackDevice(rightEncoder);
     // leftController.setFeedbackDevice(leftEncoder);

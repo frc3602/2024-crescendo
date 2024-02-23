@@ -40,8 +40,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
   private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
   public final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric()
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-      .withDeadband(0.02 * kMaxSpeed.in(MetersPerSecond))
-      .withRotationalDeadband(0.02 * kMaxAngularRate.in(MetersPerSecond));
+      .withDeadband(0.02 * kMaxSpeed)
+      .withRotationalDeadband(0.02 * kMaxAngularRate);
 
   // Vision
   private final Vision vision = new Vision();

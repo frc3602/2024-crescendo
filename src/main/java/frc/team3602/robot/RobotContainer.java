@@ -13,7 +13,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import static edu.wpi.first.units.Units.*;
 
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
@@ -48,7 +51,11 @@ public class RobotContainer implements Logged {
   private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
 
   // Operator interfaces
+  private double _kMaxSpeed, _kMaxAngularRate;
+
   public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
+
+  private final Trigger atVelocity = new Trigger(shooterSubsys::atVelocity);
 
   // Autonomous
   private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
@@ -63,10 +70,10 @@ public class RobotContainer implements Logged {
     driveSubsys
         .setDefaultCommand(driveSubsys.applyRequest(
             () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(-xboxController.getLeftY() * kMaxSpeed.in(MetersPerSecond))
-                .withVelocityY(-xboxController.getLeftX() * kMaxSpeed.in(MetersPerSecond))
+                .withVelocityX(-xboxController.getLeftY() * _kMaxSpeed)
+                .withVelocityY(-xboxController.getLeftX() * _kMaxSpeed)
                 .withRotationalRate(-xboxController.getRightX() *
-                    kMaxAngularRate.in(MetersPerSecond))));
+                    _kMaxAngularRate)));
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
@@ -74,20 +81,27 @@ public class RobotContainer implements Logged {
   }
 
   private void configButtonBindings() {
+    xboxController.leftTrigger(0.5).toggleOnTrue(new InstantCommand(() -> {
+      _kMaxSpeed = kMaxSpeed * 0.5;
+    })).toggleOnFalse(new InstantCommand(() -> {
+      _kMaxSpeed = kMaxSpeed;
+    }));
+
     xboxController.a().whileTrue(superstructure.pickupCmd()).onFalse(intakeSubsys.stopIntake());
 
     xboxController.leftBumper().whileTrue(shooterSubsys.runShooter())
         .onFalse(shooterSubsys.stopShooter());
 
-    xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75)).onFalse(intakeSubsys.stopIntake());
+    xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75).unless(atVelocity.negate()))
+        .onFalse(intakeSubsys.stopIntake());
 
     xboxController.x().onTrue(superstructure.inFrameCmd());
 
-    xboxController.rightBumper().whileTrue(shooterSubsys.runShooterSpeed(0.5, 0.5)).onFalse(shooterSubsys.stopShooter());
+    xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
     // xboxController.y().onTrue(climberSubsys.setHeight(() -> 28.0));
 
-    // xboxController.rightBumper().onTrue(climberSubsys.setHeight(() -> 47.75));
+    // xboxController.pov(90).onTrue(climberSubsys.setHeight(() -> 47.75));
   }
 
   private void configAutonomous() {
