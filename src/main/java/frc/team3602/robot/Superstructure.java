@@ -8,6 +8,7 @@ package frc.team3602.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -25,6 +26,8 @@ public class Superstructure {
   // private final ClimberSubsystem climberSubsys;
   private final Vision vision;
 
+  private final Trigger atVelocity;
+
   public Superstructure(IntakeSubsystem intakeSubsys, PivotSubsystem pivotSubsys, ShooterSubsystem shooterSubsys,
       Vision vision) {
     this.intakeSubsys = intakeSubsys;
@@ -32,10 +35,12 @@ public class Superstructure {
     this.shooterSubsys = shooterSubsys;
     // this.climberSubsys = climberSubsys;
     this.vision = vision;
+
+    atVelocity = new Trigger(shooterSubsys::atVelocity);
   }
 
   public Command inFrameCmd() {
-  return pivotSubsys.setAngle(() -> 45);
+    return pivotSubsys.setAngle(() -> 45);
   }
 
   public Command pickupCmd() {
@@ -44,11 +49,10 @@ public class Superstructure {
         intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()));
   }
 
-  public Command shootCmd() {
-    return Commands.sequence(
-      // shooterSubsys.runShooter(() -> 0.50).alongWith(Commands.waitSeconds(2.0)).andThen(intakeSubsys.runIntake(() -> 0.75))
-    );
-  }
+  // public Command shootCmd() {
+  //   return shooterSubsys.runShooter()
+  //       .alongWith(intakeSubsys.runIntake(() -> 0.75).unless(atVelocity.negate()));
+  // }
 
   // public Command speakerCmd() {
   // return Commands.sequence(
