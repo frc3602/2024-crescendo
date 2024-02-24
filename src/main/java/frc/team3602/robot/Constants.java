@@ -15,12 +15,10 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackTy
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Velocity;
 import static edu.wpi.first.units.Units.*;
 
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
@@ -47,7 +45,7 @@ public final class Constants {
     public static final double kRetractedHeight = 47.75;
 
     // PID tuning constants :)
-    public static double kP = 1.0; // 0.2
+    public static double kP = 10.0;
     public static double kI = 0.0;
     public static double kD = 0.0;
 
@@ -67,7 +65,7 @@ public final class Constants {
 
     public static final double kTopConvFactor = (Math.PI * 4.0);
 
-    public static final double kP = 0.001;
+    public static final double kP = 2.0;
     public static final double kI = 0.0;
     public static final double kD = 0.1;
 

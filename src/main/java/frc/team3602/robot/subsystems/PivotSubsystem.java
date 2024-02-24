@@ -15,14 +15,11 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
-import com.revrobotics.SparkPIDController.AccelStrategy;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,10 +32,7 @@ import static frc.team3602.robot.Constants.PivotConstants.*;
 public class PivotSubsystem extends SubsystemBase implements Logged {
   // Motor controllers
   @Log
-  public double motorOutput;
-
-  @Log
-  public double motorOutputTwo;
+  public double motorOutput, motorOutputTwo;
 
   public final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
   private final CANSparkMax pivotFollower = new CANSparkMax(kPivotFollowerId, MotorType.kBrushless);
@@ -170,10 +164,10 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     pivotFollower.burnFlash();
 
     // Interpolation table config
-    lerpTable.put(5.0, 25.0); // 5 feet, 25 degrees
-    lerpTable.put(10.0, 39.5); // 10 feet, 39.5 degrees
+    lerpTable.put(5.0, 32.0); // 5 feet, 25 degrees
+    lerpTable.put(10.0, 48.0); // 10 feet, 39.5 degrees
     lerpTable.put(15.0, 43.0); // 15 feet, 43 degrees
-    lerpTable.put(20.0, 44.5); // 20 feet, 44.5 degrees
+    lerpTable.put(20.0, 53.5); // 20 feet, 44.5 degrees
     lerpTable.put(25.0, 41.0); // 25 feet, 41 degrees
   }
 }
