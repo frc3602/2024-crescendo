@@ -53,6 +53,7 @@ public class Vision {
 
   public double getTargetHeight() {
     double targetHeight;
+    
     var result = getLatestResult();
 
     if (result.hasTargets()) {
@@ -66,6 +67,7 @@ public class Vision {
 
   public double getTargetDistance() {
     double targetDistance;
+
     var result = getLatestResult();
 
     if (result.hasTargets()) {

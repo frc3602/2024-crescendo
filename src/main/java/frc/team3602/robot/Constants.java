@@ -12,15 +12,16 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Velocity;
 import static edu.wpi.first.units.Units.*;
 
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
@@ -47,7 +48,7 @@ public final class Constants {
     public static final double kRetractedHeight = 47.75;
 
     // PID tuning constants :)
-    public static double kP = 1.0; // 0.2
+    public static double kP = 10.0;
     public static double kI = 0.0;
     public static double kD = 0.0;
 
@@ -67,7 +68,7 @@ public final class Constants {
 
     public static final double kTopConvFactor = (Math.PI * 4.0);
 
-    public static final double kP = 0.001;
+    public static final double kP = 2.0;
     public static final double kI = 0.0;
     public static final double kD = 0.1;
 
@@ -112,13 +113,17 @@ public final class Constants {
   public final class VisionConstants {
     public static final String kPhotonCameraName = "photonvision";
 
+    // Camera mounted facing forward, half a meter forward of center, half a meter
+    // up from center. TODO: Measure this
     public static final Transform3d kRobotToCamera = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
         new Rotation3d(0.0, 0.0, 0.0));
 
     public static final Measure<Distance> kCameraHeight = Feet.of(1.3);
     public static final Measure<Angle> kCameraPitch = Degrees.of(0.0);
 
-    public static final Measure<Distance> kGoalRange = Feet.of(9.0);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+
   }
 
   public final class DrivetrainConstants {

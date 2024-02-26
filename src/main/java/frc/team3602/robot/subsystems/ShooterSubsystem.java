@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -40,7 +41,7 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
 
   // Controllers
   @Log
-  private double topVelocityRPM = 1800, bottomVelocityRPM = 3000; // 2300 trap_top: 1800, trap_bottom: 3000
+  private double topVelocityRPM = 5500, bottomVelocityRPM = 5500; // 2300 trap_top: 1800, trap_bottom: 3000
 
   // private double kP, kI, kD;
 
@@ -48,8 +49,8 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
   private final SparkPIDController bottomController = bottomShooterMotor.getPIDController();
 
   public ShooterSubsystem() {
-    // SmartDashboard.putNumber("Shooter Top RPM", topVelocityRPM);
-    // SmartDashboard.putNumber("Shooter Bottom RPM", bottomVelocityRPM);
+    SmartDashboard.putNumber("Shooter Top RPM", topVelocityRPM);
+    SmartDashboard.putNumber("Shooter Bottom RPM", bottomVelocityRPM);
 
     // SmartDashboard.putNumber("Shooter kP", kP);
     // SmartDashboard.putNumber("Shooter kI", kI);
@@ -70,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
 
   @Log
   public boolean atVelocity() {
-    if ((getTopEncoder() >= 1300 && getBottomEncoder() >= 2400)) { // 3700 trap_top: 1300, trap_bottom: 2400
+    if ((getTopEncoder() >= 5000 && getBottomEncoder() >= 5000)) { // 3700 trap_top: 1300, trap_bottom: 2400
       return true;
     } else {
       return false;
@@ -125,12 +126,12 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     topVolts = topShooterMotor.getBusVoltage();
     bottomVolts = bottomShooterMotor.getBusVoltage();
 
-    // Get new tuning numbers from shuffleboard
+    // // Get new tuning numbers from shuffleboard
     // var _kP = SmartDashboard.getNumber("Shooter kP", kP);
     // var _kI = SmartDashboard.getNumber("Shooter kI", kI);
     // var _kD = SmartDashboard.getNumber("Shooter kD", kD);
 
-    // Check if tuning numbers changed and update controller values
+    // // Check if tuning numbers changed and update controller values
     // if (_kP != kP) {
     // kP = _kP;
     // topController.setP(kP);

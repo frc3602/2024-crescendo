@@ -51,7 +51,7 @@ public class RobotContainer implements Logged {
   private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
 
   // Operator interfaces
-  private double _kMaxSpeed, _kMaxAngularRate;
+  private double _kMaxSpeed = kMaxSpeed, _kMaxAngularRate = kMaxAngularRate;
 
   public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
 
@@ -77,7 +77,7 @@ public class RobotContainer implements Logged {
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
-    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {
@@ -99,9 +99,9 @@ public class RobotContainer implements Logged {
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-    // xboxController.y().onTrue(climberSubsys.setHeight(() -> 28.0));
+    xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 28.0));
 
-    // xboxController.pov(90).onTrue(climberSubsys.setHeight(() -> 47.75));
+    xboxController.pov(90).onTrue(climberSubsys.setHeight(() -> 47.75));
   }
 
   private void configAutonomous() {

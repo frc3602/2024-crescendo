@@ -47,18 +47,14 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
 
   private final PIDController rightController = new PIDController(kP, kI, kD);
   private final PIDController leftController = new PIDController(kP, kI, kD);
-  // private final SparkPIDController rightController =
-  // rightMotor.getPIDController();
-  // private final SparkPIDController leftController =
-  // leftMotor.getPIDController();
 
   private final ArmFeedforward rightFeedforward = new ArmFeedforward(kS, kG, kV, kA);
   private final ArmFeedforward leftFeedforward = new ArmFeedforward(kS, kG, kV, kA);
 
   public ClimberSubsystem() {
-    SmartDashboard.putNumber("Proportional", kP);
-    SmartDashboard.putNumber("Integral", kI);
-    SmartDashboard.putNumber(" Derivitave", kD);
+    // SmartDashboard.putNumber("Proportional", kP);
+    // SmartDashboard.putNumber("Integral", kI);
+    // SmartDashboard.putNumber(" Derivitave", kD);
 
     rightTarget = 28.0;
     leftTarget = 28.0;
@@ -142,7 +138,7 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     // double _kI = SmartDashboard.getNumber("Integral", kI);
     // double _kD = SmartDashboard.getNumber("Derivitave", kD);
 
-    // // Check if tuning numbers changed and update controller values
+    // Check if tuning numbers changed and update controller values
     // if ((_kP != kP)) {
     //   kP = _kP;
     //   rightController.setP(kP);
@@ -185,9 +181,6 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     leftController.setP(kP);
     leftController.setI(kI);
     leftController.setD(kD);
-
-    // rightController.setFeedbackDevice(rightEncoder);
-    // leftController.setFeedbackDevice(leftEncoder);
 
     rightMotor.burnFlash();
     leftMotor.burnFlash();
