@@ -23,6 +23,7 @@ import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
+import frc.team3602.robot.auton.AutonFactory;
 import frc.team3602.robot.subsystems.ClimberSubsystem;
 
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
@@ -70,8 +71,8 @@ public class RobotContainer implements Logged {
     driveSubsys
         .setDefaultCommand(driveSubsys.applyRequest(
             () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(-xboxController.getLeftY() * _kMaxSpeed)
-                .withVelocityY(-xboxController.getLeftX() * _kMaxSpeed)
+                .withVelocityX(xboxController.getLeftY() * _kMaxSpeed)
+                .withVelocityY(xboxController.getLeftX() * _kMaxSpeed)
                 .withRotationalRate(-xboxController.getRightX() *
                     _kMaxAngularRate)));
 
@@ -99,13 +100,15 @@ public class RobotContainer implements Logged {
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 28.0));
+    xboxController.pov(180).onTrue(climberSubsys.setHeight(() -> 28.0));
 
-    xboxController.pov(90).onTrue(climberSubsys.setHeight(() -> 47.75));
+    xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
   }
 
   private void configAutonomous() {
     NamedCommands.registerCommand("onePieceCommand", Commands.none());
+
+    autoChooser.addOption("Go Forwards", AutonFactory.goForwardsCmd());
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

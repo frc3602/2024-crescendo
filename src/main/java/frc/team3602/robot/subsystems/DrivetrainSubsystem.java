@@ -38,8 +38,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
   private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
   public final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric()
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-      .withDeadband(0.02 * kMaxSpeed)
-      .withRotationalDeadband(0.02 * kMaxAngularRate);
+      .withDeadband(0.04)
+      .withRotationalDeadband(0.04);
 
   // Vision
   private final Vision vision = new Vision();
@@ -63,7 +63,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
 
   @Override
   public void periodic() {
-    updateOdometry();
+    // updateOdometry();
   }
 
   public Pose2d getPose() {
@@ -94,16 +94,16 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
     });
   }
 
-  private void updateOdometry() {
-    var pose = vision.getEstimatedRobotPose();
+  // private void updateOdometry() {
+  //   var pose = vision.getEstimatedRobotPose();
 
-    if (pose.isPresent()) {
-      var estimatedRobotPose = pose.get();
+  //   if (pose.isPresent()) {
+  //     var estimatedRobotPose = pose.get();
 
-      this.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds,
-          kMultiTagStdDevs);
-    }
-  }
+  //     this.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds,
+  //         kMultiTagStdDevs);
+  //   }
+  // }
 
   private void configPathPlanner() {
     double driveBaseRadius = 0;
