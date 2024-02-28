@@ -112,9 +112,9 @@ public class RobotContainer implements Logged {
   private void configAutonomous() {
     NamedCommands.registerCommand("onePieceCommand", Commands.none());
 
-    autoChooser.addOption("Test", AutonFactory.testCmd());
-
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    autoChooser.addOption("Test", AutonFactory.testCmd());
   }
 
   public Command getAutonomousCommand() {
