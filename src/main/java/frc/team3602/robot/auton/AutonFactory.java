@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 public class AutonFactory {
   public static final Command doNothingCmd = Commands.print("This literally does nothing.");
 
-  public static Command goForwardsCmd() {
-    return AutoBuilder.followPath(AutonPaths.goForwardsPath);
+  public static Command testCmd() {
+    return AutoBuilder.followPath(AutonPaths.testPath);
   }
 }

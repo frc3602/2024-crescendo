@@ -63,7 +63,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
 
   @Override
   public void periodic() {
-    // updateOdometry();
+    updateOdometry();
   }
 
   public Pose2d getPose() {
@@ -94,19 +94,19 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
     });
   }
 
-  // private void updateOdometry() {
-  //   var pose = vision.getEstimatedRobotPose();
+  private void updateOdometry() {
+    var pose = vision.getEstimatedRobotPose();
 
-  //   if (pose.isPresent()) {
-  //     var estimatedRobotPose = pose.get();
+    if (pose.isPresent()) {
+      var estimatedRobotPose = pose.get();
 
-  //     this.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds,
-  //         kMultiTagStdDevs);
-  //   }
-  // }
+      this.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds,
+          kMultiTagStdDevs);
+    }
+  }
 
   private void configPathPlanner() {
-    double driveBaseRadius = 0;
+    double driveBaseRadius = 13;
 
     for (var moduleLocation : m_moduleLocations) {
       driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());

@@ -59,9 +59,13 @@ public class RobotContainer implements Logged {
   private final Trigger atVelocity = new Trigger(shooterSubsys::atVelocity);
 
   // Autonomous
+  private final Telemetry logger = new Telemetry(_kMaxSpeed);
+
   private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
 
   public RobotContainer() {
+    driveSubsys.registerTelemetry(logger::telemeterize);
+
     configDefaultCommands();
     configButtonBindings();
     configAutonomous();
@@ -108,7 +112,7 @@ public class RobotContainer implements Logged {
   private void configAutonomous() {
     NamedCommands.registerCommand("onePieceCommand", Commands.none());
 
-    autoChooser.addOption("Go Forwards", AutonFactory.goForwardsCmd());
+    autoChooser.addOption("Test", AutonFactory.testCmd());
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

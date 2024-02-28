@@ -9,5 +9,5 @@ package frc.team3602.robot.auton;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 public class AutonPaths {
-  public static final PathPlannerPath goForwardsPath = PathPlannerPath.fromPathFile("go_forwar");
+  public static final PathPlannerPath testPath = PathPlannerPath.fromPathFile("test");
 }
