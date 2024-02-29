@@ -17,4 +17,20 @@ public class AutonFactory {
   public static Command testCmd() {
     return new PathPlannerAuto("test");
   }
+
+  public static Command bruhCmd() {
+    return new PathPlannerAuto("bruh");
+  }
+
+  public static Command bruh2Cmd() {
+    return new PathPlannerAuto("bruh2");
+  }
+
+  public static Command straitbackCmd() {
+    return new PathPlannerAuto("straitback");
+  }
+
+  public static Command rightstraitbackCmd() {
+    return new PathPlannerAuto("rightstraitback");
+  }
 }
