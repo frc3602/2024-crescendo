@@ -40,10 +40,12 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
   private final RelativeEncoder bottomShooterEncoder = bottomShooterMotor.getEncoder();
 
   // Controllers
+  public boolean atVelocity;
+
   @Log
   private double topVelocityRPM = 5500, bottomVelocityRPM = 5500; // 2300 trap_top: 1800, trap_bottom: 3000
 
-  private double __kP, __kI, __kD;
+  // private double __kP, __kI, __kD;
 
   private final SparkPIDController topController = topShooterMotor.getPIDController();
   private final SparkPIDController bottomController = bottomShooterMotor.getPIDController();
@@ -52,9 +54,9 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     SmartDashboard.putNumber("Shooter Top RPM", topVelocityRPM);
     SmartDashboard.putNumber("Shooter Bottom RPM", bottomVelocityRPM);
 
-    SmartDashboard.putNumber("Shooter kP", __kP);
-    SmartDashboard.putNumber("Shooter kI", __kI);
-    SmartDashboard.putNumber("Shooter kD", __kD);
+    // SmartDashboard.putNumber("Shooter kP", __kP);
+    // SmartDashboard.putNumber("Shooter kI", __kI);
+    // SmartDashboard.putNumber("Shooter kD", __kD);
 
     configShooterSubsys();
   }
@@ -90,10 +92,10 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     });
   }
 
-  public Command setRPM(DoubleSupplier topVelocityRPM, DoubleSupplier bottomVelocityRPM) {
+  public Command setRPM(double topVelocityRPM, double bottomVelocityRPM) {
     return runOnce(() -> {
-      this.topVelocityRPM = topVelocityRPM.getAsDouble();
-      this.bottomVelocityRPM = bottomVelocityRPM.getAsDouble();
+      this.topVelocityRPM = topVelocityRPM;
+      this.bottomVelocityRPM = bottomVelocityRPM;
     });
   }
 
@@ -101,6 +103,16 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     return run(() -> {
       topShooterMotor.set(topSpeed);
       bottomShooterMotor.set(bottomSpeed);
+    });
+  }
+
+  public Command runShooterRPM(DoubleSupplier topVelocityRPM, DoubleSupplier bottomVelocityRPM) {
+    return run(() -> {
+      topController.setReference(topVelocityRPM.getAsDouble(), ControlType.kVelocity);
+      bottomController.setReference(bottomVelocityRPM.getAsDouble(), ControlType.kVelocity);
+    }).finallyDo(() -> {
+      topShooterMotor.stopMotor();
+      bottomShooterMotor.stopMotor();
     });
   }
 
@@ -118,6 +130,11 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     });
   }
 
+  public void stopMotors() {
+    topShooterMotor.stopMotor();
+    bottomShooterMotor.stopMotor();
+  }
+
   @Override
   public void periodic() {
     topOut = topShooterMotor.getAppliedOutput();
@@ -126,24 +143,26 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     topVolts = topShooterMotor.getBusVoltage();
     bottomVolts = bottomShooterMotor.getBusVoltage();
 
+    atVelocity = !atVelocity();
+
     // Get new tuning numbers from shuffleboard
-    var _kP = SmartDashboard.getNumber("Shooter kP", __kP);
-    var _kI = SmartDashboard.getNumber("Shooter kI", __kI);
-    var _kD = SmartDashboard.getNumber("Shooter kD", __kD);
+    // var _kP = SmartDashboard.getNumber("Shooter kP", __kP);
+    // var _kI = SmartDashboard.getNumber("Shooter kI", __kI);
+    // var _kD = SmartDashboard.getNumber("Shooter kD", __kD);
 
     // Check if tuning numbers changed and update controller values
-    if (_kP != __kP) {
-    __kP = _kP;
-    topController.setP(__kP);
-    }
-    if (_kI != __kI) {
-    __kI = _kI;
-    topController.setI(__kI);
-    }
-    if (_kD != __kD) {
-    __kD = _kD;
-    topController.setD(__kD);
-    }
+    // if (_kP != __kP) {
+    // __kP = _kP;
+    // topController.setP(__kP);
+    // }
+    // if (_kI != __kI) {
+    // __kI = _kI;
+    // topController.setI(__kI);
+    // }
+    // if (_kD != __kD) {
+    // __kD = _kD;
+    // topController.setD(__kD);
+    // }
 
     // Get new velocity numbers from shuffleboard
     // var _topVelocityRPM = SmartDashboard.getNumber("Shooter Top RPM",
@@ -186,9 +205,9 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     topController.setFeedbackDevice(topShooterEncoder);
     bottomController.setFeedbackDevice(bottomShooterEncoder);
 
-    // topController.setP(kP);
-    // topController.setI(kI);
-    // topController.setD(kD);
+    topController.setP(kP);
+    topController.setI(kI);
+    topController.setD(kD);
 
     bottomController.setP(kP);
     bottomController.setI(kI);

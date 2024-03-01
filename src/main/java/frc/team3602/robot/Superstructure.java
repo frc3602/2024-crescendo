@@ -6,8 +6,10 @@
 
 package frc.team3602.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import static edu.wpi.first.units.Units.*;
@@ -43,6 +45,32 @@ public class Superstructure {
     return pivotSubsys.setAngle(() -> 45);
   }
 
+  // public Command testPickup() {
+  // return Commands.sequence(
+  // intakeSubsys.runIntake(() -> 0.25).until(() ->
+  // intakeSubsys.getColorSensor()),
+  // shooterSubsys.runShooterRPM(() -> 5500, () -> 5500).withTimeout(4.0)
+  // .alongWith(intakeSubsys.runIntake(() -> 0.75).unless(() ->
+  // !shooterSubsys.atVelocity)))
+  // .withTimeout(4.0);
+  // }
+
+  public Command testPickup() {
+    return Commands.sequence(
+        intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()),
+        shooterSubsys.setRPM(5500, 5500),
+        new WaitCommand(1.0).alongWith(intakeSubsys.runOnce(() -> System.out.println("Testing"))),
+        (intakeSubsys.runIntake(() -> 0.75) /* .unless(() -> !shooterSubsys.atVelocity) */ ),
+        shooterSubsys.stopShooter());
+  }
+
+  // public Command firstShootMiddle() {
+  //   return Commands.sequence(
+  //       pivotSubsys.setAngle(() -> 0.50),
+  //       shooterSubsys.setRPM(() -> 5500, () -> 5500),
+  //       intakeSubsys.runIntake(() -> -0.75).unless(atVelocity));
+  // }
+
   public Command pickupCmd() {
     return Commands.sequence(
         pivotSubsys.setAngle(() -> 1.75),
@@ -50,8 +78,8 @@ public class Superstructure {
   }
 
   // public Command shootCmd() {
-  //   return shooterSubsys.runShooter()
-  //       .alongWith(intakeSubsys.runIntake(() -> 0.75).unless(atVelocity.negate()));
+  // return shooterSubsys.runShooter()
+  // .alongWith(intakeSubsys.runIntake(() -> 0.75).unless(atVelocity.negate()));
   // }
 
   // public Command speakerCmd() {

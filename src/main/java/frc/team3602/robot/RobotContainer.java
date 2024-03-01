@@ -49,7 +49,7 @@ public class RobotContainer implements Logged {
   public double targetDistance;
 
   public final Vision vision = new Vision();
-  private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
+  public final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
 
   // Operator interfaces
   private double _kMaxSpeed = kMaxSpeed, _kMaxAngularRate = kMaxAngularRate;
@@ -61,14 +61,18 @@ public class RobotContainer implements Logged {
   // Autonomous
   private final Telemetry logger = new Telemetry(_kMaxSpeed);
 
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+  private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
+    NamedCommands.registerCommand("testPickup", superstructure.testPickup());
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
     driveSubsys.registerTelemetry(logger::telemeterize);
 
     configDefaultCommands();
     configButtonBindings();
-    configAutonomous();
   }
 
   private void configDefaultCommands() {
@@ -82,7 +86,9 @@ public class RobotContainer implements Logged {
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
-    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    shooterSubsys.setDefaultCommand(shooterSubsys.runShooter());
+
+    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {
@@ -107,14 +113,6 @@ public class RobotContainer implements Logged {
     xboxController.pov(180).onTrue(climberSubsys.setHeight(() -> 28.0));
 
     xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
-  }
-
-  private void configAutonomous() {
-    NamedCommands.registerCommand("onePieceCommand", Commands.none());
-
-    SmartDashboard.putData("Auto Chooser", autoChooser);
-
-    autoChooser.addOption("Test", AutonFactory.testCmd());
   }
 
   public Command getAutonomousCommand() {
