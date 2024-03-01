@@ -40,10 +40,12 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
   private final RelativeEncoder bottomShooterEncoder = bottomShooterMotor.getEncoder();
 
   // Controllers
+  public boolean atVelocity;
+
   @Log
   private double topVelocityRPM = 5500, bottomVelocityRPM = 5500; // 2300 trap_top: 1800, trap_bottom: 3000
 
-  // private double kP, kI, kD;
+  // private double __kP, __kI, __kD;
 
   private final SparkPIDController topController = topShooterMotor.getPIDController();
   private final SparkPIDController bottomController = bottomShooterMotor.getPIDController();
@@ -52,9 +54,9 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     SmartDashboard.putNumber("Shooter Top RPM", topVelocityRPM);
     SmartDashboard.putNumber("Shooter Bottom RPM", bottomVelocityRPM);
 
-    // SmartDashboard.putNumber("Shooter kP", kP);
-    // SmartDashboard.putNumber("Shooter kI", kI);
-    // SmartDashboard.putNumber("Shooter kD", kD);
+    // SmartDashboard.putNumber("Shooter kP", __kP);
+    // SmartDashboard.putNumber("Shooter kI", __kI);
+    // SmartDashboard.putNumber("Shooter kD", __kD);
 
     configShooterSubsys();
   }
@@ -71,7 +73,7 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
 
   @Log
   public boolean atVelocity() {
-    if ((getTopEncoder() >= 5000 && getBottomEncoder() >= 5000)) { // 3700 trap_top: 1300, trap_bottom: 2400
+    if ((getTopEncoder() >= 4500 && getBottomEncoder() >= 4500)) { // 3700 trap_top: 1300, trap_bottom: 2400
       return true;
     } else {
       return false;
@@ -90,10 +92,10 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     });
   }
 
-  public Command setRPM(DoubleSupplier topVelocityRPM, DoubleSupplier bottomVelocityRPM) {
+  public Command setRPM(double topVelocityRPM, double bottomVelocityRPM) {
     return runOnce(() -> {
-      this.topVelocityRPM = topVelocityRPM.getAsDouble();
-      this.bottomVelocityRPM = bottomVelocityRPM.getAsDouble();
+      this.topVelocityRPM = topVelocityRPM;
+      this.bottomVelocityRPM = bottomVelocityRPM;
     });
   }
 
@@ -101,6 +103,16 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     return run(() -> {
       topShooterMotor.set(topSpeed);
       bottomShooterMotor.set(bottomSpeed);
+    });
+  }
+
+  public Command runShooterRPM(DoubleSupplier topVelocityRPM, DoubleSupplier bottomVelocityRPM) {
+    return run(() -> {
+      topController.setReference(topVelocityRPM.getAsDouble(), ControlType.kVelocity);
+      bottomController.setReference(bottomVelocityRPM.getAsDouble(), ControlType.kVelocity);
+    }).finallyDo(() -> {
+      topShooterMotor.stopMotor();
+      bottomShooterMotor.stopMotor();
     });
   }
 
@@ -118,6 +130,11 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     });
   }
 
+  public void stopMotors() {
+    topShooterMotor.stopMotor();
+    bottomShooterMotor.stopMotor();
+  }
+
   @Override
   public void periodic() {
     topOut = topShooterMotor.getAppliedOutput();
@@ -126,26 +143,25 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     topVolts = topShooterMotor.getBusVoltage();
     bottomVolts = bottomShooterMotor.getBusVoltage();
 
-    // // Get new tuning numbers from shuffleboard
-    // var _kP = SmartDashboard.getNumber("Shooter kP", kP);
-    // var _kI = SmartDashboard.getNumber("Shooter kI", kI);
-    // var _kD = SmartDashboard.getNumber("Shooter kD", kD);
+    atVelocity = !atVelocity();
 
-    // // Check if tuning numbers changed and update controller values
-    // if (_kP != kP) {
-    // kP = _kP;
-    // topController.setP(kP);
-    // bottomController.setP(kP);
+    // Get new tuning numbers from shuffleboard
+    // var _kP = SmartDashboard.getNumber("Shooter kP", __kP);
+    // var _kI = SmartDashboard.getNumber("Shooter kI", __kI);
+    // var _kD = SmartDashboard.getNumber("Shooter kD", __kD);
+
+    // Check if tuning numbers changed and update controller values
+    // if (_kP != __kP) {
+    // __kP = _kP;
+    // topController.setP(__kP);
     // }
-    // if (_kI != kI) {
-    // kI = _kI;
-    // topController.setI(kI);
-    // bottomController.setI(kI);
+    // if (_kI != __kI) {
+    // __kI = _kI;
+    // topController.setI(__kI);
     // }
-    // if (_kD != kD) {
-    // kD = _kD;
-    // topController.setD(kD);
-    // bottomController.setD(kD);
+    // if (_kD != __kD) {
+    // __kD = _kD;
+    // topController.setD(__kD);
     // }
 
     // Get new velocity numbers from shuffleboard

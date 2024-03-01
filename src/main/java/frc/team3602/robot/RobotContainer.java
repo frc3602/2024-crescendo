@@ -23,6 +23,7 @@ import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
+import frc.team3602.robot.auton.AutonFactory;
 import frc.team3602.robot.subsystems.ClimberSubsystem;
 
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
@@ -48,7 +49,7 @@ public class RobotContainer implements Logged {
   public double targetDistance;
 
   public final Vision vision = new Vision();
-  private final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
+  public final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
 
   // Operator interfaces
   private double _kMaxSpeed = kMaxSpeed, _kMaxAngularRate = kMaxAngularRate;
@@ -58,26 +59,36 @@ public class RobotContainer implements Logged {
   private final Trigger atVelocity = new Trigger(shooterSubsys::atVelocity);
 
   // Autonomous
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+  private final Telemetry logger = new Telemetry(_kMaxSpeed);
+
+  private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
+    NamedCommands.registerCommand("testPickup", superstructure.testPickup());
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    driveSubsys.registerTelemetry(logger::telemeterize);
+
     configDefaultCommands();
     configButtonBindings();
-    configAutonomous();
   }
 
   private void configDefaultCommands() {
     driveSubsys
         .setDefaultCommand(driveSubsys.applyRequest(
             () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(-xboxController.getLeftY() * _kMaxSpeed)
-                .withVelocityY(-xboxController.getLeftX() * _kMaxSpeed)
+                .withVelocityX(xboxController.getLeftY() * _kMaxSpeed)
+                .withVelocityY(xboxController.getLeftX() * _kMaxSpeed)
                 .withRotationalRate(-xboxController.getRightX() *
                     _kMaxAngularRate)));
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
-    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    shooterSubsys.setDefaultCommand(shooterSubsys.runShooter());
+
+    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {
@@ -99,15 +110,9 @@ public class RobotContainer implements Logged {
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 28.0));
+    xboxController.pov(180).onTrue(climberSubsys.setHeight(() -> 28.0));
 
-    xboxController.pov(90).onTrue(climberSubsys.setHeight(() -> 47.75));
-  }
-
-  private void configAutonomous() {
-    NamedCommands.registerCommand("onePieceCommand", Commands.none());
-
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
   }
 
   public Command getAutonomousCommand() {
