@@ -13,13 +13,17 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.team3602.robot.Constants.ShooterConstants.*;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
 
 import monologue.Logged;
 import monologue.Annotations.Log;
@@ -40,10 +44,18 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
   private final RelativeEncoder bottomShooterEncoder = bottomShooterMotor.getEncoder();
 
   // Controllers
-  public boolean atVelocity;
+  @Log
+  public boolean isAtVelocity;
+
+  private BooleanSupplier atVelocitySup = new BooleanSupplier() {
+    @Override
+    public boolean getAsBoolean() {
+      return isAtVelocity;
+    }
+  };
 
   @Log
-  private double topVelocityRPM = 5500, bottomVelocityRPM = 5500; // 2300 trap_top: 1800, trap_bottom: 3000
+  public double topVelocityRPM = 0, bottomVelocityRPM = 0; // 2300 trap_top: 1800, trap_bottom: 3000
 
   // private double __kP, __kI, __kD;
 
@@ -71,14 +83,49 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     return bottomShooterEncoder.getVelocity();
   }
 
-  @Log
-  public boolean atVelocity() {
-    if ((getTopEncoder() >= 4500 && getBottomEncoder() >= 4500)) { // 3700 trap_top: 1300, trap_bottom: 2400
-      return true;
-    } else {
-      return false;
-    }
+  // @Log
+  // public boolean atVelocity() {
+  // var topTarget = topVelocityRPM;
+  // var bottomTarget = bottomVelocityRPM;
+
+  // var tolerance = 600;
+
+  // boolean topOk = MathUtil.isNear(topTarget, getTopEncoder(), tolerance);
+  // boolean bottomOk = MathUtil.isNear(bottomTarget, getBottomEncoder(),
+  // tolerance);
+
+  // return topOk && bottomOk;
+  // }
+
+  public Command atVelocity(BooleanSupplier isFinishedSup) {
+    return new FunctionalCommand(
+        () -> {
+
+        },
+        () -> {
+          var topTarget = topVelocityRPM;
+          var bottomTarget = bottomVelocityRPM;
+
+          var tolerance = 600;
+
+          boolean topOk = MathUtil.isNear(topTarget, getTopEncoder(), tolerance);
+          boolean bottomOk = MathUtil.isNear(bottomTarget, getBottomEncoder(), tolerance);
+
+          isAtVelocity = topOk && bottomOk;
+        }, (onEnd) -> {
+
+        }, isFinishedSup, this);
   }
+
+  // @Log
+  // public boolean atVelocity() {
+  // if ((getTopEncoder() >= 4500 && getBottomEncoder() >= 4500)) { // 3700
+  // trap_top: 1300, trap_bottom: 2400
+  // return true;
+  // } else {
+  // return false;
+  // }
+  // }
 
   public Command setTopRPM(DoubleSupplier velocityRPM) {
     return runOnce(() -> {
@@ -143,7 +190,7 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     topVolts = topShooterMotor.getBusVoltage();
     bottomVolts = bottomShooterMotor.getBusVoltage();
 
-    atVelocity = !atVelocity();
+    // isAtVelocity = atVelocity();
 
     // Get new tuning numbers from shuffleboard
     // var _kP = SmartDashboard.getNumber("Shooter kP", __kP);

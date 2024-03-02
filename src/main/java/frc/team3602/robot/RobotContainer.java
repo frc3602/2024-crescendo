@@ -56,7 +56,7 @@ public class RobotContainer implements Logged {
 
   public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
 
-  private final Trigger atVelocity = new Trigger(shooterSubsys::atVelocity);
+  // private final Trigger atVelocity = new Trigger(shooterSubsys::atVelocity);
 
   // Autonomous
   private final Telemetry logger = new Telemetry(_kMaxSpeed);
@@ -88,7 +88,7 @@ public class RobotContainer implements Logged {
 
     shooterSubsys.setDefaultCommand(shooterSubsys.runShooter());
 
-    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {
@@ -103,7 +103,7 @@ public class RobotContainer implements Logged {
     xboxController.leftBumper().whileTrue(shooterSubsys.runShooter())
         .onFalse(shooterSubsys.stopShooter());
 
-    xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75).unless(atVelocity.negate()))
+    xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
         .onFalse(intakeSubsys.stopIntake());
 
     xboxController.x().onTrue(superstructure.inFrameCmd());
