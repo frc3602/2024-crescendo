@@ -92,7 +92,7 @@ public class Superstructure {
       shooterSubsys.setRPM(5000, 5000),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.setAngle(() -> 8.0),
+      pivotSubsys.runSetAngle(() -> 8.0),
 
       Commands.print("Intaking Note"),
       intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()),
@@ -114,7 +114,7 @@ public class Superstructure {
       Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.setAngle(() -> 23.0).until(() -> pivotSubsys.isAtPosition),
+      pivotSubsys.runSetAngle(() -> 23.0).until(() -> pivotSubsys.isAtPosition),
       Commands.waitSeconds(0.2),
 
       Commands.print("Waiting for Spinup"),
@@ -127,7 +127,7 @@ public class Superstructure {
       // shooterSubsys.stopShooter(),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.setAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
+      pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
       Commands.waitSeconds(0.2)
     );
   }
@@ -142,7 +142,7 @@ public class Superstructure {
       // Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.setAngle(() -> 45.0).until(() -> pivotSubsys.isAtPosition),
+      pivotSubsys.runSetAngle(() -> 45.0).until(() -> pivotSubsys.isAtPosition),
       Commands.waitSeconds(0.2),
 
       Commands.print("Waiting for Spinup"),
@@ -184,9 +184,9 @@ public class Superstructure {
   // }
 
   // public Command speakerCmd() {
-  // return Commands.sequence(
-  // pivotSubsys.setAngle(() ->
-  // Degrees.of(pivotSubsys.lerpTable.get(vision.getTargetDistance()))));
+  //   return Commands.sequence(
+  //     pivotSubsys.setAngle(() -> pivotSubsys.lerpTable.get(vision.getTargetDistance()))
+  //   );
   // }
 
   public Command ampCmd() {

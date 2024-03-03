@@ -89,13 +89,13 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     });
   }
 
-  // public Command setAngle(DoubleSupplier angleDegrees) {
-  //   return runOnce(() -> {
-  //     angle = angleDegrees.getAsDouble();
-  //   });
-  // }
-
   public Command setAngle(DoubleSupplier angleDegrees) {
+    return runOnce(() -> {
+      angle = angleDegrees.getAsDouble();
+    });
+  }
+
+  public Command runSetAngle(DoubleSupplier angleDegrees) {
     return run(() -> {
       angle = angleDegrees.getAsDouble();
 
@@ -142,11 +142,11 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
     isAtPosition = atPosition();
 
-    // var angle = SmartDashboard.getNumber("Angle", this.angle);
+    var angle = SmartDashboard.getNumber("Angle", this.angle);
 
-    // if (angle != this.angle) {
-    //   this.angle = angle;
-    // }
+    if (angle != this.angle) {
+      this.angle = angle;
+    }
   }
 
   private void configPivotSubsys() {

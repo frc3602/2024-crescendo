@@ -118,8 +118,8 @@ public final class Constants {
     public static final Transform3d kRobotToCamera = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
         new Rotation3d(0.0, 0.0, 0.0));
 
-    public static final Measure<Distance> kCameraHeight = Feet.of(1.3);
-    public static final Measure<Angle> kCameraPitch = Degrees.of(0.0);
+    public static final Measure<Distance> kCameraHeight = Inches.of(10.75);
+    public static final Measure<Angle> kCameraPitch = Degrees.of(23.5);
 
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);

@@ -211,6 +211,13 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     });
   }
 
+  public Command stopMotorsCmd() {
+    return runOnce(() -> {
+      topShooterMotor.stopMotor();
+      bottomShooterMotor.stopMotor();
+    });
+  }
+
   public void stopMotors() {
     topShooterMotor.stopMotor();
     bottomShooterMotor.stopMotor();

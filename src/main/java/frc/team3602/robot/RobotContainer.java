@@ -88,11 +88,11 @@ public class RobotContainer implements Logged {
                 .withRotationalRate(-xboxController.getRightX() *
                     _kMaxAngularRate)));
 
-    pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
+    // pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
     // shooterSubsys.setDefaultCommand(shooterSubsys.runShooterSpeed());
 
-    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {
@@ -104,8 +104,8 @@ public class RobotContainer implements Logged {
 
     xboxController.a().whileTrue(superstructure.pickupCmd()).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.leftBumper().onTrue(shooterSubsys.setRPM(5000, 5000))
-        .onFalse(shooterSubsys.stopShooter());
+    xboxController.leftBumper().onTrue(shooterSubsys.runShooterSpeed(0.75, 0.75))
+        .onFalse(shooterSubsys.stopMotorsCmd());
 
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
         .onFalse(intakeSubsys.stopIntake());
@@ -118,7 +118,7 @@ public class RobotContainer implements Logged {
 
     xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
 
-    xboxController.pov(90).onTrue(shooterSubsys.stopShooter());
+    xboxController.pov(90).whileTrue(pivotSubsys.setAngle(() -> pivotSubsys.lerpTable.get(vision.getTargetDistance())));
 
     xboxController.rightBumper().onTrue(superstructure.oneNoteMiddle());
   }
