@@ -174,9 +174,10 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
     // Interpolation table config
     lerpTable.put(4.6, 32.0); // 4.6 feet, 32 degrees
-    lerpTable.put(7.65, 38.0); // 7.65 feet, 39.5 degrees
-    lerpTable.put(15.0, 43.0); // 15 feet, 43 degrees
-    lerpTable.put(20.0, 53.5); // 20 feet, 44.5 degrees
-    lerpTable.put(25.0, 41.0); // 25 feet, 41 degrees
+    lerpTable.put(7.65, 42.0); // 7.65 feet, 42 degrees
+    lerpTable.put(10.7, 49.75); // 10.7 feet, 49.75 degrees
+    lerpTable.put(13.79, 53.0); // 13.79 feet, 53 degrees
+    lerpTable.put(16.9, 52.5); // 16.9 feet, 52.5 degrees
+    lerpTable.put(20.6, 45.0); // 20.6 feet, 45 degrees
   }
 }
