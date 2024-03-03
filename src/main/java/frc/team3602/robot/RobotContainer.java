@@ -21,7 +21,7 @@ import static edu.wpi.first.units.Units.*;
 
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
-import frc.team3602.robot.subsystems.PivotSubsystem;
+import frc.team3602.robot.subsystems._PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 import frc.team3602.robot.auton.AutonFactory;
 import frc.team3602.robot.subsystems.ClimberSubsystem;
@@ -42,7 +42,7 @@ public class RobotContainer implements Logged {
   private final DrivetrainSubsystem driveSubsys = kDrivetrainSubsys;
   public final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
-  private final PivotSubsystem pivotSubsys = new PivotSubsystem();
+  private final _PivotSubsystem pivotSubsys = new _PivotSubsystem();
   private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
 
   @Log
@@ -65,9 +65,13 @@ public class RobotContainer implements Logged {
 
   public RobotContainer() {
     NamedCommands.registerCommand("testPickup", superstructure.testPickup());
+    NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
+    NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    // autoChooser.addOption("One Note Middle", superstructure.oneNoteMiddle());
 
     driveSubsys.registerTelemetry(logger::telemeterize);
 
@@ -86,7 +90,7 @@ public class RobotContainer implements Logged {
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
-    shooterSubsys.setDefaultCommand(shooterSubsys.runShooter());
+    // shooterSubsys.setDefaultCommand(shooterSubsys.runShooterSpeed());
 
     climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
@@ -100,7 +104,7 @@ public class RobotContainer implements Logged {
 
     xboxController.a().whileTrue(superstructure.pickupCmd()).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.leftBumper().whileTrue(shooterSubsys.runShooter())
+    xboxController.leftBumper().onTrue(shooterSubsys.setRPM(5000, 5000))
         .onFalse(shooterSubsys.stopShooter());
 
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
@@ -113,6 +117,10 @@ public class RobotContainer implements Logged {
     xboxController.pov(180).onTrue(climberSubsys.setHeight(() -> 28.0));
 
     xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
+
+    xboxController.pov(90).onTrue(shooterSubsys.stopShooter());
+
+    xboxController.rightBumper().onTrue(superstructure.oneNoteMiddle());
   }
 
   public Command getAutonomousCommand() {

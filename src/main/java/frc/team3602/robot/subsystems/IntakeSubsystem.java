@@ -23,6 +23,12 @@ import static frc.team3602.robot.Constants.IntakeConstants.*;
 
 public class IntakeSubsystem extends SubsystemBase implements Logged {
   // Motor controllers
+  @Log
+  private double intakeOut;
+
+  @Log
+  private double intakeVolts;
+
   public final CANSparkMax intakeMotor = new CANSparkMax(kIntakeMotorId, MotorType.kBrushless);
 
   // Sensors
@@ -53,6 +59,10 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
 
   @Override
   public void periodic() {
+    intakeOut = intakeMotor.getAppliedOutput();
+
+    intakeVolts = (intakeMotor.getAppliedOutput() * 12);
+
     hasNote = getColorSensor();
   }
 

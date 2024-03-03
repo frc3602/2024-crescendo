@@ -88,13 +88,13 @@ public final class Constants {
     public static final int kPivotMotorId = 4;
     public static final int kPivotFollowerId = 6; // TODO: CHANGE MOTOR CONTROLLER TO CAN ID 6
 
-    public static final int kPivotMotorCurrentLimit = 20;
-    public static final int kPivotFollowerCurrentLimit = 20;
+    public static final int kPivotMotorCurrentLimit = 30;
+    public static final int kPivotFollowerCurrentLimit = 30;
 
     public static final double kPivotConversionFactor = 360;
     public static final double kAbsoluteOffset = 0;
 
-    public static final double kP = 0.02;
+    public static final double kP = 0.15; // 0.02
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 
