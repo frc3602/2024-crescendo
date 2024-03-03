@@ -29,12 +29,14 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team3602.robot.Vision;
 
 import monologue.Logged;
+import monologue.Annotations.Log;
 
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 import static frc.team3602.robot.Constants.VisionConstants.*;
 
 public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, Logged {
   // Drivetrain
+  @Log public double heading;
   private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
   public final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric()
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
@@ -63,6 +65,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
 
   @Override
   public void periodic() {
+    heading = this.m_pigeon2.getQuatZ().getValueAsDouble()*360;
     updateOdometry();
   }
 

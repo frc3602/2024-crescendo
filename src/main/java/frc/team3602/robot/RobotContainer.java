@@ -88,11 +88,11 @@ public class RobotContainer implements Logged {
                 .withRotationalRate(-xboxController.getRightX() *
                     _kMaxAngularRate)));
 
-    // pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
+    pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
     // shooterSubsys.setDefaultCommand(shooterSubsys.runShooterSpeed());
 
-    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {
