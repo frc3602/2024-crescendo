@@ -145,6 +145,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     var angle = SmartDashboard.getNumber("Angle", this.angle);
 
     if (angle != this.angle) {
+      MathUtil.clamp(angle, 0, 130);
       this.angle = angle;
     }
   }
@@ -172,8 +173,8 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     pivotFollower.burnFlash();
 
     // Interpolation table config
-    lerpTable.put(5.0, 32.0); // 5 feet, 25 degrees
-    lerpTable.put(10.0, 48.0); // 10 feet, 39.5 degrees
+    lerpTable.put(4.6, 32.0); // 4.6 feet, 32 degrees
+    lerpTable.put(7.65, 38.0); // 7.65 feet, 39.5 degrees
     lerpTable.put(15.0, 43.0); // 15 feet, 43 degrees
     lerpTable.put(20.0, 53.5); // 20 feet, 44.5 degrees
     lerpTable.put(25.0, 41.0); // 25 feet, 41 degrees
