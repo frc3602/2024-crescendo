@@ -88,13 +88,13 @@ public final class Constants {
     public static final int kPivotMotorId = 4;
     public static final int kPivotFollowerId = 6; // TODO: CHANGE MOTOR CONTROLLER TO CAN ID 6
 
-    public static final int kPivotMotorCurrentLimit = 20;
-    public static final int kPivotFollowerCurrentLimit = 20;
+    public static final int kPivotMotorCurrentLimit = 30;
+    public static final int kPivotFollowerCurrentLimit = 30;
 
     public static final double kPivotConversionFactor = 360;
     public static final double kAbsoluteOffset = 0;
 
-    public static final double kP = 0.02;
+    public static final double kP = 0.15; // 0.02
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 
@@ -118,8 +118,8 @@ public final class Constants {
     public static final Transform3d kRobotToCamera = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
         new Rotation3d(0.0, 0.0, 0.0));
 
-    public static final Measure<Distance> kCameraHeight = Feet.of(1.3);
-    public static final Measure<Angle> kCameraPitch = Degrees.of(0.0);
+    public static final Measure<Distance> kCameraHeight = Inches.of(10.75);
+    public static final Measure<Angle> kCameraPitch = Degrees.of(23.5);
 
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
@@ -170,7 +170,7 @@ public final class Constants {
     private static final int kFrontLeftTurnMotorId = 49;
     private static final int kFrontLeftDriveMotorId = 46;
     private static final int kFrontLeftEncoderId = 41;
-    private static final double kFrontLeftEncoderOffset = 0.098388671875;
+    private static final double kFrontLeftEncoderOffset = 0.102294921875;
     private static final double kFrontLeftXPosInches = 10.25;
     private static final double kFrontLeftYPosInches = 10.25;
 
@@ -188,7 +188,7 @@ public final class Constants {
     private static final int kFrontRightTurnMotorId = 45;
     private static final int kFrontRightDriveMotorId = 44;
     private static final int kFrontRightEncoderId = 42;
-    private static final double kFrontRightEncoderOffset = -0.48583984375;
+    private static final double kFrontRightEncoderOffset = -0.440673828125;
     private static final double kFrontRightXPosInches = 10.25;
     private static final double kFrontRightYPosInches = -10.25;
 
@@ -206,7 +206,7 @@ public final class Constants {
     private static final int kBackLeftTurnMotorId = 50;
     private static final int kBackLeftDriveMotorId = 51;
     private static final int kBackLeftEncoderId = 40;
-    private static final double kBackLeftEncoderOffset = 0.450927734375;
+    private static final double kBackLeftEncoderOffset = 0.459228515625;
     private static final double kBackLeftXPosInches = -10.25;
     private static final double kBackLeftYPosInches = 10.25;
 
@@ -224,7 +224,7 @@ public final class Constants {
     private static final int kBackRightTurnMotorId = 47;
     private static final int kBackRightDriveMotorId = 48;
     private static final int kBackRightEncoderId = 43;
-    private static final double kBackRightEncoderOffset = 0.27880859375;
+    private static final double kBackRightEncoderOffset = 0.28857421875;
     private static final double kBackRightXPosInches = -10.25;
     private static final double kBackRightYPosInches = -10.25;
 

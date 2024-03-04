@@ -13,18 +13,25 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.team3602.robot.Constants.ShooterConstants.*;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
 
 import monologue.Logged;
 import monologue.Annotations.Log;
 
 public class ShooterSubsystem extends SubsystemBase implements Logged {
+  @Log
+  private String defaultCommandName;
+
   // Motor controllers
   @Log
   private double topOut, bottomOut;
@@ -39,11 +46,13 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
   private final RelativeEncoder topShooterEncoder = topShooterMotor.getEncoder();
   private final RelativeEncoder bottomShooterEncoder = bottomShooterMotor.getEncoder();
 
-  // Controllers
-  public boolean atVelocity;
+  // Controls
+  @Log public boolean isAtVelocity;
+  @Log public boolean isAtSpeed;
 
-  @Log
-  private double topVelocityRPM = 5500, bottomVelocityRPM = 5500; // 2300 trap_top: 1800, trap_bottom: 3000
+  @Log public double topVelocityRPM = 0, bottomVelocityRPM = 0; // 2300 trap_top: 1800, trap_bottom: 3000
+
+  @Log public double topSpeed = 0, bottomSpeed = 0;
 
   // private double __kP, __kI, __kD;
 
@@ -73,12 +82,62 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
 
   @Log
   public boolean atVelocity() {
-    if ((getTopEncoder() >= 4500 && getBottomEncoder() >= 4500)) { // 3700 trap_top: 1300, trap_bottom: 2400
-      return true;
-    } else {
-      return false;
-    }
+    var topTarget = topVelocityRPM;
+    var bottomTarget = bottomVelocityRPM;
+
+    var tolerance = 100;
+
+    boolean topOk = MathUtil.isNear(topTarget, getTopEncoder(), tolerance);
+    boolean bottomOk = MathUtil.isNear(bottomTarget, getBottomEncoder(),
+        tolerance);
+
+    return topOk && bottomOk;
   }
+
+  @Log
+  public boolean atSpeed() {
+    var topTarget = topSpeed;
+    var bottomTarget = bottomSpeed;
+
+    var tolerance = 0.09;
+
+    boolean topOk = MathUtil.isNear(topTarget, topShooterMotor.getAppliedOutput(), tolerance);
+    boolean bottomOk = MathUtil.isNear(bottomTarget, bottomShooterMotor.getAppliedOutput(),
+        tolerance);
+
+    return topOk && bottomOk;
+  }
+
+  // public Command atVelocity(BooleanSupplier isFinishedSup) {
+  // return new FunctionalCommand(
+  // () -> {
+
+  // },
+  // () -> {
+  // var topTarget = topVelocityRPM;
+  // var bottomTarget = bottomVelocityRPM;
+
+  // var tolerance = 600;
+
+  // boolean topOk = MathUtil.isNear(topTarget, getTopEncoder(), tolerance);
+  // boolean bottomOk = MathUtil.isNear(bottomTarget, getBottomEncoder(),
+  // tolerance);
+
+  // isAtVelocity = topOk && bottomOk;
+  // }, (onEnd) -> {
+
+  // }, isFinishedSup, this);
+  // }
+
+  // @Log
+  // public boolean atVelocity() {
+  // if ((getTopEncoder() >= 4500 && getBottomEncoder() >= 4500)) { // 3700
+  // trap_top: 1300, trap_bottom: 2400
+  // return true;
+  // } else {
+  // return false;
+  // }
+  // }
 
   public Command setTopRPM(DoubleSupplier velocityRPM) {
     return runOnce(() -> {
@@ -99,12 +158,26 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     });
   }
 
+  public Command setSpeed(double topSpeed, double bottomSpeed) {
+    return runOnce(() -> {
+      this.topSpeed = topSpeed;
+      this.bottomSpeed = bottomSpeed;
+    });
+  }
+
   public Command runShooterSpeed(double topSpeed, double bottomSpeed) {
     return run(() -> {
       topShooterMotor.set(topSpeed);
       bottomShooterMotor.set(bottomSpeed);
     });
   }
+
+  // public Command runShooterSpeed() {
+  //   return run(() -> {
+  //     topShooterMotor.set(topSpeed);
+  //     bottomShooterMotor.set(bottomSpeed);
+  //   }).withName("Run Shooter Speed Default Command");
+  // }
 
   public Command runShooterRPM(DoubleSupplier topVelocityRPM, DoubleSupplier bottomVelocityRPM) {
     return run(() -> {
@@ -120,10 +193,25 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     return run(() -> {
       topController.setReference(topVelocityRPM, ControlType.kVelocity);
       bottomController.setReference(bottomVelocityRPM, ControlType.kVelocity);
-    });
+
+      if (topVelocityRPM <= 100 && bottomVelocityRPM <= 100) {
+        topVelocityRPM = 10;
+        bottomVelocityRPM = 10;
+      } else if (topVelocityRPM >= 100 && bottomVelocityRPM >= 100) {
+        topController.setReference(topVelocityRPM, ControlType.kVelocity);
+        bottomController.setReference(bottomVelocityRPM, ControlType.kVelocity);
+      }
+    }).withName("Run Shooter Default Command");
   }
 
   public Command stopShooter() {
+    return runOnce(() -> {
+      topVelocityRPM = 0;
+      bottomVelocityRPM = 0;
+    });
+  }
+
+  public Command stopMotorsCmd() {
     return runOnce(() -> {
       topShooterMotor.stopMotor();
       bottomShooterMotor.stopMotor();
@@ -140,10 +228,13 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     topOut = topShooterMotor.getAppliedOutput();
     bottomOut = bottomShooterMotor.getAppliedOutput();
 
-    topVolts = topShooterMotor.getBusVoltage();
-    bottomVolts = bottomShooterMotor.getBusVoltage();
+    topVolts = (topShooterMotor.getAppliedOutput() / 12);
+    bottomVolts = (bottomShooterMotor.getAppliedOutput() / 12);
 
-    atVelocity = !atVelocity();
+    // defaultCommandName = this.getDefaultCommand().getName();
+
+    isAtVelocity = atVelocity();
+    isAtSpeed = atSpeed();
 
     // Get new tuning numbers from shuffleboard
     // var _kP = SmartDashboard.getNumber("Shooter kP", __kP);
@@ -212,6 +303,9 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     bottomController.setP(kP);
     bottomController.setI(kI);
     bottomController.setD(kD);
+
+    // topController.setSmartMotionAllowedClosedLoopError(5, 0);
+    // bottomController.setSmartMotionAllowedClosedLoopError(5, 0);
 
     topShooterMotor.burnFlash();
     bottomShooterMotor.burnFlash();

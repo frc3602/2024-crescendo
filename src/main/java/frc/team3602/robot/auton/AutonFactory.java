@@ -26,11 +26,15 @@ public class AutonFactory {
     return new PathPlannerAuto("bruh2");
   }
 
-  public static Command straitbackCmd() {
-    return new PathPlannerAuto("straitback");
-  }
-
   public static Command rightstraitbackCmd() {
     return new PathPlannerAuto("rightstraitback");
+  }
+
+  public static Command oneNoteMiddleCmd() {
+    return new PathPlannerAuto("oneNoteMiddle");
+  }
+
+  public static Command twoNoteMiddleCmd() {
+    return new PathPlannerAuto("twoNoteMiddle");
   }
 }
