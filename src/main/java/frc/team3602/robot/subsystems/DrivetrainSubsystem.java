@@ -65,7 +65,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
 
   @Override
   public void periodic() {
-    heading = this.m_pigeon2.getQuatZ().getValueAsDouble()*360;
+    heading = this.m_pigeon2.getYaw().getValueAsDouble();
     updateOdometry();
   }
 

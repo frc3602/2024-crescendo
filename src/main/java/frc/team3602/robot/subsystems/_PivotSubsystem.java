@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.team3602.robot.Vision;
 import monologue.Logged;
 import monologue.Annotations.Log;
 
@@ -53,6 +53,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   @Log public double encoderValue;
 
   public double angle = 0;
+  @Log public double lerpAngle; 
   public double absoluteOffset = 255;
 
   @Log public double effort;
@@ -60,6 +61,8 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   @Log public double ffEffort;
 
   @Log public double pidEffort;
+
+  private final Vision vision = new Vision();
 
   public final InterpolatingDoubleTreeMap lerpTable = new InterpolatingDoubleTreeMap();
 
@@ -142,12 +145,14 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
     isAtPosition = atPosition();
 
-    var angle = SmartDashboard.getNumber("Angle", this.angle);
+    lerpAngle = lerpTable.get(vision.getTargetDistance());
 
-    if (angle != this.angle) {
-      MathUtil.clamp(angle, 0, 130);
-      this.angle = angle;
-    }
+    // var angle = SmartDashboard.getNumber("Angle", this.angle);
+
+    // if (angle != this.angle) {
+    //   MathUtil.clamp(angle, 0, 130);
+    //   this.angle = angle;
+    // }
   }
 
   private void configPivotSubsys() {
