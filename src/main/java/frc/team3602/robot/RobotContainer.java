@@ -83,8 +83,8 @@ public class RobotContainer implements Logged {
     driveSubsys
         .setDefaultCommand(driveSubsys.applyRequest(
             () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(xboxController.getLeftY() * _kMaxSpeed)
-                .withVelocityY(xboxController.getLeftX() * _kMaxSpeed)
+                .withVelocityX(-xboxController.getLeftY() * _kMaxSpeed)
+                .withVelocityY(-xboxController.getLeftX() * _kMaxSpeed)
                 .withRotationalRate(-xboxController.getRightX() *
                     _kMaxAngularRate)));
 
@@ -104,7 +104,7 @@ public class RobotContainer implements Logged {
 
     xboxController.a().whileTrue(superstructure.pickupCmd()).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.leftBumper().onTrue(shooterSubsys.runShooterSpeed(0.75, 0.75))
+    xboxController.leftBumper().onTrue(shooterSubsys.runShooterSpeed(0.8, 0.8))
         .onFalse(shooterSubsys.stopMotorsCmd());
 
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
@@ -118,9 +118,9 @@ public class RobotContainer implements Logged {
 
     xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
 
-    xboxController.pov(90).whileTrue(pivotSubsys.setAngle(() -> pivotSubsys.lerpTable.get(vision.getTargetDistance())));
+    xboxController.pov(90).whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpTable.get(vision.getTargetDistance())));
 
-    xboxController.rightBumper().onTrue(superstructure.oneNoteMiddle());
+    xboxController.rightBumper().onTrue(pivotSubsys.setAngle(() -> 125));
   }
 
   public Command getAutonomousCommand() {
