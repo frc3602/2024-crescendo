@@ -83,8 +83,8 @@ public class RobotContainer implements Logged {
     driveSubsys
         .setDefaultCommand(driveSubsys.applyRequest(
             () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(xboxController.getLeftY() * _kMaxSpeed)
-                .withVelocityY(xboxController.getLeftX() * _kMaxSpeed)
+                .withVelocityX(-xboxController.getLeftY() * _kMaxSpeed)
+                .withVelocityY(-xboxController.getLeftX() * _kMaxSpeed)
                 .withRotationalRate(-xboxController.getRightX() *
                     _kMaxAngularRate)));
 
