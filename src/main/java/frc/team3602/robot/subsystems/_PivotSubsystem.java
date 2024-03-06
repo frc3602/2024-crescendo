@@ -54,7 +54,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
   public double angle = 0;
   @Log public double lerpAngle; 
-  public double absoluteOffset = 255;
+  public double absoluteOffset = 77;
 
   @Log public double effort;
 
