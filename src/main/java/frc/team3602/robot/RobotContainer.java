@@ -6,6 +6,7 @@
 
 package frc.team3602.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -57,6 +58,7 @@ public class RobotContainer implements Logged {
   private double _kMaxSpeed = kMaxSpeed, _kMaxAngularRate = kMaxAngularRate;
 
   public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
+  public final CommandXboxController guitarController = new CommandXboxController(kGuitarController);
 
   // private final Trigger atVelocity = new Trigger(shooterSubsys::atVelocity);
 
@@ -120,9 +122,9 @@ public class RobotContainer implements Logged {
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.pov(180).onTrue(climberSubsys.setHeight(() -> 28.0));
+    guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 28.0));
 
-    xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
+    guitarController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
 
     xboxController.leftBumper()
         .whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpTable.get(vision.getTargetDistance())));

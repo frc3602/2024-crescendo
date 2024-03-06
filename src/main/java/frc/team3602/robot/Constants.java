@@ -29,6 +29,7 @@ import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 public final class Constants {
   public final class OperatorInterfaceConstants {
     public final static int kXboxControllerPort = 0;
+    public final static int kGuitarController = 1;
   }
 
   public final class ClimberConstants {
