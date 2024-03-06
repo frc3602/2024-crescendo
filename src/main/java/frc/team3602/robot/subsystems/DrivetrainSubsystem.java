@@ -124,7 +124,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
         this::seedFieldRelative,
         this::getChassisSpeeds,
         (chassisSpeeds) -> this.setControl(autoRequest.withSpeeds(chassisSpeeds)),
-        new HolonomicPathFollowerConfig(new PIDConstants(1, 0, 0), new PIDConstants(1, 0, 0), kSpeedAt12VoltsMps,
+        new HolonomicPathFollowerConfig(new PIDConstants(1, 0, 0), new PIDConstants(1.5, 0, 0), kSpeedAt12VoltsMps,
             driveBaseRadius, new ReplanningConfig()),
         () -> {
           var alliance = DriverStation.getAlliance();
