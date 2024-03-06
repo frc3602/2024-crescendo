@@ -6,6 +6,7 @@
 
 package frc.team3602.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -52,9 +53,12 @@ public class RobotContainer implements Logged {
   public final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
 
   // Operator interfaces
+  private SendableChooser<Double> polarityChooser = new SendableChooser<>();
+
   private double _kMaxSpeed = kMaxSpeed, _kMaxAngularRate = kMaxAngularRate;
 
   public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
+  public final CommandXboxController guitarController = new CommandXboxController(kGuitarController);
 
   // private final Trigger atVelocity = new Trigger(shooterSubsys::atVelocity);
 
@@ -64,16 +68,20 @@ public class RobotContainer implements Logged {
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
-    NamedCommands.registerCommand("testPickup", superstructure.testPickup());
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
     NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
+    NamedCommands.registerCommand("twoNoteLeftStart", superstructure.twoNoteLeftStart());
+    NamedCommands.registerCommand("twoNoteLeftEnd", superstructure.twoNoteLeftEnd());
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Drive Polarity", polarityChooser);
 
-    // autoChooser.addOption("One Note Middle", superstructure.oneNoteMiddle());
+    polarityChooser.setDefaultOption("Default", 1.0);
+    polarityChooser.addOption("Positive", 1.0);
+    polarityChooser.addOption("Negative", -1.0);
 
-    driveSubsys.registerTelemetry(logger::telemeterize);
+    // driveSubsys.registerTelemetry(logger::telemeterize);
 
     configDefaultCommands();
     configButtonBindings();
@@ -83,8 +91,8 @@ public class RobotContainer implements Logged {
     driveSubsys
         .setDefaultCommand(driveSubsys.applyRequest(
             () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(-xboxController.getLeftY() * _kMaxSpeed)
-                .withVelocityY(-xboxController.getLeftX() * _kMaxSpeed)
+                .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() * _kMaxSpeed)
+                .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftX() * _kMaxSpeed)
                 .withRotationalRate(-xboxController.getRightX() *
                     _kMaxAngularRate)));
 
@@ -96,15 +104,15 @@ public class RobotContainer implements Logged {
   }
 
   private void configButtonBindings() {
-    xboxController.leftTrigger(0.5).toggleOnTrue(new InstantCommand(() -> {
-      _kMaxSpeed = kMaxSpeed * 0.5;
-    })).toggleOnFalse(new InstantCommand(() -> {
-      _kMaxSpeed = kMaxSpeed;
-    }));
+    // xboxController.leftTrigger(0.5).toggleOnTrue(new InstantCommand(() -> {
+    //   _kMaxSpeed = kMaxSpeed * 0.5;
+    // })).toggleOnFalse(new InstantCommand(() -> {
+    //   _kMaxSpeed = kMaxSpeed;
+    // }));
 
     xboxController.a().whileTrue(superstructure.pickupCmd()).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.leftBumper().onTrue(shooterSubsys.runShooterSpeed(0.8, 0.8))
+    xboxController.rightTrigger().onTrue(shooterSubsys.runShooterSpeed(0.8, 0.8))
         .onFalse(shooterSubsys.stopMotorsCmd());
 
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
@@ -114,13 +122,14 @@ public class RobotContainer implements Logged {
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.pov(180).onTrue(climberSubsys.setHeight(() -> 28.0));
+    guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 28.0));
 
-    xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
+    guitarController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
 
-    xboxController.pov(90).whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpTable.get(vision.getTargetDistance())));
+    xboxController.leftBumper()
+        .whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpTable.get(vision.getTargetDistance())));
 
-    xboxController.rightBumper().onTrue(pivotSubsys.setAngle(() -> 125));
+    xboxController.rightBumper().onTrue(pivotSubsys.setAngle(() -> 100));
   }
 
   public Command getAutonomousCommand() {

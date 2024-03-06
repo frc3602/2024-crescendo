@@ -29,6 +29,7 @@ import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 public final class Constants {
   public final class OperatorInterfaceConstants {
     public final static int kXboxControllerPort = 0;
+    public final static int kGuitarController = 1;
   }
 
   public final class ClimberConstants {
@@ -170,7 +171,7 @@ public final class Constants {
     private static final int kFrontLeftTurnMotorId = 49;
     private static final int kFrontLeftDriveMotorId = 46;
     private static final int kFrontLeftEncoderId = 41;
-    private static final double kFrontLeftEncoderOffset = 0.102294921875;
+    private static final double kFrontLeftEncoderOffset = -0.077392578125;
     private static final double kFrontLeftXPosInches = 10.25;
     private static final double kFrontLeftYPosInches = 10.25;
 
@@ -188,7 +189,7 @@ public final class Constants {
     private static final int kFrontRightTurnMotorId = 45;
     private static final int kFrontRightDriveMotorId = 44;
     private static final int kFrontRightEncoderId = 42;
-    private static final double kFrontRightEncoderOffset = -0.440673828125;
+    private static final double kFrontRightEncoderOffset = -0.343994140625;
     private static final double kFrontRightXPosInches = 10.25;
     private static final double kFrontRightYPosInches = -10.25;
 
@@ -206,7 +207,7 @@ public final class Constants {
     private static final int kBackLeftTurnMotorId = 50;
     private static final int kBackLeftDriveMotorId = 51;
     private static final int kBackLeftEncoderId = 40;
-    private static final double kBackLeftEncoderOffset = 0.459228515625;
+    private static final double kBackLeftEncoderOffset =  -0.4482421875;
     private static final double kBackLeftXPosInches = -10.25;
     private static final double kBackLeftYPosInches = 10.25;
 
@@ -224,7 +225,7 @@ public final class Constants {
     private static final int kBackRightTurnMotorId = 47;
     private static final int kBackRightDriveMotorId = 48;
     private static final int kBackRightEncoderId = 43;
-    private static final double kBackRightEncoderOffset = 0.28857421875;
+    private static final double kBackRightEncoderOffset =0.138671875;
     private static final double kBackRightXPosInches = -10.25;
     private static final double kBackRightYPosInches = -10.25;
 
