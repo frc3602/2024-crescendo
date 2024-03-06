@@ -8,8 +8,11 @@ package frc.team3602.robot.subsystems;
 
 import java.util.function.Supplier;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -36,7 +39,8 @@ import static frc.team3602.robot.Constants.VisionConstants.*;
 
 public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, Logged {
   // Drivetrain
-  @Log public double heading;
+  @Log
+  public double heading;
   private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
   public final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric()
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
@@ -133,5 +137,24 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
   }
 
   private void configDriveSubsys() {
+    var moduleZeroDrive = this.Modules[0].getDriveMotor().getConfigurator();
+    var moduleOneDrive = this.Modules[1].getDriveMotor().getConfigurator();
+    var moduleTwoDrive = this.Modules[2].getDriveMotor().getConfigurator();
+    var moduleThreeDrive = this.Modules[3].getDriveMotor().getConfigurator();
+
+    var moduleZeroSteer = this.Modules[0].getSteerMotor().getConfigurator();
+    var moduleOneSteer = this.Modules[1].getSteerMotor().getConfigurator();
+    var moduleTwoSteer = this.Modules[2].getSteerMotor().getConfigurator();
+    var moduleThreeSteer = this.Modules[3].getSteerMotor().getConfigurator();
+
+    moduleZeroDrive.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(40));
+    moduleOneDrive.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(40));
+    moduleTwoDrive.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(40));
+    moduleThreeDrive.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(40));
+
+    moduleZeroSteer.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(30));
+    moduleOneSteer.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(30));
+    moduleTwoSteer.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(30));
+    moduleThreeSteer.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(30));
   }
 }

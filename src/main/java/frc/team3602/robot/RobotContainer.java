@@ -52,6 +52,8 @@ public class RobotContainer implements Logged {
   public final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
 
   // Operator interfaces
+  private SendableChooser<Double> polarityChooser = new SendableChooser<>();
+
   private double _kMaxSpeed = kMaxSpeed, _kMaxAngularRate = kMaxAngularRate;
 
   public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
@@ -70,6 +72,10 @@ public class RobotContainer implements Logged {
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Drive Polarity", polarityChooser);
+
+    polarityChooser.addOption("Positive", 1.0);
+    polarityChooser.addOption("Negative", -1.0);
 
     // autoChooser.addOption("One Note Middle", superstructure.oneNoteMiddle());
 
@@ -83,8 +89,8 @@ public class RobotContainer implements Logged {
     driveSubsys
         .setDefaultCommand(driveSubsys.applyRequest(
             () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(-xboxController.getLeftY() * _kMaxSpeed)
-                .withVelocityY(-xboxController.getLeftX() * _kMaxSpeed)
+                .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() * _kMaxSpeed)
+                .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftX() * _kMaxSpeed)
                 .withRotationalRate(-xboxController.getRightX() *
                     _kMaxAngularRate)));
 
@@ -104,7 +110,7 @@ public class RobotContainer implements Logged {
 
     xboxController.a().whileTrue(superstructure.pickupCmd()).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.leftBumper().onTrue(shooterSubsys.runShooterSpeed(0.8, 0.8))
+    xboxController.rightTrigger().onTrue(shooterSubsys.runShooterSpeed(0.8, 0.8))
         .onFalse(shooterSubsys.stopMotorsCmd());
 
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
@@ -118,7 +124,8 @@ public class RobotContainer implements Logged {
 
     xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
 
-    xboxController.pov(90).whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpTable.get(vision.getTargetDistance())));
+    xboxController.leftBumper()
+        .whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpTable.get(vision.getTargetDistance())));
 
     xboxController.rightBumper().onTrue(pivotSubsys.setAngle(() -> 125));
   }
