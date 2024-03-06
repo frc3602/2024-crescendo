@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.72394368066646,
-      "y": 6.5518375217273
+      "x": 0.6206848777333918,
+      "y": 6.623409610455584
     },
-    "rotation": 61.6309537067214
+    "rotation": 60.60394714505676
   },
   "command": {
     "type": "sequential",
@@ -18,16 +18,28 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "bruh"
+                  "pathName": "twoNoteLeft"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "pickupCmd"
+                  "name": "twoNoteLeftStart"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "leftRotate"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "TwoNoteLeftEnd"
           }
         }
       ]

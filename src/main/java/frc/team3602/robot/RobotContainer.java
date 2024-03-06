@@ -66,20 +66,20 @@ public class RobotContainer implements Logged {
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
-    NamedCommands.registerCommand("testPickup", superstructure.testPickup());
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
     NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
+    NamedCommands.registerCommand("twoNoteLeftStart", superstructure.twoNoteLeftStart());
+    NamedCommands.registerCommand("twoNoteLeftEnd", superstructure.twoNoteLeftEnd());
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
     SmartDashboard.putData("Drive Polarity", polarityChooser);
 
+    polarityChooser.setDefaultOption("Default", 1.0);
     polarityChooser.addOption("Positive", 1.0);
     polarityChooser.addOption("Negative", -1.0);
 
-    // autoChooser.addOption("One Note Middle", superstructure.oneNoteMiddle());
-
-    driveSubsys.registerTelemetry(logger::telemeterize);
+    // driveSubsys.registerTelemetry(logger::telemeterize);
 
     configDefaultCommands();
     configButtonBindings();
@@ -102,11 +102,11 @@ public class RobotContainer implements Logged {
   }
 
   private void configButtonBindings() {
-    xboxController.leftTrigger(0.5).toggleOnTrue(new InstantCommand(() -> {
-      _kMaxSpeed = kMaxSpeed * 0.5;
-    })).toggleOnFalse(new InstantCommand(() -> {
-      _kMaxSpeed = kMaxSpeed;
-    }));
+    // xboxController.leftTrigger(0.5).toggleOnTrue(new InstantCommand(() -> {
+    //   _kMaxSpeed = kMaxSpeed * 0.5;
+    // })).toggleOnFalse(new InstantCommand(() -> {
+    //   _kMaxSpeed = kMaxSpeed;
+    // }));
 
     xboxController.a().whileTrue(superstructure.pickupCmd()).onFalse(intakeSubsys.stopIntake());
 

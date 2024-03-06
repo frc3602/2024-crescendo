@@ -9,32 +9,21 @@ package frc.team3602.robot.auton;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 
 public class AutonFactory {
-  public static final Command doNothingCmd = Commands.print("This literally does nothing.");
-
-  public static Command testCmd() {
-    return new PathPlannerAuto("test");
-  }
-
-  public static Command bruhCmd() {
-    return new PathPlannerAuto("bruh");
-  }
-
-  public static Command bruh2Cmd() {
-    return new PathPlannerAuto("bruh2");
-  }
-
-  public static Command rightstraitbackCmd() {
-    return new PathPlannerAuto("rightstraitback");
-  }
-
   public static Command oneNoteMiddleCmd() {
     return new PathPlannerAuto("oneNoteMiddle");
   }
 
   public static Command twoNoteMiddleCmd() {
     return new PathPlannerAuto("twoNoteMiddle");
+  }
+
+  public static Command twoNoteLeftCmd() {
+    return new PathPlannerAuto("twoNoteLeft");
+  }
+
+  public static Command twoNoteRightCmd() {
+    return new PathPlannerAuto("twoNoteRight");
   }
 }
