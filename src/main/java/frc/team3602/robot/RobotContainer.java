@@ -129,7 +129,7 @@ public class RobotContainer implements Logged {
     xboxController.leftBumper()
         .whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpTable.get(vision.getTargetDistance())));
 
-    xboxController.rightBumper().onTrue(pivotSubsys.setAngle(() -> 125));
+    xboxController.rightBumper().onTrue(pivotSubsys.setAngle(() -> 100));
   }
 
   public Command getAutonomousCommand() {
