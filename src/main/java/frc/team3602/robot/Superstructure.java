@@ -222,6 +222,7 @@ return Commands.sequence(
     );
   }
 
+<<<<<<< HEAD
 public Command oneNoteMoveRight() {
      return Commands.sequence(
       Commands.print("Spinning Up Shooter"),
@@ -231,6 +232,17 @@ public Command oneNoteMoveRight() {
       Commands.print("Setting Angle"),
       pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition),
  // initial30>25>23 copy and pasted>31>28>23>21
+=======
+  public Command oneNoteMoveRightFirst() {
+     return Commands.sequence(
+      Commands.print("Spinning Up Shooter"),
+      shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
+      Commands.waitSeconds(0.2),
+
+      Commands.print("Setting Angle"),
+      pivotSubsys.runSetAngle(() -> 31.0).until(() -> pivotSubsys.isAtPosition),
+      //angle is same as oneNoteLeftFirst
+>>>>>>> e5b89a55a3f3fd4a2c048a3a6198b6263285888e
       Commands.waitSeconds(0.2),
       
       Commands.print("Shooting Note"),
@@ -247,7 +259,10 @@ public Command oneNoteMoveRight() {
   }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e5b89a55a3f3fd4a2c048a3a6198b6263285888e
   public Command pickupCmd() {
     return Commands.sequence(
         pivotSubsys.setAngle(() -> 1.75),
