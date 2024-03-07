@@ -12,9 +12,15 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "M1"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "oneNoteMiddle"
+            "name": "oneNoteLeftFirst"
           }
         },
         {
@@ -22,30 +28,24 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "twoNoteLeft"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "twoNoteLeftStart"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Copy of Copy of twoNoteLeft"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "leftRotate"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "TwoNoteLeftEnd"
+            "name": "twoNoteLeftEnd"
           }
         }
       ]

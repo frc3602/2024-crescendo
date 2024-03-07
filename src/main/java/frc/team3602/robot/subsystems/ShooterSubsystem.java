@@ -12,6 +12,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -277,6 +278,7 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     topShooterMotor.setSmartCurrentLimit(kTopShooterMotorCurrentLimit);
     topShooterMotor.enableVoltageCompensation(topShooterMotor.getBusVoltage());
     topShooterMotor.setOpenLoopRampRate(0.01);
+    topShooterMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
 
     // Bottom shooter motor config
     bottomShooterMotor.restoreFactoryDefaults(true);
@@ -284,6 +286,7 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     bottomShooterMotor.setSmartCurrentLimit(kBottomShooterMotorCurrentLimit);
     bottomShooterMotor.enableVoltageCompensation(bottomShooterMotor.getBusVoltage());
     bottomShooterMotor.setOpenLoopRampRate(0.01);
+    bottomShooterMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0,500);
 
     // Encoder config
     topShooterEncoder.setMeasurementPeriod(10);
