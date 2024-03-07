@@ -170,15 +170,15 @@ return Commands.sequence(
     );
   }
 
-   public Command oneNoteRight() {
+  public Command oneNoteRight() {
      return Commands.sequence(
       Commands.print("Spinning Up Shooter"),
       shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
       Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 23.0).until(() -> pivotSubsys.isAtPosition),
- // initial30>25>23
+      pivotSubsys.runSetAngle(() -> 32.0).until(() -> pivotSubsys.isAtPosition),
+ // initial30>32
       Commands.waitSeconds(0.2),
       
       Commands.print("Shooting Note"),
@@ -217,10 +217,36 @@ return Commands.sequence(
       shooterSubsys.runShooterSpeed(0.75, 0.75).withTimeout(0.2),
       Commands.waitSeconds(0.2),
       Commands.print("Shooting Note"),
-        intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
-    //intake speed .7>.75 copied and pasted >0.65
+        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)
+    //intake speed .65>.75
     );
   }
+
+public Command oneNoteMoveRight() {
+     return Commands.sequence(
+      Commands.print("Spinning Up Shooter"),
+      shooterSubsys.runShooterSpeed(0.7, 0.7).until(() -> shooterSubsys.isAtVelocity),
+      Commands.waitSeconds(0.2),
+
+      Commands.print("Setting Angle"),
+      pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition),
+ // initial30>25>23 copy and pasted>31>28>23>21
+      Commands.waitSeconds(0.2),
+      
+      Commands.print("Shooting Note"),
+      intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+
+      // Commands.print("Stopping Shooter"),
+      // shooterSubsys.stopShooter(),
+
+      Commands.print("Setting Angle"),
+      pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
+      Commands.waitSeconds(0.2),
+      intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
+     );
+  }
+
+
 
   public Command pickupCmd() {
     return Commands.sequence(

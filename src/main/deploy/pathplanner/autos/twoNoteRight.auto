@@ -12,15 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": " L1"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "oneNoteRight"
+            "name": "oneNoteMiddle"
           }
         },
         {
@@ -40,12 +34,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "twoNoteRightShoot"
           }
         },
         {

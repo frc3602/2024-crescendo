@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6579998614542684,
+      "y": 4.4777980465051845
+    },
+    "rotation": -58.392497753751115
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "oneNoteMoveRight"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "oneNoteMoveRight"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
