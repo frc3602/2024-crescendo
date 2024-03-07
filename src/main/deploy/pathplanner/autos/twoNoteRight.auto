@@ -2,15 +2,59 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 2
+      "x": 0.7792735585471171,
+      "y": 4.5804142517375945
     },
-    "rotation": 0
+    "rotation": -59.03624346792641
   },
   "command": {
     "type": "sequential",
     "data": {
-      "commands": []
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": " L1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "oneNoteRight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "twoNoteRightStart"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "twoNoteRight"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "twoNoteRightShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "twoNoteRightEnd"
+          }
+        }
+      ]
     }
   },
   "folder": null,

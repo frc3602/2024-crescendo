@@ -24,33 +24,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Copy of twoNoteLeft"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "twoNoteLeftStart"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Copy of Copy of twoNoteLeft"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "twoNoteLeftStart"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "turn"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "TwoNoteLeftEnd"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": []
+            "name": "twoNoteLeftEnd"
           }
         }
       ]
