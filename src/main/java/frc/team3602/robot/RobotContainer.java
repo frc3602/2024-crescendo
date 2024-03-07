@@ -74,6 +74,10 @@ public class RobotContainer implements Logged {
     NamedCommands.registerCommand("twoNoteLeftStart", superstructure.twoNoteLeftStart());
     NamedCommands.registerCommand("twoNoteLeftEnd", superstructure.twoNoteLeftEnd());
     NamedCommands.registerCommand("oneNoteLeftFirst", superstructure.oneNoteLeftFirst());
+    NamedCommands.registerCommand("oneNoteTwistFirst", superstructure.oneNoteLeftFirst());
+    NamedCommands.registerCommand("twoNoteTwistStart", superstructure.oneNoteLeftFirst());
+    NamedCommands.registerCommand("twoNoteTwistEnd", superstructure.oneNoteLeftFirst());
+
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
