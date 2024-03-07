@@ -68,7 +68,7 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
 
   private void configIntakeSubsys() {
     // Intake motor config
-    intakeMotor.setIdleMode(IdleMode.kCoast);
+    intakeMotor.setIdleMode(IdleMode.kBrake);
     intakeMotor.setSmartCurrentLimit(kIntakeMotorCurrentLimit);
     intakeMotor.enableVoltageCompensation(intakeMotor.getBusVoltage());
     intakeMotor.setOpenLoopRampRate(0.000001);

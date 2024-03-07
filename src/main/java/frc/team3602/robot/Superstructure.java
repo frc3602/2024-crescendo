@@ -67,16 +67,14 @@ public class Superstructure {
   }
 
   public Command oneNoteMiddle() {
-    return Commands.sequence(
+     return Commands.sequence(
       Commands.print("Spinning Up Shooter"),
       shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
       Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 23.0).until(() -> pivotSubsys.isAtPosition),
-      Commands.waitSeconds(0.2),
-
-      Commands.print("Waiting for Spinup"),
+      pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition),
+ 
       Commands.waitSeconds(0.2),
       
       Commands.print("Shooting Note"),
@@ -87,9 +85,12 @@ public class Superstructure {
 
       Commands.print("Setting Angle"),
       pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
-      Commands.waitSeconds(0.2)
-    );
+      Commands.waitSeconds(0.2),
+      intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
+     );
   }
+  
+
 
   public Command twoNoteMiddle() {
     return Commands.sequence(
@@ -101,7 +102,7 @@ public class Superstructure {
       // Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 45.0).until(() -> pivotSubsys.isAtPosition),
+      pivotSubsys.runSetAngle(() -> 38.0).until(() -> pivotSubsys.isAtPosition),
       Commands.waitSeconds(0.2),
 
       Commands.print("Waiting for Spinup"),
@@ -114,6 +115,31 @@ public class Superstructure {
       shooterSubsys.stopShooter()
     );
   }
+
+
+  //  public Command bruh() {
+  //   return Commands.sequence(
+  //     Commands.print("Spinning Up Shooter"),
+  //    intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+  //     Commands.waitSeconds(0.2),
+
+  //     Commands.print("Setting Angle"),
+  //     pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition),
+ 
+  //     Commands.waitSeconds(0.2),
+      
+  //     Commands.print("Shooting Note"),
+  //     intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+
+  //     // Commands.print("Stopping Shooter"),
+  //     // shooterSubsys.stopShooter(),
+
+  //     Commands.print("Setting Angle"),
+  //     pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
+  //     Commands.waitSeconds(0.2),
+  //     intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)
+  //   );
+  // }
 
   public Command twoNoteLeftStart() {
     return Commands.sequence(
@@ -125,18 +151,18 @@ public class Superstructure {
       // Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 45.0).until(() -> pivotSubsys.isAtPosition),
+      pivotSubsys.runSetAngle(() -> 40).until(() -> pivotSubsys.isAtPosition),
       Commands.waitSeconds(0.2)
     );
   }
 
   public Command twoNoteLeftEnd() {
     return Commands.sequence(
-      Commands.print("Waiting for Spinup"),
+      Commands.print("Waiting for Spinup"), 
+      shooterSubsys.runShooterSpeed(0.75, 0.75).withTimeout(0.2),
       Commands.waitSeconds(0.2),
-      
       Commands.print("Shooting Note"),
-      intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+      intakeSubsys.runIntake(() -> 0.7).withTimeout(0.2),
 
       Commands.print("Stopping Shooter"),
       shooterSubsys.stopShooter()
@@ -147,6 +173,7 @@ public class Superstructure {
     return Commands.sequence(
         pivotSubsys.setAngle(() -> 1.75),
         intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()));
+      //  pivotSubsys.setAngle(() -> 25));
   }
 
   public Command trapCmd() {

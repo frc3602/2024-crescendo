@@ -12,40 +12,45 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "M1"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "oneNoteMiddle"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "twoNoteLeft"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "twoNoteLeftStart"
-                }
-              }
-            ]
+            "pathName": "Copy of twoNoteLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "twoNoteLeftStart"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "leftRotate"
+            "pathName": "turn"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "TwoNoteLeftEnd"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": []
           }
         }
       ]
