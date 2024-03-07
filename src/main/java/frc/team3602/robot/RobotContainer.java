@@ -30,6 +30,7 @@ import frc.team3602.robot.subsystems.ClimberSubsystem;
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 import static frc.team3602.robot.Constants.OperatorInterfaceConstants.*;
 
+import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -72,6 +73,7 @@ public class RobotContainer implements Logged {
     NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
     NamedCommands.registerCommand("twoNoteLeftStart", superstructure.twoNoteLeftStart());
     NamedCommands.registerCommand("twoNoteLeftEnd", superstructure.twoNoteLeftEnd());
+    NamedCommands.registerCommand("oneNoteLeftFirst", superstructure.oneNoteLeftFirst());
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);

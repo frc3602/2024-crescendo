@@ -73,8 +73,8 @@ public class Superstructure {
       Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition),
- 
+      pivotSubsys.runSetAngle(() -> 23.0).until(() -> pivotSubsys.isAtPosition),
+ // initial30>25>23
       Commands.waitSeconds(0.2),
       
       Commands.print("Shooting Note"),
@@ -117,29 +117,29 @@ public class Superstructure {
   }
 
 
-  //  public Command bruh() {
-  //   return Commands.sequence(
-  //     Commands.print("Spinning Up Shooter"),
-  //    intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
-  //     Commands.waitSeconds(0.2),
+   public Command oneNoteLeftFirst() {
+    return Commands.sequence(
+      Commands.print("Spinning Up Shooter"),
+     intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+      Commands.waitSeconds(0.2),
 
-  //     Commands.print("Setting Angle"),
-  //     pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition),
+      Commands.print("Setting Angle"),
+      pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition),
  
-  //     Commands.waitSeconds(0.2),
+      Commands.waitSeconds(0.2),
       
-  //     Commands.print("Shooting Note"),
-  //     intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+      Commands.print("Shooting Note"),
+      intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
 
-  //     // Commands.print("Stopping Shooter"),
-  //     // shooterSubsys.stopShooter(),
+      // Commands.print("Stopping Shooter"),
+      // shooterSubsys.stopShooter(),
 
-  //     Commands.print("Setting Angle"),
-  //     pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
-  //     Commands.waitSeconds(0.2),
-  //     intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)
-  //   );
-  // }
+      Commands.print("Setting Angle"),
+      pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
+      Commands.waitSeconds(0.2),
+      intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)
+    );
+  }
 
   public Command twoNoteLeftStart() {
     return Commands.sequence(
@@ -151,7 +151,8 @@ public class Superstructure {
       // Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 40).until(() -> pivotSubsys.isAtPosition),
+      pivotSubsys.runSetAngle(() -> 35).until(() -> pivotSubsys.isAtPosition),
+      //init 40>45>48>52>35
       Commands.waitSeconds(0.2)
     );
   }
