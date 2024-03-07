@@ -222,7 +222,7 @@ return Commands.sequence(
     );
   }
 
-  public Command oneNoteTwistFirst() {
+  public Command oneNoteMoveRightFirst() {
      return Commands.sequence(
       Commands.print("Spinning Up Shooter"),
       shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
@@ -246,33 +246,6 @@ return Commands.sequence(
      );
   }
 
-   public Command twoNoteTwistStart() {
-    return Commands.sequence(
-      Commands.print("Intaking Note"),
-      intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()),
-  
-
-      // Commands.print("Spinning Up Shooter"),
-      // shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtSpeed),
-      // Commands.waitSeconds(0.2),
-
-      Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 40).until(() -> pivotSubsys.isAtPosition),
-      //init 40>45>48>52>35>38>40
-      Commands.waitSeconds(0.2)
-    );
-  }
-
-  public Command twoNoteTwistEnd() {
-    return Commands.sequence(
-      Commands.print("Waiting for Spinup"), 
-      shooterSubsys.runShooterSpeed(0.75, 0.75).withTimeout(0.2),
-      Commands.waitSeconds(0.2),
-      Commands.print("Shooting Note"),
-        intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
-    //intake speed .7>.75 copied and pasted >0.65
-    );
-  }
 
   public Command pickupCmd() {
     return Commands.sequence(
