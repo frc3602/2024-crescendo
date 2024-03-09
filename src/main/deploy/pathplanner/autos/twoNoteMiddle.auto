@@ -18,15 +18,15 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "twoNoteMiddle"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "twoNoteMiddle"
-                }
-              },
               {
                 "type": "named",
                 "data": {

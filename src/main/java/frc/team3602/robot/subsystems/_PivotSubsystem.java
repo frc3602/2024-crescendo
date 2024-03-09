@@ -46,7 +46,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
   @Log public double encoderValue;
 
-  public double angle = 0;
+  public double angle;
   @Log public double lerpAngle; 
   public double absoluteOffset = 77;
 
@@ -104,7 +104,9 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   }
 
   private double getEffort() {
-    var ffEfort = feedforward.calculate(Units.degreesToRadians(angle), 0);
+    // var ffEfort = feedforward.calculate(Units.degreesToRadians(angle), 0);  
+     var ffEfort = feedforward.calculate(Units.degreesToRadians(getDegrees()), 0);  
+ 
     var pidEffort = controller.calculate(getDegrees(), angle);
 
     this.ffEffort = ffEfort;
@@ -155,7 +157,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     pivotMotor.setInverted(true);
     pivotMotor.setSmartCurrentLimit(kPivotMotorCurrentLimit);
     pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
-    pivotMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500)
+    pivotMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
 
     // Pivot motor follower config
     pivotFollower.setIdleMode(IdleMode.kBrake);
@@ -179,5 +181,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     lerpTable.put(13.79, 53.0); // 13.79 feet, 53 degrees
     lerpTable.put(16.9, 52.5); // 16.9 feet, 52.5 degrees
     lerpTable.put(20.6, 45.0); // 20.6 feet, 45 degrees
+
+    angle = getDegrees();
   }
 }
