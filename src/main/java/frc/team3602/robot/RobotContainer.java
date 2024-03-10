@@ -70,14 +70,17 @@ public class RobotContainer implements Logged {
 
   public RobotContainer() {
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
-    NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
+    NamedCommands.registerCommand("twoNoteMiddleStart", superstructure.twoNoteMiddleStart());
+        NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
+
+     NamedCommands.registerCommand("twoNoteMiddleEnd", superstructure.twoNoteMiddleEnd());
     NamedCommands.registerCommand("twoNoteLeftStart", superstructure.twoNoteLeftStart());
     NamedCommands.registerCommand("twoNoteLeftEnd", superstructure.twoNoteLeftEnd());
     NamedCommands.registerCommand("oneNoteLeftFirst", superstructure.oneNoteLeftFirst());
 
     NamedCommands.registerCommand("twoNoteRightStart", superstructure.twoNoteRightStart());
     NamedCommands.registerCommand("twoNoteRightEnd", superstructure.twoNoteRightStart());
-   NamedCommands.registerCommand("oneNoteMoveRight", superstructure.oneNoteMoveRight());
+   NamedCommands.registerCommand("oneNoteMoveRightFirst", superstructure.oneNoteMoveRightFirst());
 
     //NamedCommands.registerCommand("oneNoteRight", superstructure.oneNoteRight());
 

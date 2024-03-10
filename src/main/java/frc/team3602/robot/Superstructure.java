@@ -89,7 +89,12 @@ public class Superstructure {
       pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
       Commands.waitSeconds(0.2),
       intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
-     );     
+
+      // Commands.print("Intaking Note"),
+      // intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getColorSensor()),
+      // Commands.waitSeconds(0.2)
+      );
+          
   }
   
 
@@ -97,15 +102,16 @@ public class Superstructure {
   public Command twoNoteMiddle() {
     return Commands.sequence(
       Commands.print("Intaking Note"),
-      intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()),
-
+      intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getColorSensor()),
+      Commands.waitSeconds(0.2),
+       // intake speed .25>.75
       // Commands.print("Spinning Up Shooter"),
       // shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtSpeed),
       // Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 37).until(() -> pivotSubsys.isAtPosition),
-      //40 adjusted path to frc field>37
+      pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.isAtPosition),
+      //40 adjusted path to frc field>37>39
       Commands.waitSeconds(0.2),
 
       Commands.print("Waiting for Spinup"),
@@ -115,7 +121,58 @@ public class Superstructure {
       intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
 
       Commands.print("Stopping Shooter"),
-      shooterSubsys.stopShooter()
+      shooterSubsys.stopShooter());
+    
+ }
+
+  public Command twoNoteMiddleStart() {
+    return Commands.sequence(
+      Commands.print("Intaking Note"),
+      intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getColorSensor())
+      // Commands.waitSeconds(0.2));
+       // intake speed .25>.75
+    );
+  }
+
+
+      // // Commands.print("Spinning Up Shooter"),
+      // // shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtSpeed),
+      // // Commands.waitSeconds(0.2),
+
+      // Commands.print("Setting Angle"),
+      // pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.isAtPosition),
+      // //40 adjusted path to frc field>37>39
+      // Commands.waitSeconds(0.2),
+
+      // Commands.print("Waiting for Spinup"),
+      // Commands.waitSeconds(0.2),
+      
+      // Commands.print("Shooting Note"),
+      // intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+
+      // Commands.print("Stopping Shooter"),
+      // shooterSubsys.stopShooter()
+    
+//  }
+
+
+ public Command twoNoteMiddleEnd() {
+    return Commands.sequence(
+      Commands.print("Setting Angle"),
+      pivotSubsys.runSetAngle(() -> 23).until(() -> pivotSubsys.isAtPosition),
+      //40 adjusted path to frc field>37>39
+      Commands.waitSeconds(0.2),
+
+      Commands.print("Waiting for Spinup"),
+      Commands.waitSeconds(0.2),
+      
+      Commands.print("Shooting Note"),
+      intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+
+      Commands.print("Stopping Shooter"),
+      shooterSubsys.stopShooter(),
+      Commands.print("Setting Angle"),
+      pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition)
     );
   }
 
@@ -149,16 +206,16 @@ return Commands.sequence(
       intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2),
 
       Commands.print("Intaking Note"),
-      intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()),
-    //intake speed .25>.5>.7 made parrallel to copy of move>.25
+      intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getColorSensor()),
+    //intake speed .25>.5>.7 made parrallel to copy of move>.25>.75
 
       // Commands.print("Spinning Up Shooter"),
       // shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtSpeed),
       // Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 37).until(() -> pivotSubsys.isAtPosition),
-      //init 40>45>48>52>35>38>40 adjusted path to frc field>37
+      pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.isAtPosition),
+      //init 40>45>48>52>35>38>40 adjusted path to frc field>37>39>42
       Commands.waitSeconds(0.2)
     );
   }
@@ -227,16 +284,16 @@ return Commands.sequence(
   }
 
 
-public Command oneNoteMoveRight() {
-     return Commands.sequence(
-      Commands.print("Spinning Up Shooter"),
-      shooterSubsys.runShooterSpeed(0.7, 0.7).until(() -> shooterSubsys.isAtVelocity),
-      Commands.waitSeconds(0.2),
+// public Command oneNoteMoveRight() {
+//      return Commands.sequence(
+//       Commands.print("Spinning Up Shooter"),
+//       shooterSubsys.runShooterSpeed(0.7, 0.7).until(() -> shooterSubsys.isAtVelocity),
+//       Commands.waitSeconds(0.2),
 
-      Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition));
-    }
- // initial30>25>23 copy and pasted>31>28>23>21
+//       Commands.print("Setting Angle"),
+//       pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition));
+//     }
+//  // initial30>25>23 copy and pasted>31>28>23>21
 
   public Command oneNoteMoveRightFirst() {
      return Commands.sequence(
@@ -245,8 +302,8 @@ public Command oneNoteMoveRight() {
       Commands.waitSeconds(0.2),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 31.0).until(() -> pivotSubsys.isAtPosition),
-      //angle is same as oneNoteLeftFirst
+      pivotSubsys.runSetAngle(() -> 23.0).until(() -> pivotSubsys.isAtPosition),
+      //angle is same as oneNoteLeftFirst> realized path shoots at bumper-same as two note middle>25>23
 
       Commands.waitSeconds(0.2),
       
@@ -257,10 +314,10 @@ public Command oneNoteMoveRight() {
       // shooterSubsys.stopShooter(),
 
       Commands.print("Setting Angle"),
-      pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
-      Commands.waitSeconds(0.2),
-      intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
-     );
+      pivotSubsys.runSetAngle(() -> 15.0).until(() -> pivotSubsys.isAtPosition));
+    //   Commands.waitSeconds(0.2),
+    //   intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
+    //  );
   }
 
   public Command pickupCmd() {

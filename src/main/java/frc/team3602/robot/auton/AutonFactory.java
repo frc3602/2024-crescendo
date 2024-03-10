@@ -15,6 +15,10 @@ public class AutonFactory {
     return new PathPlannerAuto("oneNoteMiddle");
   }
 
+  public static Command backTwoNoteMiddleCmd() {
+    return new PathPlannerAuto("backTwoNoteMiddle");
+  }
+
   public static Command twoNoteMiddleCmd() {
     return new PathPlannerAuto("twoNoteMiddle");
   }

@@ -22,31 +22,30 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "twoNoteMiddle"
+                  "pathName": "twoNoteMiddle"
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.7
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "twoNoteMiddle"
-                      }
-                    }
-                  ]
+                  "name": "twoNoteMiddleStart"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "twoBackNoteMiddle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "twoNoteLeftEnd"
           }
         }
       ]
