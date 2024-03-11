@@ -157,7 +157,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     pivotMotor.setInverted(true);
     pivotMotor.setSmartCurrentLimit(kPivotMotorCurrentLimit);
     pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
-    pivotMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+    // pivotMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
 
     // Pivot motor follower config
     pivotFollower.setIdleMode(IdleMode.kBrake);

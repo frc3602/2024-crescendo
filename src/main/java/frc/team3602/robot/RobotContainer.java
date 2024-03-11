@@ -22,6 +22,7 @@ import static edu.wpi.first.units.Units.*;
 
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
+import frc.team3602.robot.subsystems.LEDSubsystem;
 import frc.team3602.robot.subsystems._PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 import frc.team3602.robot.auton.AutonFactory;
@@ -46,6 +47,7 @@ public class RobotContainer implements Logged {
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final _PivotSubsystem pivotSubsys = new _PivotSubsystem();
   private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
+  private final LEDSubsystem ledSubsystem = new LEDSubsystem(intakeSubsys::getColorSensor);
 
   @Log
   public double targetDistance;
@@ -105,19 +107,21 @@ public class RobotContainer implements Logged {
   }
 
   private void configDefaultCommands() {
-    driveSubsys
-        .setDefaultCommand(driveSubsys.applyRequest(
-            () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() * _kMaxSpeed)
-                .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftX() * _kMaxSpeed)
-                .withRotationalRate(-xboxController.getRightX() *
-                    _kMaxAngularRate)));
+  //   driveSubsys
+  //       .setDefaultCommand(driveSubsys.applyRequest(
+  //           () -> driveSubsys.fieldCentricDrive
+  //               .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() * _kMaxSpeed)
+  //               .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftX() * _kMaxSpeed)
+  //               .withRotationalRate(-xboxController.getRightX() *
+  //                   _kMaxAngularRate)));
 
-    pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
+    // pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
     // shooterSubsys.setDefaultCommand(shooterSubsys.runShooterSpeed());
 
-    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+
+    ledSubsystem.setDefaultCommand(ledSubsystem.setLED());
   }
 
   private void configButtonBindings() {
