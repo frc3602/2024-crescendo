@@ -62,6 +62,8 @@ public class RobotContainer implements Logged {
 
   public RobotContainer() {
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
+        NamedCommands.registerCommand("oneBackNoteMiddle", superstructure.oneBackNoteMiddle());
+
     NamedCommands.registerCommand("twoNoteMiddleStart", superstructure.twoNoteMiddleStart());
     NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
 
@@ -109,7 +111,7 @@ public class RobotContainer implements Logged {
 
     // shooterSubsys.setDefaultCommand(shooterSubsys.runShooterSpeed());
 
-    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {
