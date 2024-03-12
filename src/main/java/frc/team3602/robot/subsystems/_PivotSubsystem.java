@@ -31,7 +31,8 @@ import monologue.Annotations.Log;
 
 public class _PivotSubsystem extends SubsystemBase implements Logged {
   // Motor controllers
-  @Log public double motorOutput, motorOutputTwo;
+  @Log
+  public double motorOutput, motorOutputTwo;
 
   public final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
   private final CANSparkMax pivotFollower = new CANSparkMax(kPivotFollowerId, MotorType.kBrushless);
@@ -42,19 +43,25 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   // pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
   // Controls
-  @Log public boolean isAtPosition;
+  @Log
+  public boolean isAtPosition;
 
-  @Log public double encoderValue;
+  @Log
+  public double encoderValue;
 
   public double angle;
-  @Log public double lerpAngle; 
+  @Log
+  public double lerpAngle;
   public double absoluteOffset = 77;
 
-  @Log public double effort;
+  @Log
+  public double effort;
 
-  @Log public double ffEffort;
+  @Log
+  public double ffEffort;
 
-  @Log public double pidEffort;
+  @Log
+  public double pidEffort;
 
   private final Vision vision = new Vision();
 
@@ -104,9 +111,9 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   }
 
   private double getEffort() {
-    // var ffEfort = feedforward.calculate(Units.degreesToRadians(angle), 0);  
-     var ffEfort = feedforward.calculate(Units.degreesToRadians(getDegrees()), 0);  
- 
+    // var ffEfort = feedforward.calculate(Units.degreesToRadians(angle), 0);
+    var ffEfort = feedforward.calculate(Units.degreesToRadians(getDegrees()), 0);
+
     var pidEffort = controller.calculate(getDegrees(), angle);
 
     this.ffEffort = ffEfort;
@@ -146,8 +153,8 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     // var angle = SmartDashboard.getNumber("Angle", this.angle);
 
     // if (angle != this.angle) {
-    //   MathUtil.clamp(angle, 0, 130);
-    //   this.angle = angle;
+    // MathUtil.clamp(angle, 0, 130);
+    // this.angle = angle;
     // }
   }
 

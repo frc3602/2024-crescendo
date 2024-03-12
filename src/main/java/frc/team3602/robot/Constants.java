@@ -137,7 +137,7 @@ public final class Constants {
     private static final double kDriveGearRatio = 6.122448979591837;
     private static final double kTurnGeatRatio = 21.428571428571427;
     private static final double kWheelRadiusInches = 2.0;
-    private static final double kSlipCurrentAmps = 300.0;
+    private static final double kSlipCurrentAmps = 120.0;
     private static final Slot0Configs kDriveGains = new Slot0Configs()
         .withKP(3.0).withKI(0.0).withKD(0.0)
         .withKS(0.0).withKV(0.0).withKA(0.0);

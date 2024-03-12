@@ -48,12 +48,16 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
   private final RelativeEncoder bottomShooterEncoder = bottomShooterMotor.getEncoder();
 
   // Controls
-  @Log public boolean isAtVelocity;
-  @Log public boolean isAtSpeed;
+  @Log
+  public boolean isAtVelocity;
+  @Log
+  public boolean isAtSpeed;
 
-  @Log public double topVelocityRPM = 0, bottomVelocityRPM = 0; // 2300 trap_top: 1800, trap_bottom: 3000
+  @Log
+  public double topVelocityRPM = 0, bottomVelocityRPM = 0; // 2300 trap_top: 1800, trap_bottom: 3000
 
-  @Log public double topSpeed = 0, bottomSpeed = 0;
+  @Log
+  public double topSpeed = 0, bottomSpeed = 0;
 
   // private double __kP, __kI, __kD;
 
@@ -174,10 +178,10 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
   }
 
   // public Command runShooterSpeed() {
-  //   return run(() -> {
-  //     topShooterMotor.set(topSpeed);
-  //     bottomShooterMotor.set(bottomSpeed);
-  //   }).withName("Run Shooter Speed Default Command");
+  // return run(() -> {
+  // topShooterMotor.set(topSpeed);
+  // bottomShooterMotor.set(bottomSpeed);
+  // }).withName("Run Shooter Speed Default Command");
   // }
 
   public Command runShooterRPM(DoubleSupplier topVelocityRPM, DoubleSupplier bottomVelocityRPM) {
@@ -286,7 +290,7 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     bottomShooterMotor.setSmartCurrentLimit(kBottomShooterMotorCurrentLimit);
     bottomShooterMotor.enableVoltageCompensation(bottomShooterMotor.getBusVoltage());
     bottomShooterMotor.setOpenLoopRampRate(0.01);
-    bottomShooterMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0,500);
+    bottomShooterMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
 
     // Encoder config
     topShooterEncoder.setMeasurementPeriod(10);
