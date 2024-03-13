@@ -49,7 +49,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   @Log
   public double encoderValue;
 
-  public double angle;
+  public double angle = 84.0;
   @Log
   public double lerpAngle;
   public double absoluteOffset = 77;
@@ -189,6 +189,5 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     lerpTable.put(16.9, 52.5); // 16.9 feet, 52.5 degrees
     lerpTable.put(20.6, 45.0); // 20.6 feet, 45 degrees
 
-    angle = getDegrees();
   }
 }

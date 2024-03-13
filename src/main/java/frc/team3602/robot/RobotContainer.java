@@ -62,7 +62,7 @@ public class RobotContainer implements Logged {
 
   public RobotContainer() {
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
-        NamedCommands.registerCommand("oneBackNoteMiddle", superstructure.oneBackNoteMiddle());
+    NamedCommands.registerCommand("oneBackNoteMiddle", superstructure.oneBackNoteMiddle());
 
     NamedCommands.registerCommand("twoNoteMiddleStart", superstructure.twoNoteMiddleStart());
     NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
@@ -97,17 +97,17 @@ public class RobotContainer implements Logged {
   }
 
   private void configDefaultCommands() {
-    // driveSubsys
-    // .setDefaultCommand(driveSubsys.applyRequest(
-    // () -> driveSubsys.fieldCentricDrive
-    // .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() *
-    // _kMaxSpeed)
-    // .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftX() *
-    // _kMaxSpeed)
-    // .withRotationalRate(-xboxController.getRightX() *
-    // _kMaxAngularRate)));
+    driveSubsys
+        .setDefaultCommand(driveSubsys.applyRequest(
+            () -> driveSubsys.fieldCentricDrive
+                .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() *
+                    _kMaxSpeed)
+                .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftX() *
+                    _kMaxSpeed)
+                .withRotationalRate(-xboxController.getRightX() *
+                    _kMaxAngularRate)));
 
-    // pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
+    pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
     // shooterSubsys.setDefaultCommand(shooterSubsys.runShooterSpeed());
 
@@ -147,11 +147,10 @@ public class RobotContainer implements Logged {
     // Triggers
     new Trigger(intakeSubsys::getColorSensor).onTrue(ledSubsys.setGreen());
 
-    new Trigger(ledSubsys::isBlueAlliance)
-        .onTrue(ledSubsys.setBlue().unless(() -> !intakeSubsys.getColorSensor()));
+    new Trigger(ledSubsys::isBlueAlliance).onTrue(ledSubsys.setBlue());
 
-    new Trigger(ledSubsys::isRedAlliance)
-        .onTrue(ledSubsys.setRed().unless(() -> !intakeSubsys.getColorSensor()));
+    // new Trigger(ledSubsys::isRedAlliance)
+    //     .onTrue(ledSubsys.setRed().unless(() -> !intakeSubsys.getColorSensor()));
   }
 
   public Command getAutonomousCommand() {

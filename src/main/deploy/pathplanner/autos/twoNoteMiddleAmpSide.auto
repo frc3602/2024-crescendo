@@ -1,0 +1,56 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2252593735956716,
+      "y": 5.545221859674489
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "oneBackNoteMiddle"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "twoNoteMiddleAmpSide"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "twoNoteMiddleStart"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "twoNoteLeftEnd"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Main",
+  "choreoAuto": false
+}

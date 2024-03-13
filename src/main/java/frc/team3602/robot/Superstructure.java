@@ -101,7 +101,7 @@ public class Superstructure {
     return Commands.sequence(
         Commands.print("Spinning Up Shooter"),
         shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
-        Commands.waitSeconds(0.2),
+        // Commands.waitSeconds(0.2),
 
         Commands.print("Setting Angle"),
         pivotSubsys.runSetAngle(() -> 23.0).until(() -> pivotSubsys.isAtPosition),
@@ -116,7 +116,7 @@ public class Superstructure {
         // shooterSubsys.stopShooter(),
 
         Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
+        pivotSubsys.runSetAngle(() -> 11.0).until(() -> pivotSubsys.isAtPosition),
         Commands.waitSeconds(0.2),
         intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
 
