@@ -1,0 +1,88 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6390795880183313,
+      "y": 6.590561913518194
+    },
+    "rotation": 61.29404745659891
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "oneNoteLeftAmpSideStart"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "twoNoteMiddleAmpSide"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "threeNoteLeftAmp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "twoNoteMiddleAmpSideEnd"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "threeNoteMiddleAmpSide"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.18
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "threeFirstNoteMiddleAmpSide"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "threeNoteMiddleAmpSide"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Main",
+  "choreoAuto": false
+}

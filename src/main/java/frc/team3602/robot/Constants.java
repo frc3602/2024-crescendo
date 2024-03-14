@@ -87,7 +87,7 @@ public final class Constants {
 
   public final class PivotConstants {
     public static final int kPivotMotorId = 4;
-    public static final int kPivotFollowerId = 6; // TODO: CHANGE MOTOR CONTROLLER TO CAN ID 6
+    public static final int kPivotFollowerId = 6; 
 
     public static final int kPivotMotorCurrentLimit = 30;
     public static final int kPivotFollowerCurrentLimit = 30;

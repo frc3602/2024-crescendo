@@ -86,7 +86,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
   public boolean atPosition() {
     var target = angle;
-    var tolerance = 3;
+    var tolerance =2;
 
     return ((MathUtil.isNear(target, getDegrees(), tolerance))&&(angle <= 80));
   }
@@ -109,8 +109,11 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
       var effort = getEffort();
       this.effort = effort;
-
-      pivotMotor.setVoltage(effort);
+      if (atPosition()) {
+        pivotMotor.setVoltage(0);
+       }
+       else{
+      pivotMotor.setVoltage(effort);}
     });
   }
 
@@ -129,9 +132,13 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   public Command holdAngle() {
     return run(() -> {
       var effort = getEffort();
-      this.effort = effort;
-
-      pivotMotor.setVoltage(effort);
+      this.effort = effort;      
+      
+      if (atPosition()) {
+        pivotMotor.setVoltage(0);
+       }
+       else{
+      pivotMotor.setVoltage(effort);}
     });
   }
 
