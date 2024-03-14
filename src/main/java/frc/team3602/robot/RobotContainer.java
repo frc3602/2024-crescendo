@@ -146,12 +146,7 @@ public class RobotContainer implements Logged {
     guitarController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
 
     // Triggers
-    new Trigger(intakeSubsys::getColorSensor).onTrue(ledSubsys.setGreen());
-
-    new Trigger(ledSubsys::isBlueAlliance).onTrue(ledSubsys.setBlue());
-
-    // new Trigger(ledSubsys::isRedAlliance)
-    //     .onTrue(ledSubsys.setRed().unless(() -> !intakeSubsys.getColorSensor()));
+    new Trigger(intakeSubsys::getColorSensor).onTrue(ledSubsys.setGreen()).onFalse(ledSubsys.setAlliance());
   }
 
   public Command getAutonomousCommand() {

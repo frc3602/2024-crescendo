@@ -10,9 +10,17 @@ public class LEDSubsystem extends SubsystemBase {
   private final double kBlue = 0.87;
   private final double kRed = 0.61;
 
+  public boolean isBlueAlliance, isRedAlliance;
+
   private final Spark blinkin = new Spark(0);
 
   public LEDSubsystem() {
+  }
+
+  @Override
+  public void periodic() {
+    isBlueAlliance = isBlueAlliance();
+    isRedAlliance = isRedAlliance();
   }
 
   private void setColor(double colorValue) {
@@ -34,6 +42,16 @@ public class LEDSubsystem extends SubsystemBase {
   public Command setRed() {
     return runOnce(() -> {
       setColor(kRed);
+    });
+  }
+
+  public Command setAlliance() {
+    return runOnce(() -> {
+      if (isBlueAlliance) {
+        setColor(kBlue);
+      } else if (isRedAlliance) {
+        setColor(kRed);
+      }
     });
   }
 
