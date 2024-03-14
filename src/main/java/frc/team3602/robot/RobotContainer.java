@@ -62,20 +62,21 @@ public class RobotContainer implements Logged {
 
   public RobotContainer() {
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
-    NamedCommands.registerCommand("oneBackNoteMiddle", superstructure.oneBackNoteMiddle());
+    NamedCommands.registerCommand("oneStartNoteMiddleAmpSide", superstructure.oneStartNoteMiddleAmpSide());
 
-    NamedCommands.registerCommand("twoNoteMiddleStart", superstructure.twoNoteMiddleStart());
+    NamedCommands.registerCommand("twoNoteMiddleAmpSide", superstructure.twoNoteMiddleAmpSide());
     NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
 
     NamedCommands.registerCommand("twoNoteMiddleEnd", superstructure.twoNoteMiddleEnd());
     NamedCommands.registerCommand("twoNoteLeftStart", superstructure.twoNoteLeftStart());
-    NamedCommands.registerCommand("twoNoteLeftEnd", superstructure.twoNoteLeftEnd());
+    NamedCommands.registerCommand("twoNoteMiddleAmpSideEnd", superstructure.twoNoteMiddleAmpSideEnd());
     NamedCommands.registerCommand("oneNoteLeftFirst", superstructure.oneNoteLeftFirst());
 
     NamedCommands.registerCommand("twoNoteRightStart", superstructure.twoNoteRightStart());
     NamedCommands.registerCommand("twoNoteRightEnd", superstructure.twoNoteRightStart());
     NamedCommands.registerCommand("oneNoteMoveRightFirst", superstructure.oneNoteMoveRightFirst());
-
+    NamedCommands.registerCommand("threeNoteMiddleAmpSide", superstructure.threeNoteMiddleAmpSide());
+    NamedCommands.registerCommand("threeFirstNoteMiddleAmpSide", superstructure.threeFirstNoteMiddleAmpSide());
     // NamedCommands.registerCommand("oneNoteRight", superstructure.oneNoteRight());
 
     NamedCommands.registerCommand("oneNoteTwistFirst", superstructure.oneNoteLeftFirst());
@@ -127,9 +128,9 @@ public class RobotContainer implements Logged {
     xboxController.rightTrigger().onTrue(shooterSubsys.runShooterSpeed(0.8, 0.8))
         .onFalse(shooterSubsys.stopMotorsCmd());
 
-    xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.75))
+    xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.6))
         .onFalse(intakeSubsys.stopIntake());
-
+//.75>.6
     xboxController.x().onTrue(superstructure.inFrameCmd());
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());

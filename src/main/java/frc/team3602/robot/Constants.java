@@ -95,14 +95,14 @@ public final class Constants {
     public static final double kPivotConversionFactor = 360;
     public static final double kAbsoluteOffset = 0;
 
-    public static final double kP = 0.22; // 0.02S
+    public static final double kP = 0.22; // 0.02S initial .22>.2>.22
     public static final double kI = 0.0;
     public static final double kD = 0.0;//.03, No greater than 0.7
 
     public static final double kS = 6.8; // 6.8
-    public static final double kG = 0.49; // 0.49
-    public static final double kV = 4.68; // 4.68
-    public static final double kA = 0.03; // 0.03
+    public static final double kG = 0.49; // 0.49 -> .28 > .49
+    public static final double kV = 4.68; // 4.68 -> 7.8 > 4.68
+    public static final double kA = 0.03; // 0.03 -> .02 > 0.03
 
     public static final Measure<Angle> kInFramePos = Degrees.of(45);
     public static final Measure<Angle> kPickupPos = Degrees.of(90);

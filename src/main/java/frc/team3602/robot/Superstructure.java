@@ -66,38 +66,8 @@ public class Superstructure {
         shooterSubsys.stopShooter());
   }
 
+  //DO NOT TOUCH used in twoNoteMiddle Auton
   public Command oneNoteMiddle() {
-    return Commands.sequence(
-        Commands.print("Spinning Up Shooter"),
-        shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
-        Commands.waitSeconds(0.2),
-
-        Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 23.0).until(() -> pivotSubsys.isAtPosition),
-        // initial30>25>23
-        Commands.waitSeconds(0.2),
-        Commands.waitSeconds(0.2),
-
-        Commands.print("Shooting Note"),
-        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
-
-        // Commands.print("Stopping Shooter"),
-        // shooterSubsys.stopShooter(),
-
-        Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition),
-        Commands.waitSeconds(0.2),
-        intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
-
-    // Commands.print("Intaking Note"),
-    // intakeSubsys.runIntake(() -> 0.75).until(() ->
-    // intakeSubsys.getColorSensor()),
-    // Commands.waitSeconds(0.2)
-    );
-
-  }
-
-  public Command oneBackNoteMiddle() {
     return Commands.sequence(
         Commands.print("Spinning Up Shooter"),
         shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
@@ -116,7 +86,7 @@ public class Superstructure {
         // shooterSubsys.stopShooter(),
 
         Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 11.0).until(() -> pivotSubsys.isAtPosition),
+        pivotSubsys.runSetAngle(() -> 16.0).until(() -> pivotSubsys.isAtPosition),
         Commands.waitSeconds(0.2),
         intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
 
@@ -125,23 +95,24 @@ public class Superstructure {
     // intakeSubsys.getColorSensor()),
     // Commands.waitSeconds(0.2)
     );
-
   }
+  
 
+  //DO NOT TOUCH used in twoNoteMiddle Auton
   public Command twoNoteMiddle() {
     return Commands.sequence(
         Commands.print("Intaking Note"),
-        intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getColorSensor()),
+        intakeSubsys.runIntake(() -> 0.4).until(() -> intakeSubsys.getColorSensor()),
         Commands.waitSeconds(0.2),
-        // intake speed .25>.75
+        // intake speed .25>.75>.5>.4
         // Commands.print("Spinning Up Shooter"),
         // shooterSubsys.runShooterSpeed(0.75, 0.75).until(() ->
         // shooterSubsys.isAtSpeed),
         // Commands.waitSeconds(0.2),
 
         Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.isAtPosition),
-        // 40 adjusted path to frc field>37>39
+        pivotSubsys.runSetAngle(() -> 36).until(() -> pivotSubsys.isAtPosition),
+        // 40 adjusted path to frc field>37>39>36
         Commands.waitSeconds(0.2),
 
         Commands.print("Waiting for Spinup"),
@@ -155,14 +126,112 @@ public class Superstructure {
 
   }
 
-  public Command twoNoteMiddleStart() {
+
+  //Two/three notemiddleampside- shot the second note to the source side of speaker, when picking up the second note it runs it into the ground maybe increment the pivot movements, check outlast shooting, check pid tuning??
+
+ //DO NOT TOUCH used in twoNoteMiddleAmpSide Auton, and in threeNoteMiddleAmpSide Auton
+  public Command oneStartNoteMiddleAmpSide() {
     return Commands.sequence(
-        Commands.print("Intaking Note"),
-        intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getColorSensor())
-    // Commands.waitSeconds(0.2));
-    // intake speed .25>.75
+        Commands.print("Spinning Up Shooter"),
+        shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
+        // Commands.waitSeconds(0.2),
+
+        Commands.print("Setting Angle"),
+        pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition),
+        // initial30>25>23
+        Commands.waitSeconds(0.2),
+        Commands.waitSeconds(0.2),
+
+        Commands.print("Shooting Note"),
+        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+        // Commands.print("Stopping Shooter"),
+        // shooterSubsys.stopShooter(),
+
+        Commands.print("Setting Angle"),
+        pivotSubsys.runSetAngle(() -> 11.0).until(() -> pivotSubsys.isAtPosition)
+       // Commands.waitSeconds(0.2)
+       // intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
+       //pivot angle initial 16 -> 11
     );
   }
+
+  // DO NOT TOUCH used in twoNoteMiddleAmpSide Auton, and threeNoteMiddleAmpSide Auton
+  public Command twoNoteMiddleAmpSide() {
+    return Commands.sequence(
+        Commands.print("Intaking Note"),
+        intakeSubsys.runIntake(() -> 0.3).until(() -> intakeSubsys.getColorSensor()),
+       Commands.waitSeconds(0.2)
+    // intake speed .25>.75 same as twoNoteMiddle>.4>.35>.3
+    );
+  }
+
+    // DO NOT TOUCH used in twoNoteMiddleAmpSide Auton, and threeNoteMiddleAmpSide Auton
+   public Command twoNoteMiddleAmpSideEnd() {
+    return Commands.sequence(
+       Commands.waitSeconds(0.2),
+        Commands.print("Waiting for Spinup"),
+        shooterSubsys.runShooterSpeed(0.75, 0.75).withTimeout(0.2),
+        Commands.waitSeconds(0.2),
+
+        // Commands.print("Setting Angle"),
+        // pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.isAtPosition),
+        // //36 c&p from twoNoteMiddle>34>36>38>39
+        // Commands.waitSeconds(0.2),
+        Commands.print("Setting Angle"),
+        pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.isAtPosition),
+        //36 c&p from twoNoteMiddle>34>36>38>39
+        Commands.waitSeconds(0.2),
+
+        Commands.print("Shooting Note"),
+        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)
+    // intake speed .7>.75 copied and pasted >0.65>.75
+    );
+  }
+
+  //  used in threeNoteMiddleAmpSide Auton
+  public Command threeFirstNoteMiddleAmpSide() {
+    return Commands.sequence(
+      Commands.print("Setting Angle"),
+        pivotSubsys.runSetAngle(() -> 29.0).until(() -> pivotSubsys.isAtPosition), 
+       pivotSubsys.runSetAngle(() -> 15.0).until(() -> pivotSubsys.isAtPosition),
+        pivotSubsys.runSetAngle(() -> 6.0).until(() -> pivotSubsys.isAtPosition),
+
+        Commands.waitSeconds(0.2),
+        //angle 20>16>11>8>5>6>16>18>20
+
+      Commands.print("Intaking Note"),
+        intakeSubsys.runIntake(() -> 0.27).until(() -> intakeSubsys.getColorSensor())
+        //intake speed .4>.3>.27
+       // Commands.waitSeconds(0.2)
+    );
+  }
+
+  // used in threeNoteMiddleAmpSide Auton
+  public Command threeNoteMiddleAmpSide() {
+    return Commands.sequence(
+ Commands.print("Setting Angle"),
+        pivotSubsys.runSetAngle(() -> 43.0).until(() -> pivotSubsys.isAtPosition),
+       //initial 45>43
+        Commands.waitSeconds(0.2),      
+    
+    Commands.print("Spinning Up Shooter"),
+        shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
+        Commands.waitSeconds(0.2),
+        // until(() -> shooterSubsys.isAtVelocity)> timeout
+
+        Commands.print("Shooting Note"),
+        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)
+
+    // Commands.print("Stopping Shooter"),
+    // shooterSubsys.stopShooter(),
+    );
+  }
+
+ 
+    // Commands.print("Intaking Note"),
+    // intakeSubsys.runIntake(() -> 0.75).until(() ->
+    // intakeSubsys.getColorSensor()),
+    // Commands.waitSeconds(0.2)
 
   // // Commands.print("Spinning Up Shooter"),
   // // shooterSubsys.runShooterSpeed(0.75, 0.75).until(() ->
@@ -201,7 +270,7 @@ public class Superstructure {
         Commands.print("Stopping Shooter"),
         shooterSubsys.stopShooter(),
         Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 8.0).until(() -> pivotSubsys.isAtPosition));
+        pivotSubsys.runSetAngle(() -> 16.0).until(() -> pivotSubsys.isAtPosition));
   }
 
   public Command oneNoteLeftFirst() {
@@ -245,17 +314,6 @@ public class Superstructure {
         pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.isAtPosition),
         // init 40>45>48>52>35>38>40 adjusted path to frc field>37>39>42
         Commands.waitSeconds(0.2));
-  }
-
-  public Command twoNoteLeftEnd() {
-    return Commands.sequence(
-        Commands.print("Waiting for Spinup"),
-        shooterSubsys.runShooterSpeed(0.75, 0.75).withTimeout(0.2),
-        Commands.waitSeconds(0.2),
-        Commands.print("Shooting Note"),
-        intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
-    // intake speed .7>.75 copied and pasted >0.65
-    );
   }
 
   public Command oneNoteRight() {

@@ -41,7 +41,10 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   private final DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(2);
   // private final SparkAbsoluteEncoder pivotEncoder =
   // pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
-
+// motors encoder
+// private final RelativeEncoder pivotMotorEncoder = pivotMotor.getEncoder();
+//   private final RelativeEncoder pivotMotorFollower = pivotFollower.getEncoder();
+  
   // Controls
   @Log
   public boolean isAtPosition;
@@ -49,6 +52,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   @Log
   public double encoderValue;
 
+  @Log
   public double angle = 84.0;
   @Log
   public double lerpAngle;
@@ -84,7 +88,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     var target = angle;
     var tolerance = 3;
 
-    return MathUtil.isNear(target, getDegrees(), tolerance);
+    return ((MathUtil.isNear(target, getDegrees(), tolerance))&&(angle <= 80));
   }
 
   public Command runPivot(DoubleSupplier percentage) {
