@@ -63,7 +63,7 @@ public class RobotContainer implements Logged {
   public RobotContainer() {
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
     NamedCommands.registerCommand("oneStartNoteMiddleAmpSide", superstructure.oneStartNoteMiddleAmpSide());
-
+    NamedCommands.registerCommand("oneLeftMoveShort", superstructure.oneLeftMoveShort());
     NamedCommands.registerCommand("twoNoteMiddleAmpSide", superstructure.twoNoteMiddleAmpSide());
     NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
     NamedCommands.registerCommand("oneNoteLeftAmpSideStart", superstructure.oneNoteLeftAmpSideStart());
@@ -141,7 +141,8 @@ public class RobotContainer implements Logged {
     xboxController.rightBumper().onTrue(pivotSubsys.setAngle(() -> 100));
 
     // Guitar controls
-    guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 28.0));
+    guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 27.0));
+//height 28>27
 
     guitarController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
 

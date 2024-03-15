@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2647271448389068,
+      "y": 5.4860202028096365
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "oneLeftMoveShort"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "oneNoteMoveMiddle"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Main",
+  "choreoAuto": false
+}
