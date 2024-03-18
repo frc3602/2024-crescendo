@@ -56,8 +56,8 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     // SmartDashboard.putNumber("Integral", kI);
     // SmartDashboard.putNumber(" Derivitave", kD);
 
-    rightTarget = 27.0;
-    leftTarget = 27.0;
+    rightTarget = 26.75;
+    leftTarget = 26.75;
 //target 28>27
     
     resetEncoders();

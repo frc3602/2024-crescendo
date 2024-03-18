@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
-import frc.team3602.robot.subsystems.LEDSubsystem;
+//import frc.team3602.robot.subsystems.LEDSubsystem;
 import frc.team3602.robot.subsystems._PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 import frc.team3602.robot.subsystems.ClimberSubsystem;
@@ -39,7 +39,7 @@ public class RobotContainer implements Logged {
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final _PivotSubsystem pivotSubsys = new _PivotSubsystem();
   private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
-  private final LEDSubsystem ledSubsys = new LEDSubsystem();
+ // private final LEDSubsystem ledSubsys = new LEDSubsystem();
 
   @Log
   public double targetDistance;
@@ -61,6 +61,9 @@ public class RobotContainer implements Logged {
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
+
+    NamedCommands.registerCommand("ampScoreCommand", superstructure.ampScoreCommand());
+    
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
     NamedCommands.registerCommand("oneStartNoteMiddleAmpSide", superstructure.oneStartNoteMiddleAmpSide());
     NamedCommands.registerCommand("oneLeftMoveShort", superstructure.oneLeftMoveShort());
@@ -71,7 +74,7 @@ public class RobotContainer implements Logged {
     NamedCommands.registerCommand("twoNoteLeftStart", superstructure.twoNoteLeftStart());
     NamedCommands.registerCommand("twoNoteMiddleAmpSideEnd", superstructure.twoNoteMiddleAmpSideEnd());
     NamedCommands.registerCommand("oneNoteLeftFirst", superstructure.oneNoteLeftFirst());
-
+    NamedCommands.registerCommand("twoNoteMoveAmpSideShoot", superstructure.twoNoteMoveAmpSideShoot());
     NamedCommands.registerCommand("twoNoteRightStart", superstructure.twoNoteRightStart());
     NamedCommands.registerCommand("twoNoteRightEnd", superstructure.twoNoteRightStart());
     NamedCommands.registerCommand("oneNoteMoveRightFirst", superstructure.oneNoteMoveRightFirst());
@@ -138,16 +141,16 @@ public class RobotContainer implements Logged {
     xboxController.leftBumper()
         .whileTrue(pivotSubsys.runSetAngle(() -> (23)));
 
-    xboxController.rightBumper().onTrue(pivotSubsys.setAngle(() -> 100));
+    xboxController.rightBumper().onTrue(superstructure.ampScoreCommand());
 
     // Guitar controls
-    guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 27.0));
+    guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 26.75));
 //height 28>27
 
     guitarController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
 
     // Triggers
-    new Trigger(intakeSubsys::getColorSensor).onTrue(ledSubsys.setGreen()).onFalse(ledSubsys.setAlliance());
+    //new Trigger(intakeSubsys::getColorSensor).onTrue(ledSubsys.setGreen()).onFalse(ledSubsys.setAlliance());
   }
 
   public Command getAutonomousCommand() {

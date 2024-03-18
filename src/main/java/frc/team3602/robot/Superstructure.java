@@ -91,8 +91,8 @@ public class Superstructure {
         // Commands.waitSeconds(0.2),
 
         Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 36).until(() -> pivotSubsys.isAtPosition),
-        // 40 adjusted path to frc field>37>39>36
+        pivotSubsys.runSetAngle(() -> 41).until(() -> pivotSubsys.isAtPosition),
+        // 40 adjusted path to frc field>37>39>36>37>39>41
         Commands.waitSeconds(0.2),
 
         Commands.print("Waiting for Spinup"),
@@ -137,8 +137,12 @@ public class Superstructure {
   // Auton
   public Command twoNoteMiddleAmpSide() {
     return Commands.sequence(
+
+        Commands.print("Setting Angle"),
+        pivotSubsys.runSetAngle(() -> 9.0).until(() -> pivotSubsys.isAtPosition),
+
         Commands.print("Intaking Note"),
-        intakeSubsys.runIntake(() -> 0.22).until(() -> intakeSubsys.getColorSensor())
+        intakeSubsys.runIntake(() -> 0.50).until(() -> intakeSubsys.getColorSensor())
     // Commands.waitSeconds(0.2)
     // intake speed .25>.75 same as twoNoteMiddle>.4>.35>.3>.27>.25>.2
     );
@@ -412,7 +416,7 @@ public class Superstructure {
         Commands.waitSeconds(0.2),
 
         Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 23.0).until(() -> pivotSubsys.isAtPosition),
+        pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition),
         // angle is same as oneNoteLeftFirst> realized path shoots at bumper-same as two
         // note middle>25>23
 
@@ -508,6 +512,51 @@ public Command oneLeftMoveShort() {
         // shooterSubsys.stopShooter(),
     );
     }
+
+    public Command twoNoteMoveAmpSideShoot() {
+      return Commands.sequence(
+        
+              Commands.print("Spinning Up Shooter"),
+        shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
+        Commands.waitSeconds(0.2),
+
+        Commands.print("Setting Angle"),
+        pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition),
+        // angle is same as oneNoteLeftFirst> realized path shoots at bumper-same as two
+        // note middle>25>23
+
+        Commands.waitSeconds(0.2),
+
+        Commands.print("Shooting Note"),
+        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)
+      );
+        
+
+    }
+
+      public Command ampScoreCommand(){
+        
+        return Commands.sequence(
+
+        Commands.parallel(
+
+        Commands.print("Spinning Up Shooter"),
+        shooterSubsys.runShooterSpeed(0.2, 0.2).until(() -> shooterSubsys.isAtVelocity),
+
+         Commands.print("Setting Angle"),
+        
+        pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition)),
+        
+        pivotSubsys.runSetAngle(() -> 55.0).until(() -> pivotSubsys.isAtPosition),
+
+        pivotSubsys.runSetAngle(() -> 80.0).until(() -> pivotSubsys.isAtPosition),
+
+        pivotSubsys.runSetAngle(() -> 100.0).until(() -> pivotSubsys.isAtPosition)
+        );
+        
+      }
+
+
 }
 
 

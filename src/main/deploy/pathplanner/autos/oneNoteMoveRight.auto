@@ -18,28 +18,41 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "oneNoteMoveRight"
-          }
-        },
-        {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 2.0
+                  "pathName": "oneNoteMoveRight"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "twoNoteMiddleAmpSide"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 3.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "twoNoteMiddleAmpSide"
+                      }
+                    }
+                  ]
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of oneNoteMoveMiddle"
           }
         }
       ]

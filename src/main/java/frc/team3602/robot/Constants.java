@@ -42,7 +42,7 @@ public final class Constants {
      * Conversion factor in inches per turn calculated as follows:
      * Drum diameter*pi/gear ratio
      */
-    public static final double kHeightConvFact = (2.0 * Math.PI) / 25.0;
+    public static final double kHeightConvFact = (2.0 * Math.PI) / 125.0;
 
     // Retracted height of arms from floor. The arm postion will be set to this on
     // init
@@ -55,7 +55,7 @@ public final class Constants {
 
     // Feedforward Constants
     public static final double kS = 6.38;
-    public static final double kG = 4.76;
+    public static final double kG = 2.36;
     public static final double kV = 1.53;
     public static final double kA = 0.53;
   }
@@ -137,7 +137,7 @@ public final class Constants {
     private static final double kDriveGearRatio = 6.122448979591837;
     private static final double kTurnGeatRatio = 21.428571428571427;
     private static final double kWheelRadiusInches = 2.0;
-    private static final double kSlipCurrentAmps = 120.0;
+    private static final double kSlipCurrentAmps = 100.0;
     private static final Slot0Configs kDriveGains = new Slot0Configs()
         .withKP(3.0).withKI(0.0).withKD(0.0)
         .withKS(0.0).withKV(0.0).withKA(0.0);
