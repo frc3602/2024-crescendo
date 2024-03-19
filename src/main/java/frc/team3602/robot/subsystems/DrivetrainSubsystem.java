@@ -6,7 +6,15 @@
 
 package frc.team3602.robot.subsystems;
 
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -22,20 +30,22 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-
-import frc.team3602.robot.Vision;
 
 import monologue.Logged;
 import monologue.Annotations.Log;
 
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 import static frc.team3602.robot.Constants.VisionConstants.*;
+import static edu.wpi.first.units.Units.*;
 
 public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, Logged {
   // Drivetrain
@@ -48,7 +58,13 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
       .withRotationalDeadband(0.04);
 
   // Vision
-  private final Vision vision = new Vision();
+  private final AprilTagFieldLayout kFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+
+  private final PhotonCamera photonCamera = new PhotonCamera(kPhotonCameraName);
+  private final PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(kFieldLayout,
+      PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, photonCamera, kRobotToCamera);
+
+ private double visionLastEstimateTimestamp = 0.0;
 
   private final PIDController turnController = new PIDController(0.015, 0.0, 0.001);
 
@@ -65,6 +81,39 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
 
     configPathPlanner();
     configDriveSubsys();
+  }
+
+  public PhotonPipelineResult visionGetLatestResult(PhotonCamera photonCamera) {
+    return photonCamera.getLatestResult();
+  }
+
+  public Optional<EstimatedRobotPose> visionGetEstimatedRobotPose(PhotonCamera photonCamera, PhotonPoseEstimator photonPoseEstimator) {
+    var visionEstimate = photonPoseEstimator.update();
+    double latestTimestamp = visionGetLatestResult(photonCamera).getTimestampSeconds();
+    visionLastEstimateTimestamp = ( Math.abs(latestTimestamp - visionLastEstimateTimestamp) > 1e-5) ? latestTimestamp : visionLastEstimateTimestamp;
+
+    return visionEstimate;
+  }
+
+  public double getTargetHeight() {
+    var result = visionGetLatestResult(photonCamera);
+   
+    return result.hasTargets() ? kFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get().getZ() : 0.0;
+  }
+
+  public double getTargetDistance() {
+    double targetDistance;
+
+    var result = visionGetLatestResult(photonCamera);
+
+    if (result.hasTargets()) {
+      targetDistance = PhotonUtils.calculateDistanceToTargetMeters(kCameraHeight.in(Meters), getTargetHeight(),
+          kCameraPitch.in(Radians), Units.degreesToRadians(result.getBestTarget().getPitch()));
+    } else {
+      targetDistance = 0.0;
+    }
+
+    return targetDistance;
   }
 
   @Override
@@ -87,22 +136,14 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
 
   public Command alignWithTarget() {
     return run(() -> {
-      double rotationSpeed;
+      var result = visionGetLatestResult(photonCamera);
 
-      var result = vision.getLatestResult();
-
-      if (result.hasTargets()) {
-        rotationSpeed = turnController.calculate(result.getBestTarget().getYaw(), 0.0);
-      } else {
-        rotationSpeed = 0.0;
-      }
-
-      this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(0.0, 0.0, rotationSpeed)));
+      this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(0.0, 0.0, (result.hasTargets() ? turnController.calculate(result.getBestTarget().getYaw(), 0.0) : 0.0))));
     });
   }
 
   private void updateOdometry() {
-    var pose = vision.getEstimatedRobotPose();
+    var pose = visionGetEstimatedRobotPose(photonCamera, photonPoseEstimator);
 
     if (pose.isPresent()) {
       var estimatedRobotPose = pose.get();
@@ -156,5 +197,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
     moduleOneSteer.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(30));
     moduleTwoSteer.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(30));
     moduleThreeSteer.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(30));
+
+    photonPoseEstimator.setMultiTagFallbackStrategy((PoseStrategy.LOWEST_AMBIGUITY));
   }
 }
