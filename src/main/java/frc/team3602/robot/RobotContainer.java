@@ -39,7 +39,7 @@ public class RobotContainer implements Logged {
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final _PivotSubsystem pivotSubsys = new _PivotSubsystem();
   private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
- // private final LEDSubsystem ledSubsys = new LEDSubsystem();
+  // private final LEDSubsystem ledSubsys = new LEDSubsystem();
 
   @Log
   public double targetDistance;
@@ -63,7 +63,7 @@ public class RobotContainer implements Logged {
   public RobotContainer() {
 
     NamedCommands.registerCommand("ampScoreCommand", superstructure.ampScoreCommand());
-    
+
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
     NamedCommands.registerCommand("oneStartNoteMiddleAmpSide", superstructure.oneStartNoteMiddleAmpSide());
     NamedCommands.registerCommand("oneLeftMoveShort", superstructure.oneLeftMoveShort());
@@ -104,18 +104,23 @@ public class RobotContainer implements Logged {
     driveSubsys
         .setDefaultCommand(driveSubsys.applyRequest(
             () -> driveSubsys.fieldCentricDrive
-                .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() *
-                    _kMaxSpeed)
-                .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftX() *
-                    _kMaxSpeed)
-                .withRotationalRate(-xboxController.getRightX() *
-                    _kMaxAngularRate)));
+       //         .withVelocityX(driveSubsys.drive ? polarityChooser.getSelected() * xboxController.getLeftY() *
+       //             _kMaxSpeed : (driveSubsys.vision.getLatestResult().hasTargets() ? driveSubsys.strafeController.calculate(driveSubsys.vision.getLatestResult().getBestTarget().getSkew(), 0.0) : 0.0))
+       .withVelocityX(driveSubsys.drive ? polarityChooser.getSelected() * xboxController.getLeftY() *
+                    _kMaxSpeed : 0.0)
+      // .withVelocityY(driveSubsys.drive ? polarityChooser.getSelected() * xboxController.getLeftX() *
+      //              _kMaxSpeed : 0.0)
+       .withVelocityY(driveSubsys.drive ? polarityChooser.getSelected() * xboxController.getLeftY() *
+                    _kMaxSpeed : (driveSubsys.vision.getLatestResult().hasTargets() ? driveSubsys.strafeController.calculate(driveSubsys.vision.getLatestResult().getBestTarget().getSkew(), 0.0) : 0.0))
+ 
+                .withRotationalRate(driveSubsys.drive ? -xboxController.getRightX() *
+                    _kMaxAngularRate : 0.0)));
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
     // shooterSubsys.setDefaultCommand(shooterSubsys.runShooterSpeed());
 
-    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
   }
 
   private void configButtonBindings() {
@@ -133,24 +138,26 @@ public class RobotContainer implements Logged {
 
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.6))
         .onFalse(intakeSubsys.stopIntake());
-//.75>.6
+    // .75>.6
     xboxController.x().onTrue(superstructure.inFrameCmd());
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.leftBumper()
-        .whileTrue(pivotSubsys.runSetAngle(() -> (23)));
+    xboxController.leftBumper().whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle)); // 23
 
     xboxController.rightBumper().onTrue(superstructure.ampScoreCommand());
 
+    xboxController.leftTrigger().onTrue(driveSubsys.setDriveStatus(false)).onFalse(driveSubsys.setDriveStatus(true));
+
     // Guitar controls
     guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 26.75));
-//height 28>27
+    // height 28>27
 
     guitarController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
 
     // Triggers
-    //new Trigger(intakeSubsys::getColorSensor).onTrue(ledSubsys.setGreen()).onFalse(ledSubsys.setAlliance());
+    // new
+    // Trigger(intakeSubsys::getColorSensor).onTrue(ledSubsys.setGreen()).onFalse(ledSubsys.setAlliance());
   }
 
   public Command getAutonomousCommand() {

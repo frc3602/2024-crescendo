@@ -159,7 +159,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
     isAtPosition = atPosition();
 
-    lerpAngle = lerpTable.get(vision.getTargetDistance());
+    lerpAngle = lerpTable.get(Units.metersToFeet(vision.getTargetDistance()));
 
     // var angle = SmartDashboard.getNumber("Angle", this.angle);
 

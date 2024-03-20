@@ -38,6 +38,8 @@ import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 import static frc.team3602.robot.Constants.VisionConstants.*;
 
 public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, Logged {
+public boolean drive = true;
+
   // Drivetrain
   @Log
   public double heading;
@@ -48,9 +50,10 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
       .withRotationalDeadband(0.04);
 
   // Vision
-  private final Vision vision = new Vision();
+  public final Vision vision = new Vision();
 
   private final PIDController turnController = new PIDController(0.015, 0.0, 0.001);
+  public final PIDController strafeController = new PIDController(0.05, 0.05, 0.05);
 
   public DrivetrainSubsystem(SwerveDrivetrainConstants drivetrainConstants, double odometryUpdateFrequency,
       SwerveModuleConstants... moduleConstants) {
@@ -85,6 +88,10 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
     return run(() -> this.setControl(requestSupplier.get()));
   }
 
+  public Command setDriveStatus(boolean driveStatus) {
+    return runOnce(() -> this.drive = driveStatus);
+  }
+
   public Command alignWithTarget() {
     return run(() -> {
       double rotationSpeed;
@@ -98,6 +105,22 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
       }
 
       this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(0.0, 0.0, rotationSpeed)));
+    });
+  }
+
+  public Command alignWithAmp() {
+    return run(() -> {
+      var strafeSpeed = 0.0;
+
+      var result = vision.getLatestResult();
+
+      if (result.hasTargets()) {
+        strafeSpeed = strafeController.calculate(result.getBestTarget().getSkew(), 0.0);
+      } else {
+        strafeSpeed = 0;
+      }
+
+      this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(0.0, strafeSpeed, 0.0)));
     });
   }
 
