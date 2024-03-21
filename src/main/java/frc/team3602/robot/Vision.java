@@ -23,7 +23,7 @@ import static edu.wpi.first.units.Units.*;
 import static frc.team3602.robot.Constants.VisionConstants.*;
 
 public class Vision {
-  private final AprilTagFieldLayout kFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+  public final AprilTagFieldLayout kFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
   private final PhotonCamera photonCamera = new PhotonCamera(kPhotonCameraName);
   private final PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(kFieldLayout,

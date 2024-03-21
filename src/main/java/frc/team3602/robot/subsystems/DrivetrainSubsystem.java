@@ -8,6 +8,8 @@ package frc.team3602.robot.subsystems;
 
 import java.util.function.Supplier;
 
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
@@ -38,11 +40,9 @@ import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 import static frc.team3602.robot.Constants.VisionConstants.*;
 
 public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, Logged {
-public boolean drive = true;
 
   // Drivetrain
-  @Log
-  public double heading;
+  @Log public double heading;
   private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
   public final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric()
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
@@ -53,7 +53,7 @@ public boolean drive = true;
   public final Vision vision = new Vision();
 
   private final PIDController turnController = new PIDController(0.015, 0.0, 0.001);
-  public final PIDController strafeController = new PIDController(0.05, 0.05, 0.05);
+  private final PIDController strafeController = new PIDController(0.5, 0.0, 0.0);
 
   public DrivetrainSubsystem(SwerveDrivetrainConstants drivetrainConstants, double odometryUpdateFrequency,
       SwerveModuleConstants... moduleConstants) {
@@ -88,11 +88,7 @@ public boolean drive = true;
     return run(() -> this.setControl(requestSupplier.get()));
   }
 
-  public Command setDriveStatus(boolean driveStatus) {
-    return runOnce(() -> this.drive = driveStatus);
-  }
-
-  public Command alignWithTarget() {
+  public Command turnTowardTarget() {
     return run(() -> {
       double rotationSpeed;
 
@@ -108,19 +104,13 @@ public boolean drive = true;
     });
   }
 
-  public Command alignWithAmp() {
+  public Command alignWithTarget() {
     return run(() -> {
-      var strafeSpeed = 0.0;
+      PhotonPipelineResult result = vision.getLatestResult();
+      double strafeDistance = strafeController.calculate((result.hasTargets() ? vision.kFieldLayout.getTagPose(result.getBestTarget().getFiducialId()).get().getX() : 0.0) - getPose().getX(), 0.0);
 
-      var result = vision.getLatestResult();
 
-      if (result.hasTargets()) {
-        strafeSpeed = strafeController.calculate(result.getBestTarget().getSkew(), 0.0);
-      } else {
-        strafeSpeed = 0;
-      }
-
-      this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(0.0, strafeSpeed, 0.0)));
+      this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(0.0, strafeDistance, 0.0)));
     });
   }
 

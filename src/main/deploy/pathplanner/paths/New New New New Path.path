@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.6825775190011933,
+        "y": 4.519059807350385
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.682577519001193,
+        "y": 4.519059807350385
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.57,
+        "y": 4.12
+      },
+      "prevControl": {
+        "x": 2.4586272249467593,
+        "y": 3.9467771243234795
+      },
+      "nextControl": {
+        "x": 2.7911843000036027,
+        "y": 4.464017471799608
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.57,
+        "y": 4.874269748539498
+      },
+      "prevControl": {
+        "x": 3.0908509017018018,
+        "y": 4.805752525351204
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -26.82070385986385,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "BetterAutonBS",
+  "previewStartingState": {
+    "rotation": -59.03624346792656,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

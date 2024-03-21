@@ -82,6 +82,32 @@ public class RobotContainer implements Logged {
     NamedCommands.registerCommand("threeFirstNoteMiddleAmpSide", superstructure.threeFirstNoteMiddleAmpSide());
     // NamedCommands.registerCommand("oneNoteRight", superstructure.oneNoteRight());
 
+/*//LEGIBLE AUTONS--if functional, comment out ALL other auton commands
+  
+    NamedCommands.registerCommand("sideStart", superstructure.sideStart());
+    NamedCommands.registerCommand("centerStart", superstructure.sideStart());
+   
+    NamedCommands.registerCommand("intakeNote", superstructure.intakeNote());
+   
+    NamedCommands.registerCommand("shootCloseAmp", superstructure.shootCloseAmp());
+    NamedCommands.registerCommand("shootCloseCenter", superstructure.shootCloseCenter());
+    NamedCommands.registerCommand("shootCloseSource", superstructure.shootCloseSource());
+   
+    NamedCommands.registerCommand("shootFarAmp", superstructure.shootFarAmp());
+    NamedCommands.registerCommand("shootFarInnerAmp", superstructure.shootFarInnerAmp());
+    NamedCommands.registerCommand("shootFarCenter", superstructure.shootFarCenter());
+    NamedCommands.registerCommand("shootFarInnerSource", superstructure.shootFarInnerSource());
+    NamedCommands.registerCommand("shootFarSource", superstructure.shootFarSource());
+
+
+
+
+ */
+
+
+
+
+
     NamedCommands.registerCommand("oneNoteTwistFirst", superstructure.oneNoteLeftFirst());
     NamedCommands.registerCommand("twoNoteTwistStart", superstructure.oneNoteLeftFirst());
     NamedCommands.registerCommand("twoNoteTwistEnd", superstructure.oneNoteLeftFirst());
@@ -104,17 +130,13 @@ public class RobotContainer implements Logged {
     driveSubsys
         .setDefaultCommand(driveSubsys.applyRequest(
             () -> driveSubsys.fieldCentricDrive
-       //         .withVelocityX(driveSubsys.drive ? polarityChooser.getSelected() * xboxController.getLeftY() *
-       //             _kMaxSpeed : (driveSubsys.vision.getLatestResult().hasTargets() ? driveSubsys.strafeController.calculate(driveSubsys.vision.getLatestResult().getBestTarget().getSkew(), 0.0) : 0.0))
-       .withVelocityX(driveSubsys.drive ? polarityChooser.getSelected() * xboxController.getLeftY() *
-                    _kMaxSpeed : 0.0)
-      // .withVelocityY(driveSubsys.drive ? polarityChooser.getSelected() * xboxController.getLeftX() *
-      //              _kMaxSpeed : 0.0)
-       .withVelocityY(driveSubsys.drive ? polarityChooser.getSelected() * xboxController.getLeftY() *
-                    _kMaxSpeed : (driveSubsys.vision.getLatestResult().hasTargets() ? driveSubsys.strafeController.calculate(driveSubsys.vision.getLatestResult().getBestTarget().getSkew(), 0.0) : 0.0))
+       .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() *
+                    _kMaxSpeed)
+       .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftY() *
+                    _kMaxSpeed)
  
-                .withRotationalRate(driveSubsys.drive ? -xboxController.getRightX() *
-                    _kMaxAngularRate : 0.0)));
+                .withRotationalRate(-xboxController.getRightX() *
+                    _kMaxAngularRate)));
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
 
@@ -143,11 +165,11 @@ public class RobotContainer implements Logged {
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.leftBumper().whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle)); // 23
+   xboxController.leftBumper().whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle)); // 23
 
     xboxController.rightBumper().onTrue(superstructure.ampScoreCommand());
 
-    xboxController.leftTrigger().onTrue(driveSubsys.setDriveStatus(false)).onFalse(driveSubsys.setDriveStatus(true));
+    xboxController.leftTrigger().whileTrue(driveSubsys.alignWithTarget());
 
     // Guitar controls
     guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 26.75));

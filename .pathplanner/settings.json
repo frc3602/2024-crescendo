@@ -4,11 +4,12 @@
   "holonomicMode": true,
   "pathFolders": [
     "Main",
-    "New Folder"
+    "BetterAutonBS"
   ],
   "autoFolders": [
+    "Good Autons",
     "Main",
-    "Good Autons"
+    "BetterAutonBS"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
