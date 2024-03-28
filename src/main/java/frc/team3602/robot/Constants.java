@@ -82,27 +82,28 @@ public final class Constants {
     public static final int kIntakeMotorId = 5;
     public static final int kIntakeMotorCurrentLimit = 30;
 
-    public static final int kColorSensorId = 0;
+    public static final int kSensor1Id = 3;
+    public static final int kSensor2Id = 1;
   }
 
   public final class PivotConstants {
     public static final int kPivotMotorId = 4;
     public static final int kPivotFollowerId = 6; 
 
-    public static final int kPivotMotorCurrentLimit = 30;
-    public static final int kPivotFollowerCurrentLimit = 30;
+    public static final int kPivotMotorCurrentLimit = 40;
+    public static final int kPivotFollowerCurrentLimit = 40;
 
     public static final double kPivotConversionFactor = 360;
     public static final double kAbsoluteOffset = 0;
 
-    public static final double kP = 0.22; // 0.02S initial .22>.2>.22
+    public static final double kP = 0.27; // 0.1>.15>.17>.22>.25
     public static final double kI = 0.0;
     public static final double kD = 0.0;//.03, No greater than 0.7
 
-    public static final double kS = 6.8; // 6.8
-    public static final double kG = 0.49; // 0.49 -> .28 > .49
-    public static final double kV = 4.68; // 4.68 -> 7.8 > 4.68
-    public static final double kA = 0.03; // 0.03 -> .02 > 0.03
+    public static final double kS = 6.0; // 6.8
+    public static final double kG = 0.21; // 0.49 -> .28 > .49
+    public static final double kV = 7.6; // 4.68 -> 7.8 > 4.68
+    public static final double kA = 0.01; // 0.03 -> .02 > 0.03
 
     public static final Measure<Angle> kInFramePos = Degrees.of(45);
     public static final Measure<Angle> kPickupPos = Degrees.of(90);
@@ -113,6 +114,7 @@ public final class Constants {
 
   public final class VisionConstants {
     public static final String kPhotonCameraName = "photonvision";
+    public static final String kNoteCameraName = "photon_note";
 
     // Camera mounted facing forward, half a meter forward of center, half a meter
     // up from center. TODO: Measure this
@@ -120,7 +122,7 @@ public final class Constants {
         new Rotation3d(0.0, 0.0, 0.0));
 
     public static final Measure<Distance> kCameraHeight = Inches.of(10.75);
-    public static final Measure<Angle> kCameraPitch = Degrees.of(23.5);
+    public static final Measure<Angle> kCameraPitch = Degrees.of(20); //23.5
 
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
@@ -151,7 +153,7 @@ public final class Constants {
     private static final boolean kInvertLeftSide = false;
     private static final boolean kInvertRightSide = true;
 
-    private static final SwerveDrivetrainConstants kDrivetrainConstants = new SwerveDrivetrainConstants()
+    public static final SwerveDrivetrainConstants kDrivetrainConstants = new SwerveDrivetrainConstants()
         .withPigeon2Id(kPigeonId)
         .withCANbusName(kCANBusName);
 
@@ -175,7 +177,7 @@ public final class Constants {
     private static final double kFrontLeftXPosInches = 10.25;
     private static final double kFrontLeftYPosInches = 10.25;
 
-    private static final SwerveModuleConstants kFrontLeftModuleConstants = kModuleConstants
+    public static final SwerveModuleConstants kFrontLeftModuleConstants = kModuleConstants
         .createModuleConstants(
             kFrontLeftTurnMotorId,
             kFrontLeftDriveMotorId,
@@ -193,7 +195,7 @@ public final class Constants {
     private static final double kFrontRightXPosInches = 10.25;
     private static final double kFrontRightYPosInches = -10.25;
 
-    private static final SwerveModuleConstants kFrontRightModuleConstants = kModuleConstants
+    public static final SwerveModuleConstants kFrontRightModuleConstants = kModuleConstants
         .createModuleConstants(
             kFrontRightTurnMotorId,
             kFrontRightDriveMotorId,
@@ -211,7 +213,7 @@ public final class Constants {
     private static final double kBackLeftXPosInches = -10.25;
     private static final double kBackLeftYPosInches = 10.25;
 
-    private static final SwerveModuleConstants kBackLeftModuleConstants = kModuleConstants
+    public static final SwerveModuleConstants kBackLeftModuleConstants = kModuleConstants
         .createModuleConstants(
             kBackLeftTurnMotorId,
             kBackLeftDriveMotorId,
@@ -229,7 +231,7 @@ public final class Constants {
     private static final double kBackRightXPosInches = -10.25;
     private static final double kBackRightYPosInches = -10.25;
 
-    private static final SwerveModuleConstants kBackRightModuleConstants = kModuleConstants
+    public static final SwerveModuleConstants kBackRightModuleConstants = kModuleConstants
         .createModuleConstants(
             kBackRightTurnMotorId,
             kBackRightDriveMotorId,
@@ -239,11 +241,5 @@ public final class Constants {
             Units.inchesToMeters(kBackRightYPosInches),
             kInvertRightSide);
 
-    public static final DrivetrainSubsystem kDrivetrainSubsys = new DrivetrainSubsystem(
-        kDrivetrainConstants,
-        kFrontLeftModuleConstants,
-        kFrontRightModuleConstants,
-        kBackLeftModuleConstants,
-        kBackRightModuleConstants);
-  }
+ }
 }

@@ -33,22 +33,28 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
 
   // Sensors
   @Log
-  private boolean hasNote;
+  public boolean hasNote = true;
 
-  public final DigitalInput colorSensor = new DigitalInput(1);
+  private final DigitalInput sensor1 = new DigitalInput(kSensor1Id);
+  public final DigitalInput sensor2 = new DigitalInput(kSensor2Id);
 
   public IntakeSubsystem() {
     configIntakeSubsys();
   }
 
-  public boolean getColorSensor() {
-    return colorSensor.get();
+  public boolean getSensor1() {
+    return sensor1.get();
+  }
+
+  public boolean getSensor2() {
+    return sensor2.get();
   }
 
   public Command runIntake(DoubleSupplier percentage) {
     return runEnd(() -> {
       intakeMotor.set(percentage.getAsDouble());
-    }, () -> {
+    },
+    () -> {
       intakeMotor.set(0.0);
     });
   }
@@ -63,7 +69,7 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
 
     intakeVolts = (intakeMotor.getAppliedOutput() * 12);
 
-    hasNote = getColorSensor();
+    hasNote = getSensor1() || getSensor2();
   }
 
   private void configIntakeSubsys() {

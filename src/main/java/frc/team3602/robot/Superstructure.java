@@ -8,7 +8,7 @@ package frc.team3602.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-
+import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
 import frc.team3602.robot.subsystems._PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
@@ -19,6 +19,7 @@ public class Superstructure {
   private final IntakeSubsystem intakeSubsys;
   private final _PivotSubsystem pivotSubsys;
   private final ShooterSubsystem shooterSubsys;
+  private final DrivetrainSubsystem driveSubsys;
   // private final ClimberSubsystem climberSubsys;
   private final Vision vision;
 
@@ -29,8 +30,9 @@ public class Superstructure {
     }
   };
 
-  public Superstructure(IntakeSubsystem intakeSubsys, _PivotSubsystem pivotSubsys, ShooterSubsystem shooterSubsys,
+  public Superstructure(IntakeSubsystem intakeSubsys, _PivotSubsystem pivotSubsys, DrivetrainSubsystem driveSubsys, ShooterSubsystem shooterSubsys,
       Vision vision) {
+    this.driveSubsys = driveSubsys;    
     this.intakeSubsys = intakeSubsys;
     this.pivotSubsys = pivotSubsys;
     this.shooterSubsys = shooterSubsys;
@@ -82,7 +84,7 @@ public class Superstructure {
   public Command twoNoteMiddle() {
     return Commands.sequence(
         Commands.print("Intaking Note"),
-        intakeSubsys.runIntake(() -> 0.4).until(() -> intakeSubsys.getColorSensor()),
+        intakeSubsys.runIntake(() -> 0.4),
         Commands.waitSeconds(0.2),
         // intake speed .25>.75>.5>.4
         // Commands.print("Spinning Up Shooter"),
@@ -142,7 +144,7 @@ public class Superstructure {
         pivotSubsys.runSetAngle(() -> 9.0).until(() -> pivotSubsys.isAtPosition),
 
         Commands.print("Intaking Note"),
-        intakeSubsys.runIntake(() -> 0.50).until(() -> intakeSubsys.getColorSensor())
+        intakeSubsys.runIntake(() -> 0.50)
     // Commands.waitSeconds(0.2)
     // intake speed .25>.75 same as twoNoteMiddle>.4>.35>.3>.27>.25>.2
     );
@@ -188,7 +190,7 @@ public class Superstructure {
         // angle 20>16>11>8>5>6>16>18>20
 
         Commands.print("Intaking Note"),
-        intakeSubsys.runIntake(() -> 0.27).until(() -> intakeSubsys.getColorSensor())
+        intakeSubsys.runIntake(() -> 0.27)
     // intake speed .4>.3>.27
     // Commands.waitSeconds(0.2)
     );
@@ -328,7 +330,7 @@ public class Superstructure {
         intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2),
 
         Commands.print("Intaking Note"),
-        intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getColorSensor()),
+        intakeSubsys.runIntake(() -> 0.75),
         // intake speed .25>.5>.7 made parrallel to copy of move>.25>.75
 
         // Commands.print("Spinning Up Shooter"),
@@ -370,7 +372,7 @@ public class Superstructure {
   public Command twoNoteRightStart() {
     return Commands.sequence(
         Commands.print("Intaking Note"),
-        intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()),
+        intakeSubsys.runIntake(() -> 0.25),
         // intake speed .25>.5>.7 made parrallel to copy of move>.25
 
         // Commands.print("Spinning Up Shooter"),
@@ -435,13 +437,48 @@ public class Superstructure {
     // );
   }
 
-  public Command pickupCmd() {
+ public Command autonPickupCmd() {
     return Commands.sequence(
-        pivotSubsys.setAngle(() -> 1.75),
-        intakeSubsys.runIntake(() -> 0.25).until(() -> intakeSubsys.getColorSensor()),
-        pivotSubsys.setAngle(() -> 25));
+        pivotSubsys.setAngle(() -> 9), // 1.75>7>15>11>9
+        intakeSubsys.runIntake(() -> 0.6).until(() -> intakeSubsys.getSensor1()),
+        intakeSubsys.runIntake(() -> 0.3).until(() -> intakeSubsys.getSensor2()),
+        pivotSubsys.setAngle(() -> 20))
+        .alongWith(driveSubsys.turnTowardNote());
   }
 
+  public Command pickupCmd() {
+    return Commands.sequence(
+        pivotSubsys.runSetAngle(() -> 9), // 1.75>7>15>11>9
+        intakeSubsys.runIntake(() -> 0.6).until(() -> intakeSubsys.getSensor1()),
+        intakeSubsys.runIntake(() -> 0.3).until(() -> intakeSubsys.getSensor2()),
+        pivotSubsys.setAngle(() -> 20))
+        .alongWith(driveSubsys.turnTowardNote());
+  }
+ 
+  public Command getNote(){
+    return Commands.sequence(
+      Commands.print("Setting Angle"),
+    pivotSubsys.runSetAngle(() -> 11).until(() -> pivotSubsys.isAtPosition),
+    Commands.print("At Angle"),
+    Commands.parallel(
+      Commands.print("parallel bruh"),
+    intakeSubsys.runIntake(() -> 0.5).until(() -> intakeSubsys.getSensor1()),
+    driveSubsys.driveTowardNote().until(() -> intakeSubsys.getSensor2())),
+
+    pivotSubsys.runSetAngle(() -> 15).until (() -> pivotSubsys.isAtPosition)
+    );
+  }
+
+  public Command aimSpeakerCmd() {
+    return Commands.parallel(
+      shooterSubsys.runShooterSpeed(0.8, 0.8),
+      pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle),
+      driveSubsys.turnTowardSpeaker()
+    );
+      
+
+
+  }
   public Command trapCmd() {
     return Commands.sequence();
   }
@@ -478,7 +515,7 @@ public class Superstructure {
         intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2),
 
         Commands.print("Intaking Note"),
-        intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getColorSensor()),
+        intakeSubsys.runIntake(() -> 0.75),
         // intake speed .25>.5>.7 made parrallel to copy of move>.25>.75
 
         // Commands.print("Spinning Up Shooter"),
@@ -545,13 +582,13 @@ public Command oneLeftMoveShort() {
 
          Commands.print("Setting Angle"),
         
-        pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition)),
+        // pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition)),
         
-        pivotSubsys.runSetAngle(() -> 55.0).until(() -> pivotSubsys.isAtPosition),
+        // pivotSubsys.runSetAngle(() -> 55.0).until(() -> pivotSubsys.isAtPosition),
 
-        pivotSubsys.runSetAngle(() -> 80.0).until(() -> pivotSubsys.isAtPosition),
+        // pivotSubsys.runSetAngle(() -> 80.0).until(() -> pivotSubsys.isAtPosition),
 
-        pivotSubsys.runSetAngle(() -> 100.0).until(() -> pivotSubsys.isAtPosition)
+        pivotSubsys.runSetAngle(() -> 100.0).until(() -> pivotSubsys.isAtPosition))
         );
         
       }

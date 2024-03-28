@@ -9,6 +9,7 @@ package frc.team3602.robot.subsystems;
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
@@ -36,6 +37,9 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
   public final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
   private final CANSparkMax pivotFollower = new CANSparkMax(kPivotFollowerId, MotorType.kBrushless);
+  private final SparkLimitSwitch lowLimitSwitch = pivotMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
+  private final SparkLimitSwitch highLimitSwitch = pivotMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
+
 
   // Encoders
   private final DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(2);
@@ -47,7 +51,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   
   // Controls
   @Log
-  public boolean isAtPosition;
+  public boolean isAtPosition, lowLimit, highLimit;
 
   @Log
   public double encoderValue;
@@ -86,9 +90,9 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
   public boolean atPosition() {
     var target = angle;
-    var tolerance =2;
+    var tolerance = 2;
 
-    return ((MathUtil.isNear(target, getDegrees(), tolerance))&&(angle <= 80));
+    return ((MathUtil.isNear(target, getDegrees(), tolerance)));
   }
 
   public Command runPivot(DoubleSupplier percentage) {
@@ -109,24 +113,30 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
       var effort = getEffort();
       this.effort = effort;
-      if (atPosition()) {
-        pivotMotor.setVoltage(0);
-       }
-       else{
-      pivotMotor.setVoltage(effort);}
+      // if (atPosition()) {
+      //   pivotMotor.setVoltage(0);
+      //  }
+      //  else{
+      pivotMotor.setVoltage(effort);//}
     });
   }
 
+
+
   private double getEffort() {
     // var ffEfort = feedforward.calculate(Units.degreesToRadians(angle), 0);
-    var ffEfort = feedforward.calculate(Units.degreesToRadians(getDegrees()), 0);
+    var ffEffort = feedforward.calculate(Units.degreesToRadians(getDegrees()), 0);
+   
+   //var ffEffort = 2.55 * Math.cos(Units.degreesToRadians(getDegrees()));
 
     var pidEffort = controller.calculate(getDegrees(), angle);
+   
+    //double pidEffort = ((angle - getDegrees()) / ((angle - getDegrees() == 0.0) ? 1.0 :  Math.abs(angle - getDegrees())))*.5;
 
-    this.ffEffort = ffEfort;
+    this.ffEffort = ffEffort;
     this.pidEffort = pidEffort;
 
-    return ffEfort + pidEffort;
+    return ffEffort + pidEffort;
   }
 
   public Command holdAngle() {
@@ -134,11 +144,11 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
       var effort = getEffort();
       this.effort = effort;      
       
-      if (atPosition()) {
-        pivotMotor.setVoltage(0);
-       }
-       else{
-      pivotMotor.setVoltage(effort);}
+      // if (atPosition()) {
+      //   pivotMotor.setVoltage(0);
+      //  }
+      //  else{
+      pivotMotor.setVoltage(effort);//}
     });
   }
 
@@ -167,12 +177,15 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     // MathUtil.clamp(angle, 0, 130);
     // this.angle = angle;
     // }
+
+    lowLimit = lowLimitSwitch.isPressed();
+    highLimit = highLimitSwitch.isPressed();
   }
 
   private void configPivotSubsys() {
     // Pivot motor config
     pivotMotor.setIdleMode(IdleMode.kBrake);
-    pivotMotor.setInverted(true);
+    pivotMotor.setInverted(false);
     pivotMotor.setSmartCurrentLimit(kPivotMotorCurrentLimit);
     pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
     // pivotMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
@@ -188,6 +201,9 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     // if (getDegrees() > 300.0) {
     // pivotEncoder.setZeroOffset(offset + (360 - getDegrees()));
     // }
+
+    lowLimitSwitch.enableLimitSwitch(true);
+    highLimitSwitch.enableLimitSwitch(true);
 
     pivotMotor.burnFlash();
     pivotFollower.burnFlash();

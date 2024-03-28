@@ -26,6 +26,7 @@ public class Vision {
   public final AprilTagFieldLayout kFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
   private final PhotonCamera photonCamera = new PhotonCamera(kPhotonCameraName);
+  private final PhotonCamera photonNote = new PhotonCamera(kNoteCameraName);
   private final PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(kFieldLayout,
       PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, photonCamera, kRobotToCamera);
 
@@ -37,6 +38,10 @@ public class Vision {
 
   public PhotonPipelineResult getLatestResult() {
     return photonCamera.getLatestResult();
+  }
+
+  public PhotonPipelineResult getNoteResult() {
+    return photonNote.getLatestResult();
   }
 
   public Optional<EstimatedRobotPose> getEstimatedRobotPose() {

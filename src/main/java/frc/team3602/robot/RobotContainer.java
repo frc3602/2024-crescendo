@@ -33,8 +33,16 @@ import monologue.Annotations.Log;
 public class RobotContainer implements Logged {
   private final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
+   public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
+  public final CommandXboxController guitarController = new CommandXboxController(kGuitarController);
   // Subsystems
-  private final DrivetrainSubsystem driveSubsys = kDrivetrainSubsys;
+  private final DrivetrainSubsystem driveSubsys = new DrivetrainSubsystem(
+    kDrivetrainConstants,
+    xboxController,
+    kFrontLeftModuleConstants,
+    kFrontRightModuleConstants,
+    kBackLeftModuleConstants,
+    kBackRightModuleConstants);
   public final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final _PivotSubsystem pivotSubsys = new _PivotSubsystem();
@@ -45,15 +53,13 @@ public class RobotContainer implements Logged {
   public double targetDistance;
 
   public final Vision vision = new Vision();
-  public final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, shooterSubsys, vision);
+  public final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, driveSubsys, shooterSubsys, vision);
 
   // Operator interfaces
   private SendableChooser<Double> polarityChooser = new SendableChooser<>();
 
   private double _kMaxSpeed = kMaxSpeed, _kMaxAngularRate = kMaxAngularRate;
 
-  public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
-  public final CommandXboxController guitarController = new CommandXboxController(kGuitarController);
 
   // Autonomous
   private final Telemetry logger = new Telemetry(_kMaxSpeed);
@@ -61,8 +67,12 @@ public class RobotContainer implements Logged {
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
-
+    NamedCommands.registerCommand("aimSpeakerCmd", superstructure.aimSpeakerCmd());
     NamedCommands.registerCommand("ampScoreCommand", superstructure.ampScoreCommand());
+    NamedCommands.registerCommand("autonPickupCmd", superstructure.autonPickupCmd());
+        NamedCommands.registerCommand("getNote", superstructure.getNote());
+
+
 
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
     NamedCommands.registerCommand("oneStartNoteMiddleAmpSide", superstructure.oneStartNoteMiddleAmpSide());
@@ -98,13 +108,7 @@ public class RobotContainer implements Logged {
     NamedCommands.registerCommand("shootFarCenter", superstructure.shootFarCenter());
     NamedCommands.registerCommand("shootFarInnerSource", superstructure.shootFarInnerSource());
     NamedCommands.registerCommand("shootFarSource", superstructure.shootFarSource());
-
-
-
-
  */
-
-
 
 
 
@@ -132,14 +136,12 @@ public class RobotContainer implements Logged {
             () -> driveSubsys.fieldCentricDrive
        .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() *
                     _kMaxSpeed)
-       .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftY() *
+       .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftX() *
                     _kMaxSpeed)
- 
                 .withRotationalRate(-xboxController.getRightX() *
                     _kMaxAngularRate)));
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
-
     // shooterSubsys.setDefaultCommand(shooterSubsys.runShooterSpeed());
 
     // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
@@ -155,7 +157,7 @@ public class RobotContainer implements Logged {
     // Xbox controls
     xboxController.a().whileTrue(superstructure.pickupCmd()).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.rightTrigger().onTrue(shooterSubsys.runShooterSpeed(0.8, 0.8))
+    xboxController.rightTrigger().onTrue(superstructure.aimSpeakerCmd())
         .onFalse(shooterSubsys.stopMotorsCmd());
 
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.6))
