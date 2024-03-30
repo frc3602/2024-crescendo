@@ -24,8 +24,6 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import static edu.wpi.first.units.Units.*;
 
-import frc.team3602.robot.subsystems.DrivetrainSubsystem;
-
 public final class Constants {
   public final class OperatorInterfaceConstants {
     public final static int kXboxControllerPort = 0;
@@ -42,11 +40,11 @@ public final class Constants {
      * Conversion factor in inches per turn calculated as follows:
      * Drum diameter*pi/gear ratio
      */
-    public static final double kHeightConvFact = (2.0 * Math.PI) / 125.0;
+    public static final double kHeightConvFact = (2.0 * Math.PI) / 45.0;
 
     // Retracted height of arms from floor. The arm postion will be set to this on
     // init
-    public static final double kRetractedHeight = 47.75;
+    public static final double kExtendedHeight = 47;
 
     // PID tuning constants :)
     public static double kP = 10.0;

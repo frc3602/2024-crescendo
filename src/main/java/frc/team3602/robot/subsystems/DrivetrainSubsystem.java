@@ -8,13 +8,12 @@ package frc.team3602.robot.subsystems;
 
 import java.util.function.Supplier;
 
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -28,6 +27,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -56,7 +56,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
   public final Vision vision = new Vision();
   private CommandXboxController xboxController;
 
-  private final PIDController noteTurnController = new PIDController(0.04, 0.0, 0.001);
+  private final PIDController noteTurnController = new PIDController(3, 0.0, 0.001);//kp = 3>2>0.5 kd0.001>0
   private final PIDController turnController = new PIDController(0.08, 0.0, 0.001);
   private final PIDController strafeController = new PIDController(0.5, 0.0, 0.0);
   private final PIDController speakerTurnController = new PIDController(0.12, 0.0, 0.001);
@@ -196,39 +196,44 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
   }
 
   @Log
-  public boolean atHeading() {
-    var target = 0;
-    var tolerance = 2;
-    var heading = 0.0;
-    var result = vision.getNoteResult();
-
-    if (result.hasTargets()) {
-      heading = (result.getBestTarget().getYaw());
-    } else {
-      heading = 100.0;
-    }
-
-    return ((MathUtil.isNear(target, heading, tolerance)));
-  }
-
-  @Log
   double xSpeed = 0;
+  @Log
+  double rotationSpeed = 0.0;
+  @Log
+  boolean targeted = false;
+  @Log
+  double targetHeading = 0;
 
   public Command driveTowardNote() {
     return run(() -> {
-      double rotationSpeed = 0.0;
+
+      double cam2note, x, y;
 
       var result = vision.getNoteResult();
 
       if (result.hasTargets()) {
-        rotationSpeed = noteTurnController.calculate(result.getBestTarget().getYaw(), 0.0);
-        if (atHeading()) {
-          xSpeed = 0.3;
+
+        targeted = true;
+        cam2note = PhotonUtils.calculateDistanceToTargetMeters(0.254, 0, -0.4014,
+            Units.degreesToRadians(result.getBestTarget().getPitch()));
+        x = cam2note * Math.sin(Units.degreesToRadians(result.getBestTarget().getYaw()));
+        y = cam2note * Math.cos(Units.degreesToRadians(result.getBestTarget().getYaw())) + 0.5842;
+        targetHeading = heading - (Math.atan(x / y));
+       }
+
+        if (MathUtil.isNear(targetHeading, heading, 0.2)) {
+          xSpeed = 0.8;
+          //TODO - change xspeed to a faster speed
         } else {
           xSpeed = 0;
         }
+      
+
+      if (targeted) {
+        rotationSpeed = noteTurnController.calculate(heading, targetHeading);
       } else {
-        rotationSpeed = 0.0;
+        rotationSpeed = 0.8;
+       //TODO - change rotation speed to small number
         xSpeed = 0.0;
       }
 

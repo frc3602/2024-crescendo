@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -36,7 +37,9 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
   public boolean hasNote = true;
 
   private final DigitalInput sensor1 = new DigitalInput(kSensor1Id);
-  public final DigitalInput sensor2 = new DigitalInput(kSensor2Id);
+  private final DigitalInput sensor2 = new DigitalInput(kSensor2Id);
+
+  public final Spark blinkin = new Spark(0);
 
   public IntakeSubsystem() {
     configIntakeSubsys();
@@ -70,6 +73,9 @@ public class IntakeSubsystem extends SubsystemBase implements Logged {
     intakeVolts = (intakeMotor.getAppliedOutput() * 12);
 
     hasNote = getSensor1() || getSensor2();
+
+    // if(hasNote) blinkin.setVoltage(0.99);
+    // else blinkin.setVoltage(0.77);
   }
 
   private void configIntakeSubsys() {

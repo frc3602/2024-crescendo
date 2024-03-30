@@ -6,17 +6,15 @@
 
 package frc.team3602.robot;
 
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+// import edu.wpi.first.wpilibj.PowerDistribution;
+// import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
-//import frc.team3602.robot.subsystems.LEDSubsystem;
 import frc.team3602.robot.subsystems._PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 import frc.team3602.robot.subsystems.ClimberSubsystem;
@@ -31,7 +29,7 @@ import monologue.Logged;
 import monologue.Annotations.Log;
 
 public class RobotContainer implements Logged {
-  private final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
+  // private final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
    public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
   public final CommandXboxController guitarController = new CommandXboxController(kGuitarController);
@@ -47,7 +45,6 @@ public class RobotContainer implements Logged {
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final _PivotSubsystem pivotSubsys = new _PivotSubsystem();
   private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
-  // private final LEDSubsystem ledSubsys = new LEDSubsystem();
 
   @Log
   public double targetDistance;
@@ -62,7 +59,7 @@ public class RobotContainer implements Logged {
 
 
   // Autonomous
-  private final Telemetry logger = new Telemetry(_kMaxSpeed);
+  // private final Telemetry logger = new Telemetry(_kMaxSpeed);
 
   private final SendableChooser<Command> autoChooser;
 
@@ -72,7 +69,8 @@ public class RobotContainer implements Logged {
     NamedCommands.registerCommand("autonPickupCmd", superstructure.autonPickupCmd());
         NamedCommands.registerCommand("getNote", superstructure.getNote());
 
-
+        NamedCommands.registerCommand("autonShootCmd", superstructure.autonShootCmd());
+        //NamedCommands.registerCommand("intakeCmd", superstructure.intakeCmd());
 
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
     NamedCommands.registerCommand("oneStartNoteMiddleAmpSide", superstructure.oneStartNoteMiddleAmpSide());
@@ -144,7 +142,8 @@ public class RobotContainer implements Logged {
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
     // shooterSubsys.setDefaultCommand(shooterSubsys.runShooterSpeed());
 
-    // climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+    climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+
   }
 
   private void configButtonBindings() {
@@ -174,10 +173,10 @@ public class RobotContainer implements Logged {
     xboxController.leftTrigger().whileTrue(driveSubsys.alignWithTarget());
 
     // Guitar controls
-    guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 26.75));
-    // height 28>27
+    guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 26.5));
+    // height 28>27 >redone>30>28>26.5
 
-    guitarController.pov(0).onTrue(climberSubsys.setHeight(() -> 47.75));
+    guitarController.pov(0).onTrue(climberSubsys.setHeight(() -> 47));
 
     // Triggers
     // new

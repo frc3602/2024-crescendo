@@ -12,7 +12,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -84,7 +83,8 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     configPivotSubsys();
   }
 
-  private double getDegrees() {
+  //getDegrees was private
+  public double getDegrees() {
     return (pivotEncoder.getAbsolutePosition() * 360) - absoluteOffset;
   }
 

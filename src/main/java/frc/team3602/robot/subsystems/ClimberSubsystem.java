@@ -8,8 +8,6 @@ package frc.team3602.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -18,7 +16,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -58,17 +55,17 @@ public class ClimberSubsystem extends SubsystemBase implements Logged {
     // SmartDashboard.putNumber("Integral", kI);
     // SmartDashboard.putNumber(" Derivitave", kD);
 
-    rightTarget = 26.75;
-    leftTarget = 26.75;
-//target 28>27
+    rightTarget = 26.5;
+    leftTarget = 26.5;
+//target 28>27 >redone>30>28
     
     resetEncoders();
     configClimberSubsys();
   }
 
   public void resetEncoders() {
-    rightEncoder.setPosition(kRetractedHeight);
-    leftEncoder.setPosition(kRetractedHeight);
+    rightEncoder.setPosition(kExtendedHeight);
+    leftEncoder.setPosition(kExtendedHeight);
   }
 
   @Log

@@ -6,6 +6,8 @@
 
 package frc.team3602.robot;
 
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
@@ -60,13 +62,12 @@ public class Superstructure {
         pivotSubsys.runSetAngle(() -> 23.0).until(() -> pivotSubsys.isAtPosition),
         // initial30>25>23
         Commands.waitSeconds(0.2),
-        Commands.waitSeconds(0.2),
 
         Commands.print("Shooting Note"),
         intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
 
-        // Commands.print("Stopping Shooter"),
-        // shooterSubsys.stopShooter(),
+        Commands.print("Stopping Shooter"),
+        shooterSubsys.stopShooter(),
 
         Commands.print("Setting Angle"),
         pivotSubsys.runSetAngle(() -> 16.0).until(() -> pivotSubsys.isAtPosition),
@@ -84,7 +85,7 @@ public class Superstructure {
   public Command twoNoteMiddle() {
     return Commands.sequence(
         Commands.print("Intaking Note"),
-        intakeSubsys.runIntake(() -> 0.4),
+        intakeSubsys.runIntake(() -> 0.7).until(() -> intakeSubsys.getSensor1()),
         Commands.waitSeconds(0.2),
         // intake speed .25>.75>.5>.4
         // Commands.print("Spinning Up Shooter"),
@@ -92,10 +93,12 @@ public class Superstructure {
         // shooterSubsys.isAtSpeed),
         // Commands.waitSeconds(0.2),
 
-        Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 41).until(() -> pivotSubsys.isAtPosition),
-        // 40 adjusted path to frc field>37>39>36>37>39>41
-        Commands.waitSeconds(0.2),
+        // Commands.print("Setting Angle"),
+        // pivotSubsys.runSetAngle(() -> 41).until(() -> pivotSubsys.isAtPosition),
+        // // 40 adjusted path to frc field>37>39>36>37>39>41
+        // Commands.waitSeconds(0.2),
+
+        aimSpeakerCmd(),
 
         Commands.print("Waiting for Spinup"),
         Commands.waitSeconds(0.2),
@@ -399,90 +402,6 @@ public class Superstructure {
     );
   }
 
-  // public Command oneNoteMoveRight() {
-  // return Commands.sequence(
-  // Commands.print("Spinning Up Shooter"),
-  // shooterSubsys.runShooterSpeed(0.7, 0.7).until(() ->
-  // shooterSubsys.isAtVelocity),
-  // Commands.waitSeconds(0.2),
-
-  // Commands.print("Setting Angle"),
-  // pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition));
-  // }
-  // // initial30>25>23 copy and pasted>31>28>23>21
-
-  public Command oneNoteMoveRightFirst() {
-    return Commands.sequence(
-        Commands.print("Spinning Up Shooter"),
-        shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
-        Commands.waitSeconds(0.2),
-
-        Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition),
-        // angle is same as oneNoteLeftFirst> realized path shoots at bumper-same as two
-        // note middle>25>23
-
-        Commands.waitSeconds(0.2),
-
-        Commands.print("Shooting Note"),
-        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
-
-        // Commands.print("Stopping Shooter"),
-        // shooterSubsys.stopShooter(),
-
-        Commands.print("Setting Angle"),
-        pivotSubsys.runSetAngle(() -> 15.0).until(() -> pivotSubsys.isAtPosition));
-    // Commands.waitSeconds(0.2),
-    // intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
-    // );
-  }
-
- public Command autonPickupCmd() {
-    return Commands.sequence(
-        pivotSubsys.setAngle(() -> 9), // 1.75>7>15>11>9
-        intakeSubsys.runIntake(() -> 0.6).until(() -> intakeSubsys.getSensor1()),
-        intakeSubsys.runIntake(() -> 0.3).until(() -> intakeSubsys.getSensor2()),
-        pivotSubsys.setAngle(() -> 20))
-        .alongWith(driveSubsys.turnTowardNote());
-  }
-
-  public Command pickupCmd() {
-    return Commands.sequence(
-        pivotSubsys.runSetAngle(() -> 9), // 1.75>7>15>11>9
-        intakeSubsys.runIntake(() -> 0.6).until(() -> intakeSubsys.getSensor1()),
-        intakeSubsys.runIntake(() -> 0.3).until(() -> intakeSubsys.getSensor2()),
-        pivotSubsys.setAngle(() -> 20))
-        .alongWith(driveSubsys.turnTowardNote());
-  }
- 
-  public Command getNote(){
-    return Commands.sequence(
-      Commands.print("Setting Angle"),
-    pivotSubsys.runSetAngle(() -> 11).until(() -> pivotSubsys.isAtPosition),
-    Commands.print("At Angle"),
-    Commands.parallel(
-      Commands.print("parallel bruh"),
-    intakeSubsys.runIntake(() -> 0.5).until(() -> intakeSubsys.getSensor1()),
-    driveSubsys.driveTowardNote().until(() -> intakeSubsys.getSensor2())),
-
-    pivotSubsys.runSetAngle(() -> 15).until (() -> pivotSubsys.isAtPosition)
-    );
-  }
-
-  public Command aimSpeakerCmd() {
-    return Commands.parallel(
-      shooterSubsys.runShooterSpeed(0.8, 0.8),
-      pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle),
-      driveSubsys.turnTowardSpeaker()
-    );
-      
-
-
-  }
-  public Command trapCmd() {
-    return Commands.sequence();
-  }
-
   public Command firstFourNoteAutonRight() {
     return Commands.sequence(
         Commands.print("Spinning Up Shooter"),
@@ -566,31 +485,155 @@ public Command oneLeftMoveShort() {
 
         Commands.print("Shooting Note"),
         intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)
-      );
-        
-
+      ); 
     }
 
-      public Command ampScoreCommand(){
+    
+  public Command oneNoteMoveRightFirst() {
+    return Commands.sequence(
+        Commands.print("Spinning Up Shooter"),
+        shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.isAtVelocity),
+        Commands.waitSeconds(0.2),
+
+        Commands.print("Setting Angle"),
+        pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition),
+        // angle is same as oneNoteLeftFirst> realized path shoots at bumper-same as two
+        // note middle>25>23
+
+        Commands.waitSeconds(0.2),
+
+        Commands.print("Shooting Note"),
+        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+
+        // Commands.print("Stopping Shooter"),
+        // shooterSubsys.stopShooter(),
+
+        Commands.print("Setting Angle"),
+        pivotSubsys.runSetAngle(() -> 15.0).until(() -> pivotSubsys.isAtPosition));
+    // Commands.waitSeconds(0.2),
+    // intakeSubsys.runIntake(() -> 0.65).withTimeout(0.2)
+    // );
+  }
+  // public Command oneNoteMoveRight() {
+  // return Commands.sequence(
+  // Commands.print("Spinning Up Shooter"),
+  // shooterSubsys.runShooterSpeed(0.7, 0.7).until(() ->
+  // shooterSubsys.isAtVelocity),
+  // Commands.waitSeconds(0.2),
+
+  // Commands.print("Setting Angle"),
+  // pivotSubsys.runSetAngle(() -> 21.0).until(() -> pivotSubsys.isAtPosition));
+  // }
+  // // initial30>25>23 copy and pasted>31>28>23>21
+
+
+ public Command autonPickupCmd() {
+    return Commands.sequence(
+        pivotSubsys.setAngle(() -> 9), // 1.75>7>15>11>9
+        intakeSubsys.runIntake(() -> 0.6).until(() -> intakeSubsys.getSensor1()),
+        intakeSubsys.runIntake(() -> 0.3).until(() -> intakeSubsys.getSensor2()),
+        pivotSubsys.setAngle(() -> 20))
+        .alongWith(driveSubsys.turnTowardNote());
+  }
+
+  public Command pickupCmd() {
+    return Commands.sequence(
+        pivotSubsys.runSetAngle(() -> 9), // 1.75>7>15>11>9
+        intakeSubsys.runIntake(() -> 0.6).until(() -> intakeSubsys.getSensor1()),
+        intakeSubsys.runIntake(() -> 0.3).until(() -> intakeSubsys.getSensor2()),
+        pivotSubsys.setAngle(() -> 20))
+        .alongWith(driveSubsys.turnTowardNote());
+  }
+ 
+  public Command getNote(){
+    return Commands.sequence(
+    pivotSubsys.runSetAngle(() -> 11).until(() -> pivotSubsys.isAtPosition),
+    Commands.parallel(
+    intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getSensor1()),
+    driveSubsys.driveTowardNote().until(() -> intakeSubsys.getSensor1())),
+    Commands.parallel(
+    pivotSubsys.runSetAngle(() -> 25).until (() -> pivotSubsys.isAtPosition),
+    intakeSubsys.runIntake(() -> 0.15).until(() -> intakeSubsys.getSensor2())
+    ));
+  }
+
+  public Command aimSpeakerCmd() {
+    return Commands.parallel(
+      shooterSubsys.runShooterSpeed(0.8, 0.8),
+      pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle),
+      driveSubsys.turnTowardSpeaker()
+    );
+  }
+
+
+
+  // public boolean position23() {
+  //   var target = 23;
+  //   var tolerance = 2;
+
+  //   return ((MathUtil.isNear(target, pivotSubsys.getDegrees(), tolerance)));
+  // }
+
+
+ public Command autonShootCmd() {
+  return Commands.sequence(
+  Commands.print("firstbro"),
+  Commands.parallel(
+    Commands.print("parallelBRUV"),
+      shooterSubsys.runShooterSpeed(0.8, 0.8).until(() -> shooterSubsys.isAtVelocity),
+      pivotSubsys.runSetAngle(() -> 23).until(() -> pivotSubsys.encoderValue <= 24),
+      intakeSubsys.stopIntake()),
+
+  Commands.waitSeconds(0.2),
+  Commands.print("BRUHHHHHHHHH"),
+
+    intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+
+     Commands.print("Setting Angle"),
+        pivotSubsys.runSetAngle(() -> 9.0).until(() -> pivotSubsys.isAtPosition)
+        // Commands.waitSeconds(0.2)
+   );
+  }
+
+
+
+
+  //   public Command intakeCmd(){
+  //     return run(() -> {
+    
+  //     var position = pivotSubsys.atPosition();
+
+  //  if (position = true){
+  //   return Commands.sequence(
+  //   Commands.print("intakeBROPAL"),
+  //   intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)); 
+  //    } else {
+  //     return Commands.sequence(
         
-        return Commands.sequence(
 
-        Commands.parallel(
+  //     );
 
+  //    }
+  //   }    );
+  // }
+
+  public Command trapCmd() {
+    return Commands.sequence();
+  }
+
+  public Command ampScoreCommand(){  
+    return Commands.sequence(
+      Commands.parallel(
         Commands.print("Spinning Up Shooter"),
         shooterSubsys.runShooterSpeed(0.2, 0.2).until(() -> shooterSubsys.isAtVelocity),
 
          Commands.print("Setting Angle"),
         
         // pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition)),
-        
         // pivotSubsys.runSetAngle(() -> 55.0).until(() -> pivotSubsys.isAtPosition),
-
         // pivotSubsys.runSetAngle(() -> 80.0).until(() -> pivotSubsys.isAtPosition),
-
         pivotSubsys.runSetAngle(() -> 100.0).until(() -> pivotSubsys.isAtPosition))
         );
-        
       }
 
 
@@ -602,6 +645,21 @@ public Command oneLeftMoveShort() {
 /*
 //LEGIBLE FREAKING AUTON COMMANDS  
  
+  public Command aimSpeakerCmd() {
+    return Commands.parallel(
+      shooterSubsys.runShooterSpeed(0.8, 0.8),
+      pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle),
+      driveSubsys.turnTowardSpeaker()
+     intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)
+    );
+  }
+
+  public Command () {
+    return Commands.sequence(
+      intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2)
+    );
+  }
+
   public Command sideStart() {
     return Commands.sequence(
         Commands.print("Spinning Up Shooter"),

@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6825775190011933,
+      "y": 4.519059807350385
+    },
+    "rotation": -55.71312302279113
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "sideStart"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "sourceToCloseSource"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aimSpeakerCmd"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "closeSourceToCloseCenter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "closeCenterToFarInnerAmp"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "BetterAutons",
+  "choreoAuto": false
+}

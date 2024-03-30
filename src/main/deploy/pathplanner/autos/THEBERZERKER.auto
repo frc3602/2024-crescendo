@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6230802761177554,
+      "y": 4.461828723942754
+    },
+    "rotation": -57.406507876189536
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "sideStart"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "THEBERZERKER"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 6.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootFarAmp"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "BetterAutons",
+  "choreoAuto": false
+}
