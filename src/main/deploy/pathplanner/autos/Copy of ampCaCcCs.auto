@@ -18,81 +18,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "ampCa"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ampCa"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autonPivotGroundCmd"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "autonGetNote"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
           }
         },
         {
           "type": "named",
           "data": {
             "name": "autonCloseNoteShootCmd"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autonShootCmd"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CaCc"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autonGetNote"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autonCloseNoteShootCmd"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autonShootCmd"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CcCs"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autonGetNote"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
           }
         },
         {
@@ -102,10 +55,28 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "csTurn"
+                  "pathName": "CaCc"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autonPivotGroundCmd"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonGetNote"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
           }
         },
         {
@@ -115,9 +86,40 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CcCs"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autonPivotGroundCmd"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "autonShootCmd"
+            "name": "autonGetNote"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonCloseNoteShootCmd"
           }
         }
       ]

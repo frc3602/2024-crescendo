@@ -26,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "getNote"
+            "name": "autonGetNote"
           }
         },
         {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "FcShoot"
+                  "pathName": "FcampShoot"
                 }
               },
               {
@@ -57,19 +57,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "shootFis"
+            "pathName": "sourceShootFis"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "getNote"
+            "name": "autonGetNote"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "FisShoot"
+            "pathName": "FissourceShoot"
           }
         },
         {

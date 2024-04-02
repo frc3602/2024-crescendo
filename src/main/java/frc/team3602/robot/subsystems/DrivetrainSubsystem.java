@@ -239,7 +239,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
        }
 
         if (MathUtil.isNear(targetHeading, heading, 0.2)) {
-          xSpeed = 1;
+          xSpeed = 2;//1>1.5>2
           //xSpeed = 0.8>1
         } else {
           xSpeed = 0;

@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "sideStart"
+            "name": "autonSideShootCmd"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "sourceToCloseSource"
+            "pathName": "sourceCs"
           }
         },
         {
@@ -32,13 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "closeSourceToCloseCenter"
+            "pathName": "CsCc"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "closeCenterToFarInnerAmp"
+            "pathName": "CcFia"
           }
         }
       ]
