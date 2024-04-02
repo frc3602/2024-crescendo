@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7911138899200891,
-      "y": 6.512182255133741
+      "x": 0.6036419765147236,
+      "y": 4.489458978917958
     },
-    "rotation": 61.606980578616984
+    "rotation": -56.82148834060717
   },
   "command": {
     "type": "sequential",
@@ -24,13 +24,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ampCa"
+                  "pathName": "sourceFc"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "autonPivotGroundCmd"
+                  "name": "keepPivot"
                 }
               }
             ]
@@ -43,9 +43,15 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "FcsourceShoot"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "autonCloseNoteShootCmd"
+            "name": "autonShootCmd"
           }
         },
         {
@@ -55,13 +61,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CaCc"
+                  "pathName": "sourceShootFia"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "autonPivotGroundCmd"
+                  "name": "keepPivot"
                 }
               }
             ]
@@ -74,15 +80,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.2
+            "pathName": "FiaampShoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "autonCloseNoteShootCmd"
+            "name": "autonShootCmd"
           }
         },
         {
@@ -92,13 +98,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CcCs"
+                  "pathName": "ampShootFis"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "autonPivotGroundCmd"
+                  "name": "keepPivot"
                 }
               }
             ]
@@ -111,15 +117,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.2
+            "pathName": "FissourceShoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "autonCloseNoteShootCmd"
+            "name": "autonShootCmd"
           }
         }
       ]

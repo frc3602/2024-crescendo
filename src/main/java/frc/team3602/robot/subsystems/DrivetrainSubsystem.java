@@ -188,8 +188,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
           rotationSpeed = speakerTurnController.calculate(result.getBestTarget().getYaw(), 0.0);
         }
       } else {
-        rotationSpeed = 0.5;
-              //rotationSpeed = 0.0
+        rotationSpeed = 0.7;
+              //rotationSpeed = 0.0>.5>.7
 
       }
 

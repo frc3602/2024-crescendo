@@ -70,12 +70,10 @@ public class RobotContainer implements Logged {
     // NamedCommands.registerCommand("autonPickupCmd",
     // superstructure.autonPickupCmd());
     NamedCommands.registerCommand("getNote", superstructure.getNote());
-       
-    NamedCommands.registerCommand("autonMidSourceShootCmd", superstructure.autonMidSourceShootCmd());
+     
+
+    NamedCommands.registerCommand("autonAimMidAmpCmd", superstructure.autonAimMidAmpCmd());
     NamedCommands.registerCommand("autonAimMidSourceCmd", superstructure.autonAimMidSourceCmd());
-
-
-
     NamedCommands.registerCommand("autonGetNote", superstructure.autonGetNote());
     NamedCommands.registerCommand("autonPivotGroundCmd", superstructure.autonPivotGroundCmd());
     NamedCommands.registerCommand("autonAimSpeakerCmd", superstructure.autonAimSpeakerCmd());

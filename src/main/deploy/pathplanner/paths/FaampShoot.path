@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 7.934780484945588,
+        "y": 7.380473222484906
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0,
-        "y": 7.0
+        "x": 6.484339891756709,
+        "y": 7.084464938160646
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 6.0
+        "x": 5.675250581270395,
+        "y": 6.452980598268889
       },
       "prevControl": {
-        "x": 3.0,
-        "y": 6.0
+        "x": 6.452609366757198,
+        "y": 6.846759539672926
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,24 +32,17 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 11.557713204412408,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Main",
-  "previewStartingState": {
-    "rotation": 0,
-    "velocity": 0
-  },
-  "useDefaultConstraints": true
-}alse,
   "folder": "BetterAutons",
   "previewStartingState": {
     "rotation": 0,

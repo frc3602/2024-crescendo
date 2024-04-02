@@ -49,7 +49,7 @@ public class Superstructure {
   // }
 
   public Command inFrameCmd() {
-    return pivotSubsys.setAngle(() -> 45);
+    return pivotSubsys.runSetAngle(() -> 45);
   }
 
   // // DO NOT TOUCH used in twoNoteMiddle, and twoNoteRight Auton
@@ -546,12 +546,12 @@ public class Superstructure {
   // }
 
 
-  public Command autonMidSourceShootCmd() {
+  public Command autonShootCmd() {
     return Commands.sequence(
       
-            // Commands.print("firstAutonAimSpeakerCmd"),
-            //   driveSubsys.turnTowardSpeaker(),
-            //   driveSubsys.stopDriveCmd(),
+            Commands.print("firstAutonAimSpeakerCmd"),
+              driveSubsys.turnTowardSpeaker(),
+              driveSubsys.stopDriveCmd(),
            
         intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
          shooterSubsys.stopMotorsCmd(),
@@ -563,7 +563,17 @@ public class Superstructure {
   public Command autonAimMidSourceCmd() {
     return Commands.parallel(
        Commands.sequence(
-               pivotSubsys.runSetAngle(() -> 50).until(() -> pivotSubsys.encoderValue >= 46),
+               pivotSubsys.runSetAngle(() -> 48).until(() -> pivotSubsys.encoderValue >= 44),
+               pivotSubsys.stopMotors()
+            ),
+            shooterSubsys.runShooterSpeed(0.85, 0.85).until(() -> shooterSubsys.topOut >= 0.65) // speed .8>.65>.75>.85 topout .65>.55>.55>.65
+  );
+  }
+
+    public Command autonAimMidAmpCmd() {
+    return Commands.parallel(
+       Commands.sequence(
+               pivotSubsys.runSetAngle(() -> 54).until(() -> pivotSubsys.encoderValue >= 48),
                pivotSubsys.stopMotors()
             ),
             shooterSubsys.runShooterSpeed(0.85, 0.85).until(() -> shooterSubsys.topOut >= 0.65) // speed .8>.65>.75>.85 topout .65>.55>.55>.65
@@ -596,6 +606,7 @@ public class Superstructure {
   public Command autonGetNote() {
     return Commands.sequence(
         // angle 11>9
+        pivotSubsys.runSetAngle(() -> 9).until(() -> pivotSubsys.isAtPosition),
         Commands.parallel(
             intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getSensor1()),
             driveSubsys.driveTowardNote().until(() -> intakeSubsys.getSensor1())),
@@ -722,16 +733,9 @@ public class Superstructure {
   // Commands.print("autonAimSpeakerCmd")
 
   // );
-  // }
+  // } 
 
-  public Command autonShootCmd() {
-    return Commands.sequence(
-        Commands.print("AutonShootCmd"),
-        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
-        Commands.waitSeconds(0.2),
-        shooterSubsys.stopMotorsCmd(),
-        Commands.print("secondAutonshootcmd"));
-  }
+
 
   // public Command autonGetNote() {
   // return Commands.sequence(

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7753211512129142,
-        "y": 4.496961233580098
+        "x": 5.014165412946212,
+        "y": 6.679920282917489
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9753211512129143,
-        "y": 4.496961233580098
+        "x": 4.017604189054533,
+        "y": 0.828823196107932
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5671635958656545,
-        "y": 4.124382094918037
+        "x": 1.876477599109046,
+        "y": 4.035579609620759
       },
       "prevControl": {
-        "x": 2.498364094630563,
-        "y": 4.18784824935002
+        "x": 4.35308024462203,
+        "y": 0.15787108497294042
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -2.8155566842113084,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Main",
+  "folder": "BetterAutons",
   "previewStartingState": {
-    "rotation": -70.20112364547502,
+    "rotation": 17.35,
     "velocity": 0
   },
   "useDefaultConstraints": true

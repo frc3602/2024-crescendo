@@ -101,9 +101,9 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     });
   }
 
-  public Command setAngle(DoubleSupplier angleDegrees) {
+  public Command setAngle(InterpolatingDoubleTreeMap lerpTable2) {
     return runOnce(() -> {
-      angle = angleDegrees.getAsDouble();
+      angle = ((DoubleSupplier) lerpTable2).getAsDouble();
     });
   }
 
@@ -211,7 +211,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
     // Interpolation table config
     lerpTable.put(4.6, 32.0); // 4.6 feet, 32 degrees
-    lerpTable.put(6.87, 40.0); // 7.65 feet, 42 degrees
+    lerpTable.put(6.87, 42.0); // 7.65 feet, 42 degrees
     lerpTable.put(8.33,44.0); 
     lerpTable.put(9.91,48.0); 
     lerpTable.put(10.95, 50.0); // 10.7 feet, 49.75 degrees
