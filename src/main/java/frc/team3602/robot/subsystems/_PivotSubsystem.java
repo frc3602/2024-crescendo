@@ -113,10 +113,10 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
       var effort = getEffort();
       this.effort = effort;
-      // if (atPosition()) {
-      //   pivotMotor.setVoltage(0);
-      //  }
-      //  else{
+    //  if (atPosition()) {
+    //   holdAngle();
+    //   }
+    //   else{
       pivotMotor.setVoltage(effort);//}
     });
   }
@@ -126,7 +126,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
   private double getEffort() {
     // var ffEfort = feedforward.calculate(Units.degreesToRadians(angle), 0);
     var ffEffort = feedforward.calculate(Units.degreesToRadians(getDegrees()), 0);
-   
+
    //var ffEffort = 2.55 * Math.cos(Units.degreesToRadians(getDegrees()));
 
     var pidEffort = controller.calculate(getDegrees(), angle);
@@ -145,7 +145,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
       this.effort = effort;      
       
       // if (atPosition()) {
-      //   pivotMotor.setVoltage(0);
+      //    runOnce(pivotMotor.setVoltage(0));
       //  }
       //  else{
       pivotMotor.setVoltage(effort);//}
@@ -195,6 +195,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     pivotFollower.follow(pivotMotor, true);
     pivotFollower.setSmartCurrentLimit(kPivotFollowerCurrentLimit);
     pivotFollower.enableVoltageCompensation(pivotFollower.getBusVoltage());
+    controller.setTolerance(1);
 
     // pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
     // double offset = pivotEncoder.getZeroOffset();
@@ -210,11 +211,15 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
 
     // Interpolation table config
     lerpTable.put(4.6, 32.0); // 4.6 feet, 32 degrees
-    lerpTable.put(7.65, 42.0); // 7.65 feet, 42 degrees
-    lerpTable.put(10.7, 49.75); // 10.7 feet, 49.75 degrees
-    lerpTable.put(13.79, 53.0); // 13.79 feet, 53 degrees
-    lerpTable.put(16.9, 52.5); // 16.9 feet, 52.5 degrees
-    lerpTable.put(20.6, 45.0); // 20.6 feet, 45 degrees
+    lerpTable.put(6.87, 40.0); // 7.65 feet, 42 degrees
+    lerpTable.put(8.33,44.0); 
+    lerpTable.put(9.91,48.0); 
+    lerpTable.put(10.95, 50.0); // 10.7 feet, 49.75 degrees
+    lerpTable.put(11.4,51.0); 
+    lerpTable.put(12.53,50.0 ); 
+    lerpTable.put(13.47, 51.0); // 13.79 feet, 53 degrees
+    lerpTable.put(15.24,51.0 ); 
+    lerpTable.put(16.0, 50.0); // 16.9 feet, 52.5 degrees
 
   }
 }

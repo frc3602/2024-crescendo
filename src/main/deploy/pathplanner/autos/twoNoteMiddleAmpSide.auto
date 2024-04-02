@@ -18,25 +18,6 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "twoNoteMiddleAmpSide"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "twoNoteMiddleAmpSide"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "twoNoteMiddleAmpSideEnd"

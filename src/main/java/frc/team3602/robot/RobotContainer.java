@@ -29,18 +29,19 @@ import monologue.Logged;
 import monologue.Annotations.Log;
 
 public class RobotContainer implements Logged {
-  // private final PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
+  // private final PowerDistribution powerDistribution = new PowerDistribution(1,
+  // ModuleType.kRev);
 
-   public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
+  public final CommandXboxController xboxController = new CommandXboxController(kXboxControllerPort);
   public final CommandXboxController guitarController = new CommandXboxController(kGuitarController);
   // Subsystems
   private final DrivetrainSubsystem driveSubsys = new DrivetrainSubsystem(
-    kDrivetrainConstants,
-    xboxController,
-    kFrontLeftModuleConstants,
-    kFrontRightModuleConstants,
-    kBackLeftModuleConstants,
-    kBackRightModuleConstants);
+      kDrivetrainConstants,
+      xboxController,
+      kFrontLeftModuleConstants,
+      kFrontRightModuleConstants,
+      kBackLeftModuleConstants,
+      kBackRightModuleConstants);
   public final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
   private final _PivotSubsystem pivotSubsys = new _PivotSubsystem();
@@ -50,13 +51,13 @@ public class RobotContainer implements Logged {
   public double targetDistance;
 
   public final Vision vision = new Vision();
-  public final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, driveSubsys, shooterSubsys, vision);
+  public final Superstructure superstructure = new Superstructure(intakeSubsys, pivotSubsys, driveSubsys, shooterSubsys,
+      vision);
 
   // Operator interfaces
   private SendableChooser<Double> polarityChooser = new SendableChooser<>();
 
   private double _kMaxSpeed = kMaxSpeed, _kMaxAngularRate = kMaxAngularRate;
-
 
   // Autonomous
   // private final Telemetry logger = new Telemetry(_kMaxSpeed);
@@ -66,11 +67,20 @@ public class RobotContainer implements Logged {
   public RobotContainer() {
     NamedCommands.registerCommand("aimSpeakerCmd", superstructure.aimSpeakerCmd());
     NamedCommands.registerCommand("ampScoreCommand", superstructure.ampScoreCommand());
-    NamedCommands.registerCommand("autonPickupCmd", superstructure.autonPickupCmd());
-        NamedCommands.registerCommand("getNote", superstructure.getNote());
+    // NamedCommands.registerCommand("autonPickupCmd",
+    // superstructure.autonPickupCmd());
+    NamedCommands.registerCommand("getNote", superstructure.getNote());
 
-        NamedCommands.registerCommand("autonShootCmd", superstructure.autonShootCmd());
-        //NamedCommands.registerCommand("intakeCmd", superstructure.intakeCmd());
+        NamedCommands.registerCommand("autonGetNote", superstructure.autonGetNote());
+
+    NamedCommands.registerCommand("autonAimSpeakerCmd", superstructure.autonAimSpeakerCmd());
+    NamedCommands.registerCommand("autonCenterShootCmd", superstructure.autonCenterShootCmd());
+    NamedCommands.registerCommand("autonSideShootCmd", superstructure.autonSideShootCmd());
+    NamedCommands.registerCommand("autonShootCmd", superstructure.autonShootCmd());
+    NamedCommands.registerCommand("keepPivot", superstructure.keepPivot());
+    NamedCommands.registerCommand("autonCloseNoteShootCmd", superstructure.autonCloseNoteShootCmd());
+
+    // NamedCommands.registerCommand("intakeCmd", superstructure.intakeCmd());
 
     NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
     NamedCommands.registerCommand("oneStartNoteMiddleAmpSide", superstructure.oneStartNoteMiddleAmpSide());
@@ -89,26 +99,6 @@ public class RobotContainer implements Logged {
     NamedCommands.registerCommand("threeNoteMiddleAmpSide", superstructure.threeNoteMiddleAmpSide());
     NamedCommands.registerCommand("threeFirstNoteMiddleAmpSide", superstructure.threeFirstNoteMiddleAmpSide());
     // NamedCommands.registerCommand("oneNoteRight", superstructure.oneNoteRight());
-
-/*//LEGIBLE AUTONS--if functional, comment out ALL other auton commands
-  
-    NamedCommands.registerCommand("sideStart", superstructure.sideStart());
-    NamedCommands.registerCommand("centerStart", superstructure.sideStart());
-   
-    NamedCommands.registerCommand("intakeNote", superstructure.intakeNote());
-   
-    NamedCommands.registerCommand("shootCloseAmp", superstructure.shootCloseAmp());
-    NamedCommands.registerCommand("shootCloseCenter", superstructure.shootCloseCenter());
-    NamedCommands.registerCommand("shootCloseSource", superstructure.shootCloseSource());
-   
-    NamedCommands.registerCommand("shootFarAmp", superstructure.shootFarAmp());
-    NamedCommands.registerCommand("shootFarInnerAmp", superstructure.shootFarInnerAmp());
-    NamedCommands.registerCommand("shootFarCenter", superstructure.shootFarCenter());
-    NamedCommands.registerCommand("shootFarInnerSource", superstructure.shootFarInnerSource());
-    NamedCommands.registerCommand("shootFarSource", superstructure.shootFarSource());
- */
-
-
 
     NamedCommands.registerCommand("oneNoteTwistFirst", superstructure.oneNoteLeftFirst());
     NamedCommands.registerCommand("twoNoteTwistStart", superstructure.oneNoteLeftFirst());
@@ -132,9 +122,9 @@ public class RobotContainer implements Logged {
     driveSubsys
         .setDefaultCommand(driveSubsys.applyRequest(
             () -> driveSubsys.fieldCentricDrive
-       .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() *
+                .withVelocityX(polarityChooser.getSelected() * xboxController.getLeftY() *
                     _kMaxSpeed)
-       .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftX() *
+                .withVelocityY(polarityChooser.getSelected() * xboxController.getLeftX() *
                     _kMaxSpeed)
                 .withRotationalRate(-xboxController.getRightX() *
                     _kMaxAngularRate)));
@@ -154,7 +144,8 @@ public class RobotContainer implements Logged {
     // }));
 
     // Xbox controls
-    xboxController.a().whileTrue(superstructure.pickupCmd()).onFalse(intakeSubsys.stopIntake());
+
+    xboxController.a().whileTrue(superstructure.getNote()).onFalse(intakeSubsys.stopIntake());
 
     xboxController.rightTrigger().onTrue(superstructure.aimSpeakerCmd())
         .onFalse(shooterSubsys.stopMotorsCmd());
@@ -162,11 +153,11 @@ public class RobotContainer implements Logged {
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.6))
         .onFalse(intakeSubsys.stopIntake());
     // .75>.6
-    xboxController.x().onTrue(superstructure.inFrameCmd());
+    xboxController.x().onTrue(superstructure.aimTrap());
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-   xboxController.leftBumper().whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle)); // 23
+    xboxController.leftBumper().whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle)); // 23
 
     xboxController.rightBumper().onTrue(superstructure.ampScoreCommand());
 

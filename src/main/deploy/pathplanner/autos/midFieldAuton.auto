@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.27,
-      "y": 5.57
+      "x": 0.8009808327308976,
+      "y": 4.588128407026045
     },
-    "rotation": 0
+    "rotation": -54.2461127455632
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "autonCenterShootCmd"
+            "name": "autonSideShootCmd"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "centerToCloseCenter"
+            "pathName": "sourceFc"
           }
         },
         {
@@ -30,9 +30,28 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "FcShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "keepPivot"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "aimSpeakerCmd"
+            "name": "autonAimSpeakerCmd"
           }
         },
         {

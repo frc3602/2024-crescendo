@@ -32,7 +32,10 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
 
   // Motor controllers
   @Log
-  private double topOut, bottomOut;
+  public double topOut;
+
+  @Log
+  private double bottomOut;
 
   @Log
   private double topVolts, bottomVolts;

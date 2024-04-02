@@ -159,7 +159,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
         this);
   }
 
-  public Command turnTowardNote() {
+  public Command 
+  turnTowardNote() {
     return run(() -> {
       double rotationSpeed;
 
@@ -176,9 +177,9 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
     });
   }
 
+
   public Command turnTowardSpeaker() {
     return run(() -> {
-      double rotationSpeed = 0.0;
 
       var result = vision.getLatestResult();
 
@@ -187,7 +188,9 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
           rotationSpeed = speakerTurnController.calculate(result.getBestTarget().getYaw(), 0.0);
         }
       } else {
-        rotationSpeed = 0.0;
+        rotationSpeed = 0.5;
+              //rotationSpeed = 0.0
+
       }
 
       this.setControl(autoRequest
@@ -195,10 +198,24 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
     });
   }
 
+
+  public Command stopDriveCmd() {
+   double xSpeed = 0.0;
+    double rotationSpeed = 0.0; 
+    return runOnce(() ->{
+      this.setControl(autoRequest
+          .withSpeeds(new ChassisSpeeds(xSpeed, xboxController.getLeftX(), rotationSpeed)));
+
+
+    });
+  }
+
   @Log
-  double xSpeed = 0;
+
+  public double xSpeed = 0;
+  //double xSpeed = 0;
   @Log
-  double rotationSpeed = 0.0;
+  public double rotationSpeed = 0.0;
   @Log
   boolean targeted = false;
   @Log
@@ -222,8 +239,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
        }
 
         if (MathUtil.isNear(targetHeading, heading, 0.2)) {
-          xSpeed = 0.8;
-          //TODO - change xspeed to a faster speed
+          xSpeed = 1;
+          //xSpeed = 0.8>1
         } else {
           xSpeed = 0;
         }
@@ -233,13 +250,39 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
         rotationSpeed = noteTurnController.calculate(heading, targetHeading);
       } else {
         rotationSpeed = 0.8;
-       //TODO - change rotation speed to small number
         xSpeed = 0.0;
       }
 
       this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(xSpeed, 0, rotationSpeed)));
     });
   }
+  public boolean pointToTrap(){
+   var result = vision.getLatestResult();
+   if (result.hasTargets()) {
+   return MathUtil.isNear(0, result.getBestTarget().getYaw(), 0.1);
+   } else return false;
+  }
+  public Command turnTowardTrap() {
+    return run(() -> {
+      double rotationSpeed = 0.0;
+      var result = vision.getLatestResult();
+
+      if (result.hasTargets()) {
+        if (result.getBestTarget().getFiducialId() == 15 || result.getBestTarget().getFiducialId() == 11 
+         || result.getBestTarget().getFiducialId() == 16 || result.getBestTarget().getFiducialId() == 12
+         || result.getBestTarget().getFiducialId() == 14 || result.getBestTarget().getFiducialId() == 13) {
+          rotationSpeed = turnController.calculate(result.getBestTarget().getYaw(), 0.0);
+        }
+      } else {
+        rotationSpeed = 0.0;
+      }
+
+      this.setControl(autoRequest
+          .withSpeeds(new ChassisSpeeds(xboxController.getLeftY(), xboxController.getLeftX(), rotationSpeed)));
+    });
+  }
+
+
 
   public Command turnTowardAmp() {
     return run(() -> {
@@ -259,8 +302,35 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
           .withSpeeds(new ChassisSpeeds(xboxController.getLeftY(), xboxController.getLeftX(), rotationSpeed)));
     });
   }
+  double targetStop = 8.0;
+  public boolean closeToTrap(){
+   return MathUtil.isNear(targetStop,Units.metersToFeet(vision.getTargetDistance()),0.5);
+  }
+  public Command driveTowardTrap() {
+    return run(() -> {
+      var result = vision.getNoteResult();
 
-  private void configDriveSubsys() {
+      if (result.hasTargets()) {
+        if (result.getBestTarget().getFiducialId() == 15 || result.getBestTarget().getFiducialId() == 11 
+         || result.getBestTarget().getFiducialId() == 16 || result.getBestTarget().getFiducialId() == 12
+         || result.getBestTarget().getFiducialId() == 14 || result.getBestTarget().getFiducialId() == 13) {
+         if (closeToTrap()) {
+          xSpeed = 0.0;
+         }
+         else{
+          xSpeed = 0.5;
+         }
+        }
+      } else {
+        xSpeed = 0.0;
+       }
+
+      this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(xSpeed, 0,0)));
+    });
+  }
+
+
+private void configDriveSubsys() {
     var moduleZeroDrive = this.Modules[0].getDriveMotor().getConfigurator();
     var moduleOneDrive = this.Modules[1].getDriveMotor().getConfigurator();
     var moduleTwoDrive = this.Modules[2].getDriveMotor().getConfigurator();
@@ -280,5 +350,7 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
     moduleOneSteer.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(30));
     moduleTwoSteer.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(30));
     moduleThreeSteer.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(30));
+
+    speakerTurnController.setTolerance(0.1);
   }
 }

@@ -1,0 +1,86 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6233758621363413,
+      "y": 4.4795920361071495
+    },
+    "rotation": -60.94539590092283
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "autonSideShootCmd"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "sourceFc"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "getNote"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "FcShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "keepPivot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonShootCmd"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "shootFis"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "getNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FisShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonShootCmd"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "BetterAutons",
+  "choreoAuto": false
+}

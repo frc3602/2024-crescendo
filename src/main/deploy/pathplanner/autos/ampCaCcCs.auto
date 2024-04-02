@@ -1,0 +1,128 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7911138899200891,
+      "y": 6.512182255133741
+    },
+    "rotation": 61.606980578616984
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "autonSideShootCmd"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ampCa"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonGetNote"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonCloseNoteShootCmd"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonShootCmd"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "closeAmpToCloseCenter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonGetNote"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonCloseNoteShootCmd"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonShootCmd"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "closeCenterCs"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonGetNote"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "csTurn"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autonCloseNoteShootCmd"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonShootCmd"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "BetterAutons",
+  "choreoAuto": false
+}

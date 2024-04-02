@@ -18,60 +18,9 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "twoNoteMiddleAmpSide"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "twoNoteMiddleAmpSide"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "twoNoteMiddleAmpSideEnd"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "threeNoteMiddleAmpSide"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.18
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "threeFirstNoteMiddleAmpSide"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
           }
         },
         {

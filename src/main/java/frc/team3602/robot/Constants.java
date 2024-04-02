@@ -94,7 +94,7 @@ public final class Constants {
     public static final double kPivotConversionFactor = 360;
     public static final double kAbsoluteOffset = 0;
 
-    public static final double kP = 0.27; // 0.1>.15>.17>.22>.25
+    public static final double kP = 0.28; // 0.1>.15>.17>.22>.25>.27
     public static final double kI = 0.0;
     public static final double kD = 0.0;//.03, No greater than 0.7
 
