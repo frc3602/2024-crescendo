@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.27,
+      "y": 5.567111941824834
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "autonCenterShootCmd"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "twoNoteMiddle"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "BetterAutons",
+  "choreoAuto": false
+}

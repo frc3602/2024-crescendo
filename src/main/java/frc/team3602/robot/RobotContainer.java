@@ -74,13 +74,17 @@ public class RobotContainer implements Logged {
     NamedCommands.registerCommand("autonAimMidAmpCmd", superstructure.autonAimMidAmpCmd());
     NamedCommands.registerCommand("autonAimMidSourceCmd", superstructure.autonAimMidSourceCmd());
     NamedCommands.registerCommand("autonGetNote", superstructure.autonGetNote());
+    NamedCommands.registerCommand("autonClockwiseGetNote", superstructure.autonClockwiseGetNote());
     NamedCommands.registerCommand("autonPivotGroundCmd", superstructure.autonPivotGroundCmd());
     NamedCommands.registerCommand("autonAimSpeakerCmd", superstructure.autonAimSpeakerCmd());
     NamedCommands.registerCommand("autonCenterShootCmd", superstructure.autonCenterShootCmd());
     NamedCommands.registerCommand("autonSideShootCmd", superstructure.autonSideShootCmd());
     NamedCommands.registerCommand("autonShootCmd", superstructure.autonShootCmd());
-    NamedCommands.registerCommand("keepPivot", superstructure.keepPivot());
+    NamedCommands.registerCommand("autonIntakeCmd", superstructure.autonIntakeCmd());
     NamedCommands.registerCommand("autonCloseNoteShootCmd", superstructure.autonCloseNoteShootCmd());
+    NamedCommands.registerCommand("keepPivot", superstructure.keepPivot());
+    NamedCommands.registerCommand("autonCloseSourceShootCmd", superstructure.autonCloseSourceShootCmd());
+
 
     // NamedCommands.registerCommand("intakeCmd", superstructure.intakeCmd());
 

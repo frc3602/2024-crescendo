@@ -39,13 +39,13 @@
         {
           "type": "named",
           "data": {
-            "name": "autonGetNote"
+            "name": "autonClockwiseGetNote"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "autonCloseNoteShootCmd"
+            "name": "autonCloseSourceShootCmd"
           }
         },
         {
@@ -65,6 +65,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
           }
         },
         {
@@ -92,16 +98,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "autonPivotGroundCmd"
+                  "name": "autonIntakeCmd"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autonGetNote"
           }
         },
         {

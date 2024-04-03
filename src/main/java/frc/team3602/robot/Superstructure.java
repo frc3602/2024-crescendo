@@ -54,6 +54,7 @@ public class Superstructure {
 
 
 
+ 
 
      public Command autonShootCmd() {
     return Commands.sequence(
@@ -94,6 +95,26 @@ public class Superstructure {
 
     );
   }
+
+
+
+public Command autonPivotGroundCmd() {
+    return Commands.sequence(
+        pivotSubsys.runSetAngle(() -> 11).until(() -> pivotSubsys.encoderValue <= 12),
+        pivotSubsys.stopMotors());
+  }
+
+public Command autonIntakeCmd() {
+    return Commands.sequence(
+        pivotSubsys.runSetAngle(() -> 11).until(() -> pivotSubsys.encoderValue <= 12),
+        // pivotSubsys.stopMotors(),
+        intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getSensor1())
+        );
+  }
+
+
+
+
   // // DO NOT TOUCH used in twoNoteMiddle, and twoNoteRight Auton
   // public Command oneNoteMiddle() {
   //   return Commands.sequence(
@@ -632,8 +653,8 @@ public class Superstructure {
   public Command autonSideShootCmd() {
     return Commands.sequence(
         Commands.parallel(
-            shooterSubsys.runShooterSpeed(0.5, 0.5).until(() -> shooterSubsys.topOut >= 0.45), // velocity .8>.7>.6>.55
-            pivotSubsys.runSetAngle(() -> 21).until(() -> pivotSubsys.encoderValue <= 22),
+            shooterSubsys.runShooterSpeed(0.65, 0.65).withTimeout(0.2), //.5>.65
+            pivotSubsys.runSetAngle(() -> 22).until(() -> pivotSubsys.encoderValue <= 23),//21,22 > 22,23
             intakeSubsys.stopIntake()),
 
         Commands.waitSeconds(0.2),
@@ -642,12 +663,7 @@ public class Superstructure {
         shooterSubsys.stopMotorsCmd());
   }
 
-  public Command autonPivotGroundCmd() {
-    return Commands.sequence(
-        pivotSubsys.runSetAngle(() -> 11).until(() -> pivotSubsys.encoderValue <= 12),
-        pivotSubsys.stopMotors());
-
-  }
+ 
 
   public Command autonGetNote() {
     return Commands.sequence(
@@ -656,6 +672,19 @@ public class Superstructure {
         Commands.parallel(
             intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getSensor1()),
             driveSubsys.driveTowardNote().until(() -> intakeSubsys.getSensor1())),
+
+        driveSubsys.stopDriveCmd()
+    // intakeSubsys.runIntake(() -> 0.15).until(() -> intakeSubsys.getSensor2()));
+    );
+  }
+
+    public Command autonClockwiseGetNote() {
+    return Commands.sequence(
+        // angle 11>9
+        pivotSubsys.runSetAngle(() -> 9).until(() -> pivotSubsys.isAtPosition),
+        Commands.parallel(
+            intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getSensor1()),
+            driveSubsys.driveClockwiseTowardNote().until(() -> intakeSubsys.getSensor1())),
 
         driveSubsys.stopDriveCmd()
     // intakeSubsys.runIntake(() -> 0.15).until(() -> intakeSubsys.getSensor2()));
@@ -672,8 +701,48 @@ public class Superstructure {
               driveSubsys.stopDriveCmd()
             ),
             Commands.sequence(
-               pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.encoderValue >= 35),
-               pivotSubsys.stopMotors()
+               pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.isAtPosition),
+
+        !pivotSubsys.isAtPosition ? pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.isAtPosition)
+            : pivotSubsys.runOnce(() -> {
+            }),
+
+        Commands.print("pivotStuff"),
+        pivotSubsys.stopMotors()
+              // pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.encoderValue >= 35),
+               //pivotSubsys.stopMotors()
+            ),
+            shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.topOut >= 0.55)), // speed .8>.65>.75 topout .65>.55>.55
+      
+        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+         shooterSubsys.stopMotorsCmd(),
+        Commands.print("autonAimSpeakerCmd")
+
+    );
+  }
+
+
+
+public Command autonCloseSourceShootCmd() {
+    return Commands.sequence(
+        Commands.parallel(
+            Commands.print("firstAutonAimSpeakerCmd"),
+            Commands.sequence(
+              //i just added .withtimeout 2 @10:04pm caroline
+              driveSubsys.turnTowardSpeaker().withTimeout(2),
+              driveSubsys.stopDriveCmd()
+            ),
+            Commands.sequence(
+               pivotSubsys.runSetAngle(() -> 44).until(() -> pivotSubsys.isAtPosition),
+
+        !pivotSubsys.isAtPosition ? pivotSubsys.runSetAngle(() -> 44).until(() -> pivotSubsys.isAtPosition)
+            : pivotSubsys.runOnce(() -> {
+            }),
+
+        Commands.print("pivotStuff"),
+        pivotSubsys.stopMotors()
+              // pivotSubsys.runSetAngle(() -> 39).until(() -> pivotSubsys.encoderValue >= 35),
+               //pivotSubsys.stopMotors()
             ),
             shooterSubsys.runShooterSpeed(0.75, 0.75).until(() -> shooterSubsys.topOut >= 0.55)), // speed .8>.65>.75 topout .65>.55>.55
       
@@ -729,7 +798,8 @@ public class Superstructure {
   // shooterSubsys.stopMotorsCmd());
   // }
 
-  public Command keepPivot() {
+
+    public Command keepPivot() {
     return Commands.sequence(
         pivotSubsys.runSetAngle(() -> 14).until(() -> pivotSubsys.isAtPosition)
 
@@ -740,7 +810,6 @@ public class Superstructure {
     // pivotSubsys.holdAngle()
     );
   }
-
 
 
   // public Command autonCloseNoteShootCmd() {

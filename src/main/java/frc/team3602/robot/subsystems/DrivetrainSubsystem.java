@@ -184,6 +184,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
    return MathUtil.isNear(0, result.getBestTarget().getYaw(), 0.2); //tolerance .1>.2
    } else return false;
   }
+
+  //if targeted = false, robot turns counterclockwise
   public Command turnTowardSpeaker() {
     return run(() -> {
 
@@ -196,7 +198,6 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
       } else {
         rotationSpeed = 0.7;
               //rotationSpeed = 0.0>.5>.7
-
       }
 
       this.setControl(autoRequest
@@ -204,6 +205,24 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
     });
   }
 
+  //if targeted = false, robot turns clockwise
+  public Command turnClockwiseTowardSpeaker() {
+    return run(() -> {
+
+      var result = vision.getLatestResult();
+
+      if (result.hasTargets()) {
+        if (result.getBestTarget().getFiducialId() == 7 || result.getBestTarget().getFiducialId() == 4) {
+          rotationSpeed = speakerTurnController.calculate(result.getBestTarget().getYaw(), 0.0);
+        }
+      } else {
+        rotationSpeed = -0.7;
+              //rotationSpeed = 0.0>.5>.7
+      }
+   this.setControl(autoRequest
+          .withSpeeds(new ChassisSpeeds(xboxController.getLeftY(), xboxController.getLeftX(), rotationSpeed)));
+    });
+  }
 
   public Command stopDriveCmd() {
    double xSpeed = 0.0;
@@ -227,6 +246,8 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
   @Log
   double targetHeading = 0;
 
+
+  //if targeted = false, robot turns counterclockwise
   public Command driveTowardNote() {
     return run(() -> {
 
@@ -262,6 +283,45 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
       this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(xSpeed, 0, rotationSpeed)));
     });
   }
+
+//if targeted = false, robot turns clockwise
+    public Command driveClockwiseTowardNote() {
+    return run(() -> {
+
+      double cam2note, x, y;
+
+      var result = vision.getNoteResult();
+
+      if (result.hasTargets()) {
+
+        targeted = true;
+        cam2note = PhotonUtils.calculateDistanceToTargetMeters(0.254, 0, -0.4014,
+            Units.degreesToRadians(result.getBestTarget().getPitch()));
+        x = cam2note * Math.sin(Units.degreesToRadians(result.getBestTarget().getYaw()));
+        y = cam2note * Math.cos(Units.degreesToRadians(result.getBestTarget().getYaw())) + 0.5842;
+        targetHeading = heading - (Math.atan(x / y));
+       }
+
+        if (MathUtil.isNear(targetHeading, heading, 0.2)) {
+          xSpeed = 2;//1>1.5>2
+          //xSpeed = 0.8>1
+        } else {
+          xSpeed = 0;
+        }
+      
+
+      if (targeted) {
+        rotationSpeed = noteTurnController.calculate(heading, targetHeading);
+      } else {
+        rotationSpeed = -0.8;
+        xSpeed = 0.0;
+      }
+
+      this.setControl(autoRequest.withSpeeds(new ChassisSpeeds(xSpeed, 0, rotationSpeed)));
+    });
+  }
+
+
   public boolean pointToTrap(){
    var result = vision.getLatestResult();
    if (result.hasTargets()) {

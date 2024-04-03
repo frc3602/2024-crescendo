@@ -42,7 +42,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "keepPivot"
+                  "name": "autonPivotGroundCmd"
                 }
               }
             ]

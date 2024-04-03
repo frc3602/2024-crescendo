@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ampCa"
+            "pathName": "Copy of ampCa"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CaCc"
+            "pathName": "Copy of CaCc"
           }
         },
         {
@@ -93,19 +93,6 @@
           "type": "wait",
           "data": {
             "waitTime": 0.2
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "csTurn"
-                }
-              }
-            ]
           }
         },
         {
