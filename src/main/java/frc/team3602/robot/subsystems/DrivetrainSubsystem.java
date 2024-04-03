@@ -177,7 +177,13 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
     });
   }
 
-
+  @Log
+  public boolean pointToSpeaker(){
+   var result = vision.getLatestResult();
+   if (result.hasTargets()) {
+   return MathUtil.isNear(0, result.getBestTarget().getYaw(), 0.2); //tolerance .1>.2
+   } else return false;
+  }
   public Command turnTowardSpeaker() {
     return run(() -> {
 

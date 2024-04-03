@@ -71,7 +71,6 @@ public class RobotContainer implements Logged {
     // superstructure.autonPickupCmd());
     NamedCommands.registerCommand("getNote", superstructure.getNote());
      
-
     NamedCommands.registerCommand("autonAimMidAmpCmd", superstructure.autonAimMidAmpCmd());
     NamedCommands.registerCommand("autonAimMidSourceCmd", superstructure.autonAimMidSourceCmd());
     NamedCommands.registerCommand("autonGetNote", superstructure.autonGetNote());
@@ -160,7 +159,8 @@ public class RobotContainer implements Logged {
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.leftBumper().whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle)); // 23
+   xboxController.leftBumper().whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle)); // 23
+
 
     xboxController.rightBumper().onTrue(superstructure.ampScoreCommand());
 
