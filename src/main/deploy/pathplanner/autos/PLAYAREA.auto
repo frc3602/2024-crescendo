@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 0.6347911126635363,
-      "y": 4.50867207012588
-    },
-    "rotation": -62.24145939893994
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,7 +8,13 @@
         {
           "type": "named",
           "data": {
-            "name": "autonSideShootCmd"
+            "name": "autonIntakeCmd"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FcsourceShoot"
           }
         }
       ]

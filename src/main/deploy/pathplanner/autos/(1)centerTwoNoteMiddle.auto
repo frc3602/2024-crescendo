@@ -18,9 +18,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "twoNoteMiddle"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "twoNoteMiddle"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autonIntakeCmd"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autonCloseNoteShootCmd"
           }
         }
       ]

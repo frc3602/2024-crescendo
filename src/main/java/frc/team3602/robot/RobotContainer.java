@@ -11,6 +11,7 @@ package frc.team3602.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
@@ -70,7 +71,7 @@ public class RobotContainer implements Logged {
     // NamedCommands.registerCommand("autonPickupCmd",
     // superstructure.autonPickupCmd());
     NamedCommands.registerCommand("getNote", superstructure.getNote());
-     
+    NamedCommands.registerCommand("autonCaShootCmd", superstructure.autonCaShootCmd());
     NamedCommands.registerCommand("autonAimMidAmpCmd", superstructure.autonAimMidAmpCmd());
     NamedCommands.registerCommand("autonAimMidSourceCmd", superstructure.autonAimMidSourceCmd());
     NamedCommands.registerCommand("autonGetNote", superstructure.autonGetNote());
@@ -84,6 +85,9 @@ public class RobotContainer implements Logged {
     NamedCommands.registerCommand("autonCloseNoteShootCmd", superstructure.autonCloseNoteShootCmd());
     NamedCommands.registerCommand("keepPivot", superstructure.keepPivot());
     NamedCommands.registerCommand("autonCloseSourceShootCmd", superstructure.autonCloseSourceShootCmd());
+        NamedCommands.registerCommand("autonBRUHShootCmd", superstructure.autonBRUHShootCmd());
+
+    //NamedCommands.registerCommand("autonClockwiseShootCmd", superstructure.autonClockwiseShootCmd());
 
 
     // NamedCommands.registerCommand("intakeCmd", superstructure.intakeCmd());
@@ -154,7 +158,7 @@ public class RobotContainer implements Logged {
     xboxController.a().whileTrue(superstructure.getNote()).onFalse(intakeSubsys.stopIntake());
 
     xboxController.rightTrigger().onTrue(superstructure.aimSpeakerCmd())
-        .onFalse(shooterSubsys.stopMotorsCmd());
+        .onFalse(shooterSubsys.stopMotorsCmd().alongWith(driveSubsys.stopRumble()));
 
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.6))
         .onFalse(intakeSubsys.stopIntake());
@@ -168,7 +172,7 @@ public class RobotContainer implements Logged {
 
     xboxController.rightBumper().onTrue(superstructure.ampScoreCommand());
 
-    xboxController.leftTrigger().whileTrue(driveSubsys.alignWithTarget());
+    xboxController.leftTrigger().whileTrue(superstructure.leftTriggerCmd());
 
     // Guitar controls
     guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 26.5));

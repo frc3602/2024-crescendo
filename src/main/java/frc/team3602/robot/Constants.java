@@ -88,8 +88,8 @@ public final class Constants {
     public static final int kPivotMotorId = 4;
     public static final int kPivotFollowerId = 6; 
 
-    public static final int kPivotMotorCurrentLimit = 40;
-    public static final int kPivotFollowerCurrentLimit = 40;
+    public static final int kPivotMotorCurrentLimit = 15;
+    public static final int kPivotFollowerCurrentLimit = 15;
 
     public static final double kPivotConversionFactor = 360;
     public static final double kAbsoluteOffset = 0;

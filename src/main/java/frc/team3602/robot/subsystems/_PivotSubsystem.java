@@ -101,9 +101,9 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     });
   }
 
-  public Command setAngle(InterpolatingDoubleTreeMap lerpTable2) {
+  public Command setAngle() {
     return runOnce(() -> {
-      angle = ((DoubleSupplier) lerpTable2).getAsDouble();
+      angle = ((DoubleSupplier) lerpTable).getAsDouble();
     });
   }
 
@@ -144,7 +144,7 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
       var effort = getEffort();
       this.effort = effort;      
       
-      // if (atPosition()) {
+      // if (atPl=()) {
       //    runOnce(pivotMotor.setVoltage(0));
       //  }
       //  else{
@@ -222,4 +222,14 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     lerpTable.put(16.0, 50.0); // 16.9 feet, 52.5 degrees
 
   }
+
+  public Command setAngle(Object object) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setAngle'");
+  }
+
+  // public Command setAngle(Object object) {
+  //   // TODO Auto-generated method stub
+  //   throw new UnsupportedOperationException("Unimplemented method 'setAngle'");
+  // }
 }

@@ -29,9 +29,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+
 
 import frc.team3602.robot.Vision;
 
@@ -40,6 +44,7 @@ import monologue.Annotations.Log;
 
 import static frc.team3602.robot.Constants.DrivetrainConstants.*;
 import static frc.team3602.robot.Constants.VisionConstants.*;
+
 
 public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, Logged {
 
@@ -195,9 +200,9 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
         if (result.getBestTarget().getFiducialId() == 7 || result.getBestTarget().getFiducialId() == 4) {
           rotationSpeed = speakerTurnController.calculate(result.getBestTarget().getYaw(), 0.0);
         }
-      } else {
-        rotationSpeed = 0.7;
-              //rotationSpeed = 0.0>.5>.7
+      // } else {
+      //   rotationSpeed = 0.7;
+      //         //rotationSpeed = 0.0>.5>.7
       }
 
       this.setControl(autoRequest
@@ -205,24 +210,51 @@ public class DrivetrainSubsystem extends SwerveDrivetrain implements Subsystem, 
     });
   }
 
-  //if targeted = false, robot turns clockwise
-  public Command turnClockwiseTowardSpeaker() {
+  // //if targeted = false, robot turns clockwise
+  // public Command turnClockwiseTowardSpeaker() {
+  //   return run(() -> {
+
+  //     var result = vision.getLatestResult();
+
+  //     if (result.hasTargets()) {
+  //       if (result.getBestTarget().getFiducialId() == 7 || result.getBestTarget().getFiducialId() == 4) {
+  //         rotationSpeed = speakerTurnController.calculate(result.getBestTarget().getYaw(), 0.0);
+  //       }
+  //     // } else {
+  //     //   rotationSpeed = -0.7;
+  //     //         //rotationSpeed = 0.0>.5>.7
+  //      }
+  //  this.setControl(autoRequest
+  //         .withSpeeds(new ChassisSpeeds(xboxController.getLeftY(), xboxController.getLeftX(), rotationSpeed)));
+  //   });
+  // }
+
+    public Command teleopTurnTowardSpeaker() {
     return run(() -> {
 
       var result = vision.getLatestResult();
 
-      if (result.hasTargets()) {
-        if (result.getBestTarget().getFiducialId() == 7 || result.getBestTarget().getFiducialId() == 4) {
-          rotationSpeed = speakerTurnController.calculate(result.getBestTarget().getYaw(), 0.0);
-        }
-      } else {
-        rotationSpeed = -0.7;
+      if (!result.hasTargets()) {
+        // if (result.getBestTarget().getFiducialId() == 7 || result.getBestTarget().getFiducialId() == 4) {
+        //   rotationSpeed = speakerTurnController.calculate(result.getBestTarget().getYaw(), 0.0);
+      //   }
+      // } else {
+        xboxController.getHID().setRumble(RumbleType.kBothRumble, 1.0);
+;
               //rotationSpeed = 0.0>.5>.7
       }
-   this.setControl(autoRequest
-          .withSpeeds(new ChassisSpeeds(xboxController.getLeftY(), xboxController.getLeftX(), rotationSpeed)));
+
+      // this.setControl(autoRequest
+      //     .withSpeeds(new ChassisSpeeds(xboxController.getLeftY(), xboxController.getLeftX(), rotationSpeed)));
     });
   }
+
+  public Command stopRumble() {
+    return runOnce(() ->{
+    xboxController.getHID().setRumble(RumbleType.kBothRumble, 0);
+  });
+  }
+
 
   public Command stopDriveCmd() {
    double xSpeed = 0.0;

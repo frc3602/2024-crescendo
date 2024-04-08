@@ -52,15 +52,32 @@ public class Superstructure {
     return pivotSubsys.runSetAngle(() -> 45);
   }
 
-
-
+    //Created by Abe @10:01 4/4
+    public Command autonCaShootCmd() {
+      return Commands.sequence(
+         Commands.print("bruhfirstAutonAimSpeakerCmd"),
+            driveSubsys.turnTowardSpeaker().withTimeout(2),
+          Commands.print("secondAutonAimSpeakerCmd"),
+          Commands.parallel(
+             driveSubsys.stopDriveCmd(),
+          Commands.print("thirdAutonAimSpeakerCmd"),
+            pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle),
+          
+            intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+         shooterSubsys.stopMotorsCmd()
+          )
+          
+      );
+    }
  
 
-     public Command autonShootCmd() {
+     public Command autonBRUHShootCmd() {
     return Commands.sequence(
            
+         shooterSubsys.runShooterSpeed(0.8, 0.8).withTimeout(0.2), //.5>.65
+
         Commands.print("bruhfirstAutonAimSpeakerCmd"),
-            driveSubsys.turnTowardSpeaker().withTimeout(2),
+            driveSubsys.turnTowardSpeaker().withTimeout(1),
           Commands.print("secondAutonAimSpeakerCmd"),
 
              driveSubsys.stopDriveCmd(),
@@ -74,6 +91,44 @@ public class Superstructure {
 
     ); 
   }
+
+     public Command autonShootCmd() {
+    return Commands.sequence(
+           
+        Commands.print("bruhfirstAutonAimSpeakerCmd"),
+            driveSubsys.turnTowardSpeaker().withTimeout(1),
+          Commands.print("secondAutonAimSpeakerCmd"),
+
+             driveSubsys.stopDriveCmd(),
+          Commands.print("thirdAutonAimSpeakerCmd"),
+
+
+
+        intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+         shooterSubsys.stopMotorsCmd(),
+        Commands.print("autonAimSpeakerCmd")
+
+    ); 
+  }
+
+  //      public Command autonClockwiseShootCmd() {
+  //   return Commands.sequence(
+           
+  //       Commands.print("bruhfirstAutonAimSpeakerCmd"),
+  //           driveSubsys.turnClockwiseTowardSpeaker().withTimeout(1),
+  //         Commands.print("secondAutonAimSpeakerCmd"),
+
+  //            driveSubsys.stopDriveCmd(),
+  //         Commands.print("thirdAutonAimSpeakerCmd"),
+
+
+
+  //       intakeSubsys.runIntake(() -> 0.75).withTimeout(0.2),
+  //        shooterSubsys.stopMotorsCmd(),
+  //       Commands.print("autonAimSpeakerCmd")
+
+  //   ); 
+  // }
 
     public Command autonAimSpeakerCmd() {
     return Commands.sequence(
@@ -112,7 +167,15 @@ public Command autonIntakeCmd() {
         );
   }
 
+  public Command leftTriggerCmd() {
+    return Commands.parallel(
 
+Commands.sequence(
+        pivotSubsys.runSetAngle(() -> 25).until(() -> pivotSubsys.isAtPosition),
+        pivotSubsys.stopMotors()),
+        shooterSubsys.runShooterSpeed(0.8, 0.8)       
+   );
+  }
 
 
   // // DO NOT TOUCH used in twoNoteMiddle, and twoNoteRight Auton
@@ -630,12 +693,20 @@ public Command autonIntakeCmd() {
 
   public Command autonAimMidSourceCmd() {
        return Commands.sequence(
-               shooterSubsys.runShooterSpeed(0.85, 0.85).withTimeout(0.2),
-               //until(() -> shooterSubsys.topOut >= 0.65), // speed .8>.65>.75>.85 topout .65>.55>.55>.65
-               pivotSubsys.runSetAngle(() -> 48).until(() -> pivotSubsys.encoderValue >= 47),
-               pivotSubsys.stopMotors()
+
+              shooterSubsys.runShooterSpeed(0.8, 0.8).until(() -> shooterSubsys.isAtSpeed),
+              //  until(() -> shooterSubsys.topOut >= 0.65), // speed .8>.65>.75>.85 topout .65>.55>.55>.65
+               pivotSubsys.runSetAngle(() -> 48).until(() -> pivotSubsys.isAtPosition)
+            //        !pivotSubsys.isAtPosition ? pivotSubsys.runSetAngle(() -> 47).until(() -> pivotSubsys.isAtPosition)
+            //  : pivotSubsys.runOnce(() -> {
+            //  }),
+            //   pivotSubsys.stopMotors()
   );
   }
+
+
+
+
 
     public Command autonAimMidAmpCmd() {
     return Commands.parallel(
@@ -857,21 +928,26 @@ public Command autonCloseSourceShootCmd() {
     return Commands.sequence(
         Commands.parallel(
             Commands.print("Spinning Up Shooter"),
-            shooterSubsys.runShooterSpeed(0.2, 0.2).until(() -> shooterSubsys.isAtVelocity),
+            shooterSubsys.runShooterSpeed(0.25, 0.25).withTimeout(0.2),//.2>.17
 
             Commands.print("Setting Angle"),
 
             // pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition)),
             // pivotSubsys.runSetAngle(() -> 55.0).until(() -> pivotSubsys.isAtPosition),
             // pivotSubsys.runSetAngle(() -> 80.0).until(() -> pivotSubsys.isAtPosition),
-            pivotSubsys.runSetAngle(() -> 100.0).until(() -> pivotSubsys.isAtPosition)));
+
+            pivotSubsys.runSetAngle(() -> 90.0).until(() -> pivotSubsys.isAtPosition)),
+              !pivotSubsys.isAtPosition ? pivotSubsys.runSetAngle(() -> 90).until(() -> pivotSubsys.isAtPosition)
+            : pivotSubsys.runOnce(() -> {
+            })
+            );
   }
 
   public Command aimSpeakerCmd() {
     return Commands.parallel(
         shooterSubsys.runShooterSpeed(0.8, 0.8),
         pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle),
-        driveSubsys.turnTowardSpeaker(),
+        driveSubsys.teleopTurnTowardSpeaker(),
         Commands.print("aimSpeakerCmd"));
   }
 
