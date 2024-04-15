@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6230802761177554,
-      "y": 4.461828723942754
+      "x": 2,
+      "y": 2
     },
-    "rotation": -57.406507876189536
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,24 +14,18 @@
         {
           "type": "named",
           "data": {
-            "name": "autonSideShootCmd"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "THEBERZERKER"
+            "name": "autonIntakeCmd"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "autonGetNote"
+            "name": "autonAimMidSourceCmd"
           }
         }
       ]
     }
   },
-  "folder": "BetterAutons",
+  "folder": null,
   "choreoAuto": false
 }

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
-import frc.team3602.robot.subsystems._PivotSubsystem;
+import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 
 import java.lang.annotation.Target;
@@ -20,7 +20,7 @@ import java.util.function.BooleanSupplier;
 
 public class Superstructure {
   private final IntakeSubsystem intakeSubsys;
-  private final _PivotSubsystem pivotSubsys;
+  private final PivotSubsystem pivotSubsys;
   private final ShooterSubsystem shooterSubsys;
   private final DrivetrainSubsystem driveSubsys;
   // private final ClimberSubsystem climberSubsys;
@@ -33,7 +33,7 @@ public class Superstructure {
     }
   };
 
-  public Superstructure(IntakeSubsystem intakeSubsys, _PivotSubsystem pivotSubsys, DrivetrainSubsystem driveSubsys,
+  public Superstructure(IntakeSubsystem intakeSubsys, PivotSubsystem pivotSubsys, DrivetrainSubsystem driveSubsys,
       ShooterSubsystem shooterSubsys,
       Vision vision) {
     this.driveSubsys = driveSubsys;
@@ -693,10 +693,12 @@ Commands.sequence(
 
   public Command autonAimMidSourceCmd() {
        return Commands.sequence(
-
+              Commands.print("Begin aimmidsourcecmd"),
               shooterSubsys.runShooterSpeed(0.8, 0.8).until(() -> shooterSubsys.isAtSpeed),
               //  until(() -> shooterSubsys.topOut >= 0.65), // speed .8>.65>.75>.85 topout .65>.55>.55>.65
-               pivotSubsys.runSetAngle(() -> 48).until(() -> pivotSubsys.isAtPosition)
+               pivotSubsys.runSetAngle(() -> 48).until(() -> pivotSubsys.isAtPosition),
+
+               Commands.print("pivot is at position")
             //        !pivotSubsys.isAtPosition ? pivotSubsys.runSetAngle(() -> 47).until(() -> pivotSubsys.isAtPosition)
             //  : pivotSubsys.runOnce(() -> {
             //  }),
@@ -926,7 +928,7 @@ public Command autonCloseSourceShootCmd() {
 
   public Command ampScoreCommand() {
     return Commands.sequence(
-        Commands.parallel(
+       // Commands.parallel(
             Commands.print("Spinning Up Shooter"),
             shooterSubsys.runShooterSpeed(0.25, 0.25).withTimeout(0.2),//.2>.17
 
@@ -934,12 +936,20 @@ public Command autonCloseSourceShootCmd() {
 
             // pivotSubsys.runSetAngle(() -> 30.0).until(() -> pivotSubsys.isAtPosition)),
             // pivotSubsys.runSetAngle(() -> 55.0).until(() -> pivotSubsys.isAtPosition),
-            // pivotSubsys.runSetAngle(() -> 80.0).until(() -> pivotSubsys.isAtPosition),
+            pivotSubsys.runSetAngle(() -> 100.0).until(() -> pivotSubsys.encoderValue >= 90),
 
-            pivotSubsys.runSetAngle(() -> 90.0).until(() -> pivotSubsys.isAtPosition)),
-              !pivotSubsys.isAtPosition ? pivotSubsys.runSetAngle(() -> 90).until(() -> pivotSubsys.isAtPosition)
-            : pivotSubsys.runOnce(() -> {
-            })
+           //90 - worked for states
+            // pivotSubsys.runSetAngle(() -> 100.0).until(() -> pivotSubsys.isAtPosition)),
+            //   !pivotSubsys.isAtPosition ? pivotSubsys.runSetAngle(() -> 100.0).until(() -> pivotSubsys.isAtPosition)
+            // : pivotSubsys.runOnce(() -> {
+            // })
+
+            Commands.print("At 80 Degrees!"),
+                 pivotSubsys.runSetVoltage(() -> 1.5).until(() -> pivotSubsys.encoderValue >= 100.0)
+
+                //   !pivotSubsys.isAtPosition ? pivotSubsys.runSetAngle(() -> 130.0).until(() -> pivotSubsys.isAtPosition)
+                // : pivotSubsys.runOnce(() -> {
+                // })
             );
   }
 

@@ -1,173 +1,256 @@
-// /*
-//  * Copyright (C) 2024, FRC Team 3602. All rights reserved. This work
-//  * is licensed under the terms of the MIT license which can be found
-//  * in the root directory of this project.
-//  */
+/*
+ * Copyright (C) 2024, FRC Team 3602. All rights reserved. This work
+ * is licensed under the terms of the MIT license which can be found
+ * in the root directory of this project.
+ */
 
-// package frc.team3602.robot.subsystems;
+package frc.team3602.robot.subsystems;
 
-// import java.util.function.DoubleSupplier;
+import java.util.function.DoubleSupplier;
 
-// import com.revrobotics.CANSparkMax;
-// import com.revrobotics.SparkAbsoluteEncoder;
-// import com.revrobotics.SparkPIDController;
-// import com.revrobotics.CANSparkBase.ControlType;
-// import com.revrobotics.CANSparkBase.IdleMode;
-// import com.revrobotics.CANSparkLowLevel.MotorType;
-// import com.revrobotics.SparkAbsoluteEncoder.Type;
-// import com.revrobotics.SparkPIDController.ArbFFUnits;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkLimitSwitch;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
-// import edu.wpi.first.math.controller.ArmFeedforward;
-// import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-// import edu.wpi.first.math.util.Units;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-// import monologue.Logged;
-// import monologue.Annotations.Log;
+import frc.team3602.robot.Vision;
+import static frc.team3602.robot.Constants.PivotConstants.*;
 
-// import static frc.team3602.robot.Constants.PivotConstants.*;
+import monologue.Logged;
+import monologue.Annotations.Log;
 
-// public class PivotSubsystem extends SubsystemBase implements Logged {
-//   // Motor controllers
-//   @Log
-//   public double motorOutput, motorOutputTwo;
+public class PivotSubsystem extends SubsystemBase implements Logged {
+  // Motor controllers
+  @Log
+  public double motorOutput, motorOutputTwo;
 
-//   public final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
-//   private final CANSparkMax pivotFollower = new CANSparkMax(kPivotFollowerId, MotorType.kBrushless);
+  public final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
+  private final CANSparkMax pivotFollower = new CANSparkMax(kPivotFollowerId, MotorType.kBrushless);
+  private final SparkLimitSwitch lowLimitSwitch = pivotMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
+  private final SparkLimitSwitch highLimitSwitch = pivotMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
 
-//   // Encoders
-//   private final SparkAbsoluteEncoder pivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
-//   // Controls
-//   @Log
-//   public double encoderValue;
+  // Encoders
+  private final DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(2);
+  // private final SparkAbsoluteEncoder pivotEncoder =
+  // pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
+// motors encoder
+// private final RelativeEncoder pivotMotorEncoder = pivotMotor.getEncoder();
+//   private final RelativeEncoder pivotMotorFollower = pivotFollower.getEncoder();
+  
+  // Controls
+  @Log
+  public boolean isAtPosition, lowLimit, highLimit;
 
-//   public double angle = 0;
+  @Log
+  public double encoderValue;
 
-//   @Log
-//   public double effort;
+  @Log
+  public double angle = 84.0;
+  @Log
+  public double lerpAngle;
+  public double absoluteOffset = 77;
 
-//   public final InterpolatingDoubleTreeMap lerpTable = new InterpolatingDoubleTreeMap();
+  @Log
+  public double effort;
 
-//   // private final TrapezoidProfile.Constraints constraints = new
-//   // TrapezoidProfile.Constraints(kMaxVelocity,
-//   // kMaxAcceleration);
-//   // private final TrapezoidProfile.State previousProfiledReference = new
-//   // TrapezoidProfile.State(0, 0);
-//   // private final TrapezoidProfile profile = new TrapezoidProfile(constraints);
+  @Log
+  public double ffEffort;
 
-//   private final SparkPIDController controller = pivotMotor.getPIDController();
-//   private final ArmFeedforward feedforward = new ArmFeedforward(kS, kG, kV, kA);
+  @Log
+  public double pidEffort;
 
-//   public PivotSubsystem() {
-//     SmartDashboard.putNumber("Angle", angle);
+  private final Vision vision = new Vision();
 
-//     configPivotSubsys();
-//   }
+  public final InterpolatingDoubleTreeMap lerpTable = new InterpolatingDoubleTreeMap();
 
-//   private double getDegrees() {
-//     return pivotEncoder.getPosition();
-//   }
+  private final PIDController controller = new PIDController(kP, kI, kD);
+  private final ArmFeedforward feedforward = new ArmFeedforward(kS, kG, kV, kA);
 
-//   public Command runPivot(DoubleSupplier percentage) {
-//     return run(() -> {
-//       pivotMotor.set(percentage.getAsDouble());
-//     });
-//   }
+  public PivotSubsystem() {
+    SmartDashboard.putNumber("Angle", angle);
 
-//   public Command setAngle(DoubleSupplier angleDegrees) {
-//     return runOnce(() -> {
-//       angle = angleDegrees.getAsDouble();
-//     });
-//   }
+    configPivotSubsys();
+  }
 
-//   private double getEffort() {
-//     return feedforward.calculate(Units.degreesToRadians(angle), 0);
-//   }
+  //getDegrees was private
+  public double getDegrees() {
+    return (pivotEncoder.getAbsolutePosition() * 360) - absoluteOffset;
+  }
 
-//   public Command holdAngle() {
-//     return run(() -> {
-//       var effort = getEffort();
-//       this.effort = effort;
+  public boolean atPosition() {
+    var target = angle;
+    var tolerance = 2;
 
-//       // var goal = new TrapezoidProfile.State(angle, 0);
-//       // var setpoint = profile.calculate(0, previousProfiledReference, goal);
+    return ((MathUtil.isNear(target, getDegrees(), tolerance)));
+  }
 
-//       controller.setReference(angle, ControlType.kPosition, 0, effort, ArbFFUnits.kVoltage);
-//     });
-//   }
+  // public Command runPivot(DoubleSupplier percentage) {
+  //   return run(() -> {
+  //     pivotMotor.set(percentage.getAsDouble());
+  //   });
+  // }
 
-//   public Command stopMotors() {
-//     return runOnce(() -> {
-//       pivotMotor.stopMotor();
-//       pivotFollower.stopMotor();
-//     });
-//   }
+  public Command setAngle() {
+    return runOnce(() -> {
+      angle = ((DoubleSupplier) lerpTable).getAsDouble();
+    });
+  }
 
-//   @Override
-//   public void periodic() {
-//     motorOutput = pivotMotor.getAppliedOutput();
+  public Command runSetAngle(DoubleSupplier angleDegrees) {
+    return run(() -> {
+      angle = angleDegrees.getAsDouble();
 
-//     motorOutputTwo = pivotFollower.getAppliedOutput();
+      var effort = getEffort();
+      this.effort = effort;
+    //  if (lowLimitSwitch.isPressed()||highLimitSwitch.isPressed()) {
+    //     pivotMotor.
+    //   }
+    //   else{
+      pivotMotor.setVoltage(effort);//}
+    });
+  }
+ 
 
-//     encoderValue = getDegrees();
+  @Log
+  public double volt;
 
-//     var angle = SmartDashboard.getNumber("Angle", this.angle);
+    public Command runSetVoltage(DoubleSupplier voltageNumber) {
+    return run(() -> {
+      volt = voltageNumber.getAsDouble();
 
-//     if (angle != this.angle) {
-//       this.angle = angle;
-//     }
-//   }
+      
+      pivotMotor.setVoltage(volt);//}
+    });
+  }
 
-//   private void configPivotSubsys() {
-//     // Pivot motor config
-//     pivotMotor.setIdleMode(IdleMode.kBrake);
-//     pivotMotor.setInverted(true);
-//     pivotMotor.setSmartCurrentLimit(kPivotMotorCurrentLimit);
-//     pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
 
-//     // Pivot motor follower config
-//     pivotFollower.setIdleMode(IdleMode.kBrake);
-//     pivotFollower.follow(pivotMotor, true);
-//     pivotFollower.setSmartCurrentLimit(kPivotFollowerCurrentLimit);
-//     pivotFollower.enableVoltageCompensation(pivotFollower.getBusVoltage());
+  private double getEffort() {
+    // var ffEfort = feedforward.calculate(Units.degreesToRadians(angle), 0);
+    var ffEffort = feedforward.calculate(Units.degreesToRadians(getDegrees()), 0);
 
-//     // Pivot encoder config
-//     pivotEncoder.setZeroOffset(255.0);
+   //var ffEffort = 2.55 * Math.cos(Units.degreesToRadians(getDegrees()));
 
-//     // pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
-//     // double offset = pivotEncoder.getZeroOffset();
-//     // if (getDegrees() > 300.0) {
-//     // pivotEncoder.setZeroOffset(offset + (360 - getDegrees()));
-//     // }
+    var pidEffort = controller.calculate(getDegrees(), angle);
+   
+    //double pidEffort = ((angle - getDegrees()) / ((angle - getDegrees() == 0.0) ? 1.0 :  Math.abs(angle - getDegrees())))*.5;
 
-//     controller.setFeedbackDevice(pivotEncoder);
+    this.ffEffort = ffEffort;
+    this.pidEffort = pidEffort;
 
-//     controller.setP(kP);
-//     controller.setI(kI);
-//     controller.setD(kD);
+    // if ((lowLimitSwitch.isPressed())||(highLimitSwitch.isPressed())){
+    //   return 0;
+    // } else {
+    return ffEffort + pidEffort;
+  
+}
 
-//     // controller.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
-//     // controller.setSmartMotionMaxAccel(kMaxAcceleration, 0);
-//     // controller.setSmartMotionMaxVelocity(kMaxVelocity, 0);
+  public Command holdAngle() {
+    return run(() -> {
+      var effort = getEffort();
+      this.effort = effort;      
+      
+      // if (atPl=()) {
+      //    runOnce(pivotMotor.setVoltage(0));
+      //  }
+      //  else{
+      pivotMotor.setVoltage(effort);//}
+    });
+  }
 
-//     // controller.setPositionPIDWrappingEnabled(true);
-//     // controller.setPositionPIDWrappingMinInput(0);
-//     // controller.setPositionPIDWrappingMaxInput(90);
+  public Command stopMotors() {
+    return runOnce(() -> {
+      pivotMotor.stopMotor();
+      pivotFollower.stopMotor();
+    });
+  }
 
-//     // controller.setTolerance(1);
-//     // controller.enableContinuousInput(0, 45);
 
-//     pivotMotor.burnFlash();
-//     pivotFollower.burnFlash();
+  @Override
+  public void periodic() {
+    motorOutput = pivotMotor.getAppliedOutput();
 
-//     // Interpolation table config
-//     lerpTable.put(5.0, 32.0); // 5 feet, 25 degrees
-//     lerpTable.put(10.0, 48.0); // 10 feet, 39.5 degrees
-//     lerpTable.put(15.0, 43.0); // 15 feet, 43 degrees
-//     lerpTable.put(20.0, 53.5); // 20 feet, 44.5 degrees
-//     lerpTable.put(25.0, 41.0); // 25 feet, 41 degrees
-//   }
-// }
+    motorOutputTwo = pivotFollower.getAppliedOutput();
+
+    encoderValue = getDegrees();
+
+    isAtPosition = atPosition();
+
+    lerpAngle = lerpTable.get(Units.metersToFeet(vision.getTargetDistance()));
+
+    // var angle = SmartDashboard.getNumber("Angle", this.angle);
+
+    // if (angle != this.angle) {
+    // MathUtil.clamp(angle, 0, 130);
+    // this.angle = angle;
+    // }
+
+    lowLimit = lowLimitSwitch.isPressed();
+    highLimit = highLimitSwitch.isPressed();
+  }
+
+  private void configPivotSubsys() {
+    // Pivot motor config
+    pivotMotor.setIdleMode(IdleMode.kBrake);
+    pivotMotor.setInverted(false);
+    pivotMotor.setSmartCurrentLimit(kPivotMotorCurrentLimit);
+    pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
+    // pivotMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+
+    // Pivot motor follower config
+    pivotFollower.setIdleMode(IdleMode.kBrake);
+    pivotFollower.follow(pivotMotor, true);
+    pivotFollower.setSmartCurrentLimit(kPivotFollowerCurrentLimit);
+    pivotFollower.enableVoltageCompensation(pivotFollower.getBusVoltage());
+    controller.setTolerance(1);
+
+    // pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
+    // double offset = pivotEncoder.getZeroOffset();
+    // if (getDegrees() > 300.0) {
+    // pivotEncoder.setZeroOffset(offset + (360 - getDegrees()));
+    // }
+
+    lowLimitSwitch.enableLimitSwitch(true);
+    highLimitSwitch.enableLimitSwitch(true);
+
+    pivotMotor.burnFlash();
+    pivotFollower.burnFlash();
+
+    // Interpolation table config
+    lerpTable.put(4.6, 32.0); // 4.6 feet, 32 degrees
+    lerpTable.put(6.87, 42.0); // 7.65 feet, 42 degrees
+    lerpTable.put(8.33,44.0); 
+    lerpTable.put(9.91,48.0); 
+    lerpTable.put(10.95, 50.0); // 10.7 feet, 49.75 degrees
+    lerpTable.put(11.4,51.0); 
+    lerpTable.put(12.53,50.0 ); 
+    lerpTable.put(13.47, 51.0); // 13.79 feet, 53 degrees
+    lerpTable.put(15.24,51.0 ); 
+    lerpTable.put(16.0, 50.0); // 16.9 feet, 52.5 degrees
+
+  }
+
+  public Command setAngle(Object object) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setAngle'");
+  }
+
+  // public Command setAngle(Object object) {
+  //   // TODO Auto-generated method stub
+  //   throw new UnsupportedOperationException("Unimplemented method 'setAngle'");
+  // }
+
+
+  
+
+}

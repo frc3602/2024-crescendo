@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.team3602.robot.subsystems.DrivetrainSubsystem;
 import frc.team3602.robot.subsystems.IntakeSubsystem;
-import frc.team3602.robot.subsystems._PivotSubsystem;
+import frc.team3602.robot.subsystems.PivotSubsystem;
 import frc.team3602.robot.subsystems.ShooterSubsystem;
 import frc.team3602.robot.subsystems.ClimberSubsystem;
 
@@ -45,7 +45,7 @@ public class RobotContainer implements Logged {
       kBackRightModuleConstants);
   public final ShooterSubsystem shooterSubsys = new ShooterSubsystem();
   public final IntakeSubsystem intakeSubsys = new IntakeSubsystem();
-  private final _PivotSubsystem pivotSubsys = new _PivotSubsystem();
+  private final PivotSubsystem pivotSubsys = new PivotSubsystem();
   private final ClimberSubsystem climberSubsys = new ClimberSubsystem();
 
   @Log
