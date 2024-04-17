@@ -66,54 +66,7 @@ public class RobotContainer implements Logged {
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
-    NamedCommands.registerCommand("aimSpeakerCmd", superstructure.aimSpeakerCmd());
-    NamedCommands.registerCommand("ampScoreCommand", superstructure.ampScoreCommand());
-    // NamedCommands.registerCommand("autonPickupCmd",
-    // superstructure.autonPickupCmd());
-    NamedCommands.registerCommand("getNote", superstructure.getNote());
-    NamedCommands.registerCommand("autonCaShootCmd", superstructure.autonCaShootCmd());
-    NamedCommands.registerCommand("autonAimMidAmpCmd", superstructure.autonAimMidAmpCmd());
-    NamedCommands.registerCommand("autonAimMidSourceCmd", superstructure.autonAimMidSourceCmd());
-    NamedCommands.registerCommand("autonGetNote", superstructure.autonGetNote());
-    NamedCommands.registerCommand("autonClockwiseGetNote", superstructure.autonClockwiseGetNote());
-    NamedCommands.registerCommand("autonPivotGroundCmd", superstructure.autonPivotGroundCmd());
-    NamedCommands.registerCommand("autonAimSpeakerCmd", superstructure.autonAimSpeakerCmd());
-    NamedCommands.registerCommand("autonCenterShootCmd", superstructure.autonCenterShootCmd());
-    NamedCommands.registerCommand("autonSideShootCmd", superstructure.autonSideShootCmd());
-    NamedCommands.registerCommand("autonShootCmd", superstructure.autonShootCmd());
-    NamedCommands.registerCommand("autonIntakeCmd", superstructure.autonIntakeCmd());
-    NamedCommands.registerCommand("autonCloseNoteShootCmd", superstructure.autonCloseNoteShootCmd());
-    NamedCommands.registerCommand("keepPivot", superstructure.keepPivot());
-    NamedCommands.registerCommand("autonCloseSourceShootCmd", superstructure.autonCloseSourceShootCmd());
-        NamedCommands.registerCommand("autonBRUHShootCmd", superstructure.autonBRUHShootCmd());
-
-    //NamedCommands.registerCommand("autonClockwiseShootCmd", superstructure.autonClockwiseShootCmd());
-
-
-    // NamedCommands.registerCommand("intakeCmd", superstructure.intakeCmd());
-
-    // NamedCommands.registerCommand("oneNoteMiddle", superstructure.oneNoteMiddle());
-    // NamedCommands.registerCommand("oneStartNoteMiddleAmpSide", superstructure.oneStartNoteMiddleAmpSide());
-    // NamedCommands.registerCommand("oneLeftMoveShort", superstructure.oneLeftMoveShort());
-    // NamedCommands.registerCommand("twoNoteMiddleAmpSide", superstructure.twoNoteMiddleAmpSide());
-    // NamedCommands.registerCommand("twoNoteMiddle", superstructure.twoNoteMiddle());
-    // NamedCommands.registerCommand("oneNoteLeftAmpSideStart", superstructure.oneNoteLeftAmpSideStart());
-    // NamedCommands.registerCommand("twoNoteMiddleEnd", superstructure.twoNoteMiddleEnd());
-    // NamedCommands.registerCommand("twoNoteLeftStart", superstructure.twoNoteLeftStart());
-    // NamedCommands.registerCommand("twoNoteMiddleAmpSideEnd", superstructure.twoNoteMiddleAmpSideEnd());
-    // NamedCommands.registerCommand("oneNoteLeftFirst", superstructure.oneNoteLeftFirst());
-    // NamedCommands.registerCommand("twoNoteMoveAmpSideShoot", superstructure.twoNoteMoveAmpSideShoot());
-    // NamedCommands.registerCommand("twoNoteRightStart", superstructure.twoNoteRightStart());
-    // NamedCommands.registerCommand("twoNoteRightEnd", superstructure.twoNoteRightStart());
-    // NamedCommands.registerCommand("oneNoteMoveRightFirst", superstructure.oneNoteMoveRightFirst());
-    // NamedCommands.registerCommand("threeNoteMiddleAmpSide", superstructure.threeNoteMiddleAmpSide());
-    // NamedCommands.registerCommand("threeFirstNoteMiddleAmpSide", superstructure.threeFirstNoteMiddleAmpSide());
-    // // NamedCommands.registerCommand("oneNoteRight", superstructure.oneNoteRight());
-
-    // NamedCommands.registerCommand("oneNoteTwistFirst", superstructure.oneNoteLeftFirst());
-    // NamedCommands.registerCommand("twoNoteTwistStart", superstructure.oneNoteLeftFirst());
-    // NamedCommands.registerCommand("twoNoteTwistEnd", superstructure.oneNoteLeftFirst());
-
+ 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
     SmartDashboard.putData("Drive Polarity", polarityChooser);
@@ -167,7 +120,7 @@ public class RobotContainer implements Logged {
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-   xboxController.leftBumper().whileTrue(pivotSubsys.runSetAngle(() -> pivotSubsys.lerpAngle)); // 23
+    xboxController.leftBumper().whileTrue(pivotSubsys.runPivotWithLerpTable());
 
 
     xboxController.rightBumper().onTrue(superstructure.ampScoreCommand());

@@ -6,6 +6,7 @@
 
 package frc.team3602.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
@@ -32,13 +33,14 @@ import monologue.Annotations.Log;
 public class PivotSubsystem extends SubsystemBase implements Logged {
   // Motor controllers
   @Log
-  public double motorOutput, motorOutputTwo;
-
   public final CANSparkMax pivotMotor = new CANSparkMax(kPivotMotorId, MotorType.kBrushless);
   private final CANSparkMax pivotFollower = new CANSparkMax(kPivotFollowerId, MotorType.kBrushless);
   private final SparkLimitSwitch lowLimitSwitch = pivotMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
   private final SparkLimitSwitch highLimitSwitch = pivotMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
 
+  @Log
+  public DoubleSupplier motorOutput = () -> pivotMotor.getAppliedOutput();
+  public DoubleSupplier motorOutputTwo = () -> pivotFollower.getAppliedOutput();
 
   // Encoders
   private final DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(2);
@@ -50,29 +52,29 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
   
   // Controls
   @Log
-  public boolean isAtPosition, lowLimit, highLimit;
+  public BooleanSupplier isAtPosition = () -> atPosition();
+  public BooleanSupplier lowLimit = () -> lowLimitSwitch.isPressed();
+  public BooleanSupplier highLimit = () -> highLimitSwitch.isPressed();
 
   @Log
-  public double encoderValue;
+  public DoubleSupplier encoderValue = () -> getDegrees();
 
   @Log
   public double angle = 84.0;
-  @Log
-  public double lerpAngle;
-  public double absoluteOffset = 77;
+  public DoubleSupplier voltage;
 
   @Log
   public double effort;
-
-  @Log
   public double ffEffort;
-
-  @Log
   public double pidEffort;
 
   private final Vision vision = new Vision();
 
   public final InterpolatingDoubleTreeMap lerpTable = new InterpolatingDoubleTreeMap();
+
+  @Log
+  public DoubleSupplier lerpAngle = () -> lerpTable.get(Units.metersToFeet(vision.getTargetDistance()));
+  public double absoluteOffset = 77;
 
   private final PIDController controller = new PIDController(kP, kI, kD);
   private final ArmFeedforward feedforward = new ArmFeedforward(kS, kG, kV, kA);
@@ -95,108 +97,74 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     return ((MathUtil.isNear(target, getDegrees(), tolerance)));
   }
 
-  // public Command runPivot(DoubleSupplier percentage) {
-  //   return run(() -> {
-  //     pivotMotor.set(percentage.getAsDouble());
-  //   });
-  // }
+  public double getEffort() {
+    double ffEffort = feedforward.calculate(Units.degreesToRadians(getDegrees()), 0);
 
-  public Command setAngle() {
-    return runOnce(() -> {
-      angle = ((DoubleSupplier) lerpTable).getAsDouble();
-    });
-  }
+    double pidEffort = controller.calculate(getDegrees(), angle);
 
-  public Command runSetAngle(DoubleSupplier angleDegrees) {
-    return run(() -> {
-      angle = angleDegrees.getAsDouble();
-
-      var effort = getEffort();
-      this.effort = effort;
-    //  if (lowLimitSwitch.isPressed()||highLimitSwitch.isPressed()) {
-    //     pivotMotor.
-    //   }
-    //   else{
-      pivotMotor.setVoltage(effort);//}
-    });
-  }
- 
-
-  @Log
-  public double volt;
-
-    public Command runSetVoltage(DoubleSupplier voltageNumber) {
-    return run(() -> {
-      volt = voltageNumber.getAsDouble();
-
-      
-      pivotMotor.setVoltage(volt);//}
-    });
-  }
-
-
-  private double getEffort() {
-    // var ffEfort = feedforward.calculate(Units.degreesToRadians(angle), 0);
-    var ffEffort = feedforward.calculate(Units.degreesToRadians(getDegrees()), 0);
-
-   //var ffEffort = 2.55 * Math.cos(Units.degreesToRadians(getDegrees()));
-
-    var pidEffort = controller.calculate(getDegrees(), angle);
-   
-    //double pidEffort = ((angle - getDegrees()) / ((angle - getDegrees() == 0.0) ? 1.0 :  Math.abs(angle - getDegrees())))*.5;
-
+    // For Logging
     this.ffEffort = ffEffort;
     this.pidEffort = pidEffort;
-
-    // if ((lowLimitSwitch.isPressed())||(highLimitSwitch.isPressed())){
-    //   return 0;
-    // } else {
+    this.effort = (ffEffort + pidEffort);
+    
     return ffEffort + pidEffort;
-  
-}
+  }
+
+  /*
+   * We overload setAngle for convenience.
+   * Passing an angle only results in the use of that angle and the PID control determining voltage.
+   * Passing a voltage only results in no change of set angle and the use of that voltage.
+   * Passing both an angle and a voltage results in the use of that angle and that voltage.
+   * 
+   * If one want to employ the lerptable, one ought not use setAngle and runPivot but runPivotWithLerpTable.
+   */
+  public Command setAngle(double angle) {
+    return runOnce(() -> {
+      this.angle = angle;
+      voltage = () -> getEffort();
+    });
+  }
+
+  public Command setAngle(DoubleSupplier voltage) {
+    return runOnce(() -> {
+      this.voltage = voltage;
+    });
+  }
+
+  public Command setAngle(double angle, DoubleSupplier voltage) {
+    return runOnce(() -> {
+      this.angle = angle;
+      this.voltage = voltage;
+    });
+  }
+
+  /*
+   * runPivot works the same as holdAngle; it exists only to differentiate between default and abnormal action.
+   * Also, it allows the use of a given voltage rather than the PID control.
+   * 
+   * If one want to employ the lerptable, one ought not use setAngle and runPivot but runPivotWithLerpTable.
+   */
+  public Command runPivot() {
+    return run(() -> {
+      pivotMotor.setVoltage(voltage.getAsDouble());
+    });
+  }
+
+  public Command runPivotWithLerpTable() {
+    return run(() -> {
+     angle = ((DoubleSupplier) lerpTable).getAsDouble();
+     pivotMotor.setVoltage(getEffort());
+    });
+  }
 
   public Command holdAngle() {
     return run(() -> {
-      var effort = getEffort();
-      this.effort = effort;      
-      
-      // if (atPl=()) {
-      //    runOnce(pivotMotor.setVoltage(0));
-      //  }
-      //  else{
-      pivotMotor.setVoltage(effort);//}
+      pivotMotor.setVoltage(getEffort());
     });
   }
-
-  public Command stopMotors() {
-    return runOnce(() -> {
-      pivotMotor.stopMotor();
-      pivotFollower.stopMotor();
-    });
-  }
-
 
   @Override
   public void periodic() {
-    motorOutput = pivotMotor.getAppliedOutput();
-
-    motorOutputTwo = pivotFollower.getAppliedOutput();
-
-    encoderValue = getDegrees();
-
-    isAtPosition = atPosition();
-
-    lerpAngle = lerpTable.get(Units.metersToFeet(vision.getTargetDistance()));
-
-    // var angle = SmartDashboard.getNumber("Angle", this.angle);
-
-    // if (angle != this.angle) {
-    // MathUtil.clamp(angle, 0, 130);
-    // this.angle = angle;
-    // }
-
-    lowLimit = lowLimitSwitch.isPressed();
-    highLimit = highLimitSwitch.isPressed();
   }
 
   private void configPivotSubsys() {
@@ -205,7 +173,6 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     pivotMotor.setInverted(false);
     pivotMotor.setSmartCurrentLimit(kPivotMotorCurrentLimit);
     pivotMotor.enableVoltageCompensation(pivotMotor.getBusVoltage());
-    // pivotMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
 
     // Pivot motor follower config
     pivotFollower.setIdleMode(IdleMode.kBrake);
@@ -213,12 +180,6 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     pivotFollower.setSmartCurrentLimit(kPivotFollowerCurrentLimit);
     pivotFollower.enableVoltageCompensation(pivotFollower.getBusVoltage());
     controller.setTolerance(1);
-
-    // pivotEncoder.setPositionConversionFactor(kPivotConversionFactor);
-    // double offset = pivotEncoder.getZeroOffset();
-    // if (getDegrees() > 300.0) {
-    // pivotEncoder.setZeroOffset(offset + (360 - getDegrees()));
-    // }
 
     lowLimitSwitch.enableLimitSwitch(true);
     highLimitSwitch.enableLimitSwitch(true);
@@ -237,20 +198,5 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     lerpTable.put(13.47, 51.0); // 13.79 feet, 53 degrees
     lerpTable.put(15.24,51.0 ); 
     lerpTable.put(16.0, 50.0); // 16.9 feet, 52.5 degrees
-
   }
-
-  public Command setAngle(Object object) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setAngle'");
-  }
-
-  // public Command setAngle(Object object) {
-  //   // TODO Auto-generated method stub
-  //   throw new UnsupportedOperationException("Unimplemented method 'setAngle'");
-  // }
-
-
-  
-
 }
