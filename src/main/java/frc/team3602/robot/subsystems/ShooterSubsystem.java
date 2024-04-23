@@ -40,6 +40,9 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
   @Log
   private double topVolts, bottomVolts;
 
+@Log
+private double topFeed, bottomFeed;
+
   public final CANSparkMax topShooterMotor = new CANSparkMax(kTopShooterMotorId, MotorType.kBrushless);
   public final CANSparkMax bottomShooterMotor = new CANSparkMax(kBottomShooterMotorId, MotorType.kBrushless);
 
@@ -143,6 +146,23 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
   // return false;
   // }
   // }
+@Log
+public double topVoltages, bottomVoltages;
+
+public Command newRunShooterVoltage(DoubleSupplier topVoltage, DoubleSupplier bottomVoltage) {
+    return runEnd(() -> {
+      topVoltages = topVoltage.getAsDouble();
+      bottomVoltages = bottomVoltage.getAsDouble();
+      topShooterMotor.setVoltage(topVoltages);
+      bottomShooterMotor.setVoltage(bottomVoltages);
+    },
+    () ->{
+      topShooterMotor.set(0.0);
+      bottomShooterMotor.set(0.0);
+    });
+  }
+
+
 
   public Command setTopRPM(DoubleSupplier velocityRPM) {
     return runOnce(() -> {
@@ -236,6 +256,9 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     topVolts = (topShooterMotor.getAppliedOutput() / 12);
     bottomVolts = (bottomShooterMotor.getAppliedOutput() / 12);
 
+    topFeed = (topShooterMotor.getBusVoltage());
+    bottomFeed = (bottomShooterMotor.getBusVoltage());
+
     // defaultCommandName = this.getDefaultCommand().getName();
 
     isAtVelocity = atVelocity();
@@ -316,5 +339,10 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
 
     topShooterMotor.burnFlash();
     bottomShooterMotor.burnFlash();
+  }
+
+  public Command newRunShooterVoltage(double d, double e) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'newRunShooterVoltage'");
   }
 }

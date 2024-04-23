@@ -93,9 +93,11 @@ public class RobotContainer implements Logged {
                     _kMaxAngularRate)));
 
     pivotSubsys.setDefaultCommand(pivotSubsys.holdAngle());
-    // shooterSubsys.setDefaultCommand(shooterSubsys.runShooterSpeed());
-
     climberSubsys.setDefaultCommand(climberSubsys.holdHeights());
+
+
+    //  shooterSubsys.setDefaultCommand(shooterSubsys.newRunShooterVoltage(() -> shooterSubsys.topVoltages, () -> shooterSubsys.bottomVoltages));
+    //   shooterSubsys.setDefaultCommand(shooterSubsys.newRunShooterVoltage(() -> 1, () -> 1));
 
   }
 
@@ -116,7 +118,9 @@ public class RobotContainer implements Logged {
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.6))
         .onFalse(intakeSubsys.stopIntake());
     // .75>.6
-    xboxController.x().onTrue(superstructure.aimTrap());
+    xboxController.x().onTrue(superstructure.testNewShooterCmd());
+    //    xboxController.x().onTrue(superstructure.aimTrap());
+
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 

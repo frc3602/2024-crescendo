@@ -111,4 +111,20 @@ public class Superstructure {
         )
       );
   }
+
+
+
+
+
+//offseason messing around
+
+  public Command testNewShooterCmd(){
+    return Commands.sequence(
+      shooterSubsys.newRunShooterVoltage(() -> 4, () -> 4).withTimeout(3)
+
+    );
+  }
+
+
+
 }
