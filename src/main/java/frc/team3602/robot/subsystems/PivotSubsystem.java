@@ -163,6 +163,15 @@ public class PivotSubsystem extends SubsystemBase implements Logged {
     });
   }
 
+
+  //same as holdAngle, but uses only feedforward
+  public Command holdPosition() {
+    return run(() -> {
+      pivotMotor.setVoltage(  feedforward.calculate(Units.degreesToRadians(getDegrees()), 0));
+    });
+  }
+
+  
   @Override
   public void periodic() {
   }

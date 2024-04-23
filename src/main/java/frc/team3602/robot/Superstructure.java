@@ -58,7 +58,7 @@ public class Superstructure {
       shooterSubsys.runShooterSpeed(0.25, 0.25).withTimeout(0.2),//.2>.17
 
       Commands.print("Setting Angle"),
-      pivotSubsys.setAngle(100.0, () -> pivotSubsys.getEffort()),  // 90.0 degrees workes for states
+      pivotSubsys.setAngle(100.0, () -> pivotSubsys.getEffort()),  // 90.0 degrees worked for states
       pivotSubsys.runPivot().until(() -> pivotSubsys.encoderValue.getAsDouble() >= 90.0),
 
       Commands.print("Slowing Pivot"),
