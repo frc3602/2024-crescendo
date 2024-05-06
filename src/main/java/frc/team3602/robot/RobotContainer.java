@@ -67,7 +67,7 @@ public class RobotContainer implements Logged {
 
   public RobotContainer() {
  
-    autoChooser = AutoBuilder.buildAutoChooser();
+   autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
     SmartDashboard.putData("Drive Polarity", polarityChooser);
 
@@ -112,19 +112,19 @@ public class RobotContainer implements Logged {
 
     xboxController.a().whileTrue(superstructure.getNote()).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.rightTrigger().onTrue(superstructure.aimSpeakerCmd())
-        .onFalse(shooterSubsys.stopMotorsCmd().alongWith(driveSubsys.stopRumble()));
-
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.6))
-        .onFalse(intakeSubsys.stopIntake());
+        .onFalse(superstructure.stopIntakeAndShooter());
     // .75>.6
     xboxController.x().onTrue(superstructure.testNewShooterCmd());
     //    xboxController.x().onTrue(superstructure.aimTrap());
+    xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.6)).onFalse(intakeSubsys.stopIntake());
 
+    xboxController.rightTrigger().onTrue(superstructure.aimSpeakerCmd())
+        .onFalse(shooterSubsys.stopMotorsCmd().alongWith(driveSubsys.stopRumble()));
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
-    xboxController.leftBumper().whileTrue(pivotSubsys.runPivotWithLerpTable());
+    // xboxController.leftBumper().whileTrue(pivotSubsys.runPivotWithLerpTable());
 
 
     xboxController.rightBumper().onTrue(superstructure.ampScoreCommand());

@@ -81,7 +81,7 @@ public class Superstructure {
   public Command aimSpeakerCmd() {
     return Commands.parallel(
         shooterSubsys.runShooterSpeed(0.8, 0.8),
-        pivotSubsys.runPivotWithLerpTable(),
+        // pivotSubsys.runPivotWithLerpTable(),
         driveSubsys.teleopTurnTowardSpeaker(),
         Commands.print("aimSpeakerCmd"));
   }
@@ -94,25 +94,27 @@ public class Superstructure {
 
   public Command getNote() {
     return Commands.sequence(
-      Commands.sequence(
         pivotSubsys.setAngle(9.0),
-        pivotSubsys.runPivot().until(pivotSubsys.isAtPosition)
-      ),
+        pivotSubsys.runPivot().until(pivotSubsys.isAtPosition),
+      
       // angle 11>9
       Commands.parallel(
         intakeSubsys.runIntake(() -> 0.75).until(() -> intakeSubsys.getSensor1()),
         driveSubsys.driveTowardNote().until(() -> intakeSubsys.getSensor1())),
-        Commands.parallel(
-          Commands.sequence(
+     
+  
             pivotSubsys.setAngle(25.0),
             pivotSubsys.runPivot().until(pivotSubsys.isAtPosition)
-          ),
-          intakeSubsys.runIntake(() -> 0.15).until(() -> intakeSubsys.getSensor2())
-        )
+          
       );
   }
 
-
+  public Command stopIntakeAndShooter() {
+    return Commands. parallel(
+      shooterSubsys.stopMotorsCmd(),
+      intakeSubsys.stopIntake()
+    );
+  }
 
 
 
