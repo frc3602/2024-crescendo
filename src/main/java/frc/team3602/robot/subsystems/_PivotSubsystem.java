@@ -210,16 +210,16 @@ public class _PivotSubsystem extends SubsystemBase implements Logged {
     pivotFollower.burnFlash();
 
     // Interpolation table config
-    lerpTable.put(4.6, 32.0); // 4.6 feet, 32 degrees
-    lerpTable.put(6.87, 42.0); // 7.65 feet, 42 degrees
-    lerpTable.put(8.33,44.0); 
-    lerpTable.put(9.91,48.0); 
-    lerpTable.put(10.95, 50.0); // 10.7 feet, 49.75 degrees
-    lerpTable.put(11.4,51.0); 
-    lerpTable.put(12.53,50.0 ); 
-    lerpTable.put(13.47, 51.0); // 13.79 feet, 53 degrees
-    lerpTable.put(15.24,51.0 ); 
-    lerpTable.put(16.0, 50.0); // 16.9 feet, 52.5 degrees
+    lerpTable.put(4.6, 34.0); // 4.6 feet, 32 degrees
+    lerpTable.put(6.87, 44.0); // 7.65 feet, 42 degrees
+    lerpTable.put(8.33,48.0); 
+    lerpTable.put(9.91,50.0); 
+    lerpTable.put(10.95, 52.0); // 10.7 feet, 49.75 degrees
+    lerpTable.put(11.4,53.0); 
+    lerpTable.put(12.53,52.0 ); 
+    lerpTable.put(13.47, 53.0); // 13.79 feet, 53 degrees
+    lerpTable.put(15.24,53.0 ); 
+    lerpTable.put(16.0, 52.0); // 16.9 feet, 52.5 degrees
 
   }
 

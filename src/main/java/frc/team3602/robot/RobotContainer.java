@@ -163,7 +163,7 @@ public class RobotContainer implements Logged {
     xboxController.b().whileTrue(intakeSubsys.runIntake(() -> 0.6))
         .onFalse(intakeSubsys.stopIntake());
     // .75>.6
-    xboxController.x().onTrue(superstructure.aimTrap());
+    xboxController.x().onTrue(shooterSubsys.stopShooter());
 
     xboxController.y().whileTrue(intakeSubsys.runIntake(() -> -0.25)).onFalse(intakeSubsys.stopIntake());
 
@@ -175,10 +175,10 @@ public class RobotContainer implements Logged {
     xboxController.leftTrigger().whileTrue(superstructure.leftTriggerCmd());
 
     // Guitar controls
-    guitarController.pov(180).onTrue(climberSubsys.setHeight(() -> 26.5));
+    xboxController.pov(180).onTrue(climberSubsys.setHeight(() -> 26.5));
     // height 28>27 >redone>30>28>26.5
 
-    guitarController.pov(0).onTrue(climberSubsys.setHeight(() -> 47));
+    xboxController.pov(0).onTrue(climberSubsys.setHeight(() -> 47));
 
     // Triggers
     // new

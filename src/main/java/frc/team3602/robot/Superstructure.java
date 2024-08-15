@@ -959,6 +959,7 @@ public Command autonCloseSourceShootCmd() {
 
   public Command getNote() {
     return Commands.sequence(
+        shooterSubsys.stopMotorsCmd(),
         pivotSubsys.runSetAngle(() -> 9).until(() -> pivotSubsys.isAtPosition),
         // angle 11>9
         Commands.parallel(
